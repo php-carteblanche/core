@@ -120,6 +120,8 @@ class Loader
      */
     public static function autoload($classname) 
     {
+        $classname = str_replace('\\\\', '\\', $classname);
+
         // already exists in application
         if (true===@class_exists($classname, false)) return $classname;
         try {

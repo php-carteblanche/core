@@ -62,17 +62,6 @@ class TemplateEngineLoader implements DependencyLoaderInterface
             ->setToView('setIncludePath', $cbcore_dir)
             ->setToView('setIncludePath', $cbcore_dir.$views_dir )
             ;
-/*
-        return \TemplateEngine\TemplateEngine::getInstance()
-            ->guessFromAssetsLoader(\Assets\Loader::getInstance(_ROOTPATH, _WWW, _WWW))
-            ->setLayoutsDir( _ROOTPATH._CarteBlanche_DIR._VIEWS )
-            ->setToTemplate('setWebRootPath', _ROOTPATH._WWW )
-            ->setToTemplate('setCachePath', _ROOTPATH._CACHE )
-            ->setToTemplate('setAssetsCachePath', _ROOTPATH._WWWTMPASSETSDIR )
-            ->setToView('setIncludePath', _ROOTPATH._CarteBlanche_DIR )
-            ->setToView('setIncludePath', _ROOTPATH._CarteBlanche_DIR._VIEWS )
-            ;
-*/
     }
 
 }

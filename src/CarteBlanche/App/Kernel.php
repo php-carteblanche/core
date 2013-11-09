@@ -270,28 +270,24 @@ final class Kernel implements StaticCreatorInterface
                 ->initConstantPath('_VENDORDIRNAME', 'vendor_dir_name')                
                 // global required relative/absolute paths
                 ->initConstantPath('_CONFIGDIR', 'config_dir')
-                ->addPath('config_path', $this->getPath('root_path').$this->getPath('config_dir'), true, true)
                 ->initConstantPath('_LANGUAGEDIR', 'i18n_dir')
-                ->addPath('i18n_path', $this->getPath('root_path').$this->getPath('i18n_dir'), true, true)
                 ->initConstantPath('_VARDIR', 'var_dir')
-                ->addPath('var_path', $this->getPath('root_path').$this->getPath('var_dir'), true, true)
                 ->initConstantPath('_SRCDIR', 'src_dir')
-                ->addPath('src_path', $this->getPath('root_path').$this->getPath('src_dir'), true)
                 ->initConstantPath('_BINDIR', 'bin_dir')
-                ->addPath('bin_path', $this->getPath('root_path').$this->getPath('bin_dir'), true)
                 ->initConstantPath('_WEBDIR', 'web_dir')
-                ->addPath('web_path', $this->getPath('root_path').$this->getPath('web_dir'), true)
                 ->initConstantPath('_LIBDIR', 'lib_dir')
+                ->addPath('src_path', $this->getPath('root_path').$this->getPath('src_dir'), true)
+                ->addPath('bin_path', $this->getPath('root_path').$this->getPath('bin_dir'), true)
+                ->addPath('web_path', $this->getPath('root_path').$this->getPath('web_dir'), true)
                 ->addPath('lib_path', $this->getPath('src_path').$this->getPath('lib_dir'))
                 // internal cache dir
                 ->initConstantPath('_APPCACHEDIR', 'app_cache_dir')
-                ->addPath('app_cache_path', $this->getPath('root_path').$this->getPath('app_cache_dir'), true, true)
                 // paths from src
                 ->initConstantPath('_BUNDLESDIR', 'bundles_dir')
-                ->addPath('bundles_path', $this->getPath('src_path').$this->getPath('bundles_dir'), true)
                 ->initConstantPath('_TOOLSDIR', 'tools_dir')
-                ->addPath('tools_path', $this->getPath('src_path').$this->getPath('tools_dir'), true)
                 ->initConstantPath('_VIEWSDIRNAME', 'views_dir')
+                ->addPath('bundles_path', $this->getPath('src_path').$this->getPath('bundles_dir'), true)
+                ->addPath('tools_path', $this->getPath('src_path').$this->getPath('tools_dir'), true)
                 // global CarteBlanche path
                 ->addPath('carte_blanche_core', $this->getPath('src_path').'/vendor/carte-blanche/core/src/CarteBlanche/')
                 // user fallbacks
@@ -303,16 +299,50 @@ final class Kernel implements StaticCreatorInterface
                     ->initConstantPath('_ROOTHTTP', 'root_http')
                     // paths from www
                     ->initConstantPath('_WEBTMPDIR', 'tmp_dir')
-                    ->addPath('tmp_path', $this->getPath('root_path').$this->getPath('tmp_dir'), true, true)
                     ->initConstantPath('_ASSETSDIR', 'assets_dir')
                     ->addPath('assets_path', $this->getPath('web_path').$this->getPath('assets_dir'))
                     ->initConstantPath('_SKINSDIR', 'skins_dir')
                     ->addPath('skins_path', $this->getPath('web_path').$this->getPath('skins_dir'));
             }
         } catch (ErrorException $e) {
-            trigger_error($e->getMessage(), E_USER_ERROR);
+            $this->addBootError(
+                sprintf('An error occured while booting: "%s"', $e->getMessage())
+            );
         } catch (Exception $e) {
-            trigger_error($e->getMessage(), E_USER_ERROR);
+            $this->addBootError(
+                sprintf('An error occured while booting: "%s"', $e->getMessage())
+            );
+        }
+
+        // error reporting
+        if (defined('_APP_MODE') && _APP_MODE==='prod') {
+            @ini_set('display_errors','0');
+        }
+
+        // app temporary or writables paths
+        try {
+            $this
+                // global required relative/absolute paths
+                ->addPath('config_path', $this->getPath('root_path').$this->getPath('config_dir'), true, true)
+                ->addPath('i18n_path', $this->getPath('root_path').$this->getPath('i18n_dir'), true, true)
+                ->addPath('var_path', $this->getPath('root_path').$this->getPath('var_dir'), true, true)
+                // internal cache dir
+                ->addPath('app_cache_path', $this->getPath('root_path').$this->getPath('app_cache_dir'), true, true)
+                ;
+            if (defined('_CLI_CALL') && false===_CLI_CALL) {
+                $this
+                    // paths from www
+                    ->addPath('tmp_path', $this->getPath('root_path').$this->getPath('tmp_dir'), true, true)
+                    ;
+            }
+        } catch (ErrorException $e) {
+            $this->addBootError(
+                sprintf('An error occured while booting: "%s"', $e->getMessage())
+            );
+        } catch (Exception $e) {
+            $this->addBootError(
+                sprintf('An error occured while booting: "%s"', $e->getMessage())
+            );
         }
 
         // manifest file
@@ -391,7 +421,13 @@ final class Kernel implements StaticCreatorInterface
         // load internal dependencies
         $internal_deps = $config->get('carte_blanche.internal_dependencies');
         foreach ($internal_deps as $dep) {
-            $this->getContainer()->load($dep);
+            try {
+                $this->getContainer()->load($dep);
+            } catch (Exception $e) {
+                $this->addBootError(
+                    sprintf('An error occured while loading a dependency: "%s"', $e->getMessage())
+                );
+            }
         }
 
         // load the app bootstrap
@@ -427,7 +463,7 @@ final class Kernel implements StaticCreatorInterface
     		$this->boot();
     	}
 	    $this->getContainer()->set('request', $request);
-	    $this->getContainer()->get('router')->setUrl($request->buildUrl());
+    	$this->getContainer()->get('router')->setUrl($request->buildUrl());
 	    return $this;
 	}
 

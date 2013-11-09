@@ -218,6 +218,12 @@ class Locator
 			return $_found;
 		}
 
+		// from CarteBlanche
+		$controller = Kernel::CARTE_BLANCHE_NAMESPACE.'\\'.Kernel::CONTROLLER_DEFAULT_NAMESPACE.$ctrl;
+		if ($_found = Loader::autoload($controller)) {
+			return $_found;
+		}
+
 		// with a full name
 		$controller .= Kernel::CONTROLLER_SUFFIX;
 		if ($_found = Loader::autoload($controller)) {

@@ -67,7 +67,12 @@ class I18nLoader
 	 */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
-        return \I18n\I18n::getInstance($this);
+        try {
+            $i18n = \I18n\I18n::getInstance($this); 
+        } catch (\Exception $e) {
+            return $e;
+        }
+        return $i18n;
     }
 
 }
