@@ -22,7 +22,7 @@
         "atelierspierrot/library": "1.*",
         "atelierspierrot/internationalization": "1.*",
         "atelierspierrot/webfilesystem": "1.*",
-        "atelierspierrot/markdown-extended": "0.*",
+        "atelierspierrot/markdown-extended": "0.1-alpha",
         "atelierspierrot/assets-manager": "1.*",
         "atelierspierrot/templatengine": "1.*",
         "atelierspierrot/devdebug": "1.*",
