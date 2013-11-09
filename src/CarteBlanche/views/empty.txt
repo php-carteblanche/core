@@ -1,0 +1,11 @@
+<?php
+if (empty($_app)) $_app=array();
+if (empty($_globals)) $_globals=array();
+
+if (!empty($title)) : echo $title.PHP_EOL; endif;
+
+if (!empty($flash_message)) : echo PHP_EOL.$flash_message.PHP_EOL; endif;
+
+echo $output.PHP_EOL;
+
+?>

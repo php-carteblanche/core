@@ -1,0 +1,5 @@
+CarteBlanche - ROADMAP
+======================
+
+
+- manage events

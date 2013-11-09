@@ -1,0 +1,238 @@
+<?php
+if (empty($_app)) $_app=array();
+if (empty($_globals)) $_globals=array();
+if (!isset($merge_css)) $merge_css = false;
+if (!isset($minify_css)) $minify_css = false;
+if (!isset($merge_js)) $merge_js = false;
+if (!isset($minify_js)) $minify_js = false;
+
+// --------------------------------
+// the "classic" assets web accessible directory
+if (empty($assets)) {
+    $assets = $_template->getAssetsLoader()->getAssetsWebPath();
+}
+if (strlen($assets)) {
+    $assets = rtrim($assets, '/').'/';
+}
+
+var_export($assets);
+exit('yo');
+
+// ------------------
+// metas
+$old_metas = $_template->getTemplateObject('MetaTag')->get();
+$_template->getTemplateObject('MetaTag')->reset();
+
+// => charset
+$_template->getTemplateObject('MetaTag')
+	->add('Content-Type', 'text/html; charset=UTF-8', true)
+	->add('X-UA-Compatible', 'IE=edge,chrome=1', true)
+	->add('viewport', 'width=device-width')
+	;
+// => description
+if (!empty($_globals['meta_description']))
+{
+	$_template->getTemplateObject('MetaTag')
+		->add('description', $_globals['meta_description']);
+}
+// => keywords
+if (!empty($_globals['meta_keywords']))
+{
+	$_template->getTemplateObject('MetaTag')
+		->add('keywords', $_globals['meta_keywords']);
+}
+// => author
+if (!empty($_app['author']))
+{
+	$_template->getTemplateObject('MetaTag')
+		->add('author', $_app['author']);
+}
+// => generator
+if (!empty($_app['name']) && !empty($_app['version']))
+{
+	$_template->getTemplateObject('MetaTag')
+		->add('generator', $_app['name'].' '.$_app['version']);
+}
+// => + old ones
+$_template->getTemplateObject('MetaTag')->set($old_metas);
+
+// ------------------
+// CSS
+$old_css = $_template->getTemplateObject('CssFile')->get();
+$_template->getTemplateObject('CssFile')->reset();
+
+$_template->getTemplateObject('CssFile')
+	// => styles.css
+	->add('css/styles.css')
+	// => print : printer_styles.css
+	->add('css/printer_styles.css','print')
+	// => + old ones
+	->set($old_css);
+
+// ------------------
+// JS
+$old_js = $_template->getTemplateObject('JavascriptFile')->get();
+$_template->getTemplateObject('JavascriptFile')->reset();
+
+$_template->getTemplateObject('JavascriptFile')
+	// => scripts.js
+	->add( 'js/scripts.js' )
+	// => + old ones
+	->set($old_js);
+
+// ------------------
+// LINKS
+$old_links = $_template->getTemplateObject('LinkTag')->get();
+$_template->getTemplateObject('LinkTag')->reset();
+
+// => favicon.ico
+if (file_exists($assets.'icons/favicon.ico'))
+{
+	$_template->getTemplateObject('LinkTag')
+		->add( array(
+			'rel'=>'icon',
+			'href'=>'img/favicon.ico',
+			'type'=>'image/x-icon'
+		) )
+		->add( array(
+			'rel'=>'shortcut icon',
+			'href'=>'img/favicon.ico',
+			'type'=>'image/x-icon'
+		) );
+}
+// the followings are taken from <http://mathiasbynens.be/notes/touch-icons>
+// => For third-generation iPad with high-resolution Retina display: apple-touch-icon-144x144-precomposed.png
+if (file_exists($assets.'icons/apple-touch-icon-144x144-precomposed.png'))
+{
+	$_template->getTemplateObject('LinkTag')
+		->add( array(
+			'rel'=>'apple-touch-icon-precomposed',
+			'href'=>$assets.'icons/apple-touch-icon-144x144-precomposed.png',
+			'sizes'=>'144x144'
+		) );
+}
+// => For iPhone with high-resolution Retina display: apple-touch-icon-114x114-precomposed.png
+if (file_exists($assets.'icons/apple-touch-icon-114x114-precomposed.png'))
+{
+	$_template->getTemplateObject('LinkTag')
+		->add( array(
+			'rel'=>'apple-touch-icon-precomposed',
+			'href'=>$assets.'icons/apple-touch-icon-114x114-precomposed.png',
+			'sizes'=>'114x114'
+		) );
+}
+// => For first- and second-generation iPad: apple-touch-icon-72x72-precomposed.png
+if (file_exists($assets.'icons/apple-touch-icon-72x72-precomposed.png'))
+{
+	$_template->getTemplateObject('LinkTag')
+		->add( array(
+			'rel'=>'apple-touch-icon-precomposed',
+			'href'=>$assets.'icons/apple-touch-icon-72x72-precomposed.png',
+			'sizes'=>'72x72'
+		) );
+}
+// => For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: apple-touch-icon-precomposed.png
+if (file_exists($assets.'icons/apple-touch-icon-precomposed.png'))
+{
+	$_template->getTemplateObject('LinkTag')
+		->add( array(
+			'rel'=>'apple-touch-icon-precomposed',
+			'href'=>$assets.'icons/apple-touch-icon-precomposed.png'
+		) );
+}
+// => + old ones
+$_template->getTemplateObject('LinkTag')->set($old_links);
+
+// ------------------
+// TITLE
+$old_titles = $_template->getTemplateObject('TitleTag')->get();
+$_template->getTemplateObject('TitleTag')->reset();
+
+// => $title
+if (!empty($title))
+{
+	$_template->getTemplateObject('TitleTag')
+		->add( $title );
+}
+// => + old ones
+$_template->getTemplateObject('TitleTag')->set($old_titles);
+// => meta_title last
+if (!empty($_globals['meta_title']))
+{
+	$_template->getTemplateObject('TitleTag')
+		->add( $_globals['meta_title'] );
+}
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<?php
+echo
+	$_template->getTemplateObject('MetaTag')->write("\n\t %s "),
+	$_template->getTemplateObject('TitleTag')->write("\n\t %s "),
+	$_template->getTemplateObject('CssFile')->minify()->writeMinified("\n\t %s "),
+	$_template->getTemplateObject('JavascriptFile')->minify()->writeMinified("\n\t %s "),
+	$_template->getTemplateObject('LinkTag')->write("\n\t %s "),
+	"\n";
+?>
+</head>
+<body>
+
+<?php if (!empty($title)) : ?>
+	<div id="page_header" class="header">
+		<h1><?php echo $title; ?></h1>
+	</div>
+<?php endif; ?>
+
+<?php if (!empty($menu)) : ?>
+	<div id="page_menu" class="menu"><ul>
+	<?php foreach($menu as $entry_link=>$entry_text) : ?>
+		<li><a href="<?php echo $entry_link; ?>"><?php echo $entry_text; ?></a></li>
+	<?php endforeach; ?>
+	</ul></div>
+<?php endif; ?>
+
+	<div id="page_content" class="content">
+
+	<?php if (!empty($flash_messages)) : ?>
+		<?php foreach ($flash_messages as $_flash) : ?>
+			<div class="<?php echo( !empty($_flash['class']) ? $_flash['class'] : 'ok' ); ?>_message">
+			<?php echo $_flash['content']; ?>
+			</div>
+		<?php endforeach; ?>
+	<?php endif; ?>
+
+	<?php echo $output; ?>
+
+	</div>
+
+	<div id="page_footer" class="footer">
+<?php if (!empty($footer)) : ?>
+	<?php echo $footer; ?>
+<?php else: ?>
+  <?php echo view( 'footer.htm', array(
+  	'_app'=>$_app,
+  	'_config'=>$_config,
+  	'altdb'=>$altdb,
+  	'db_queries'=>$db_queries,
+  	'router_views'=>$router_views,
+  	'usersession'=>$usersession,
+  	'flashsession'=>$flashsession,
+	'controller'=>$controller,
+	'action'=>$action,
+  ) ); ?>
+<?php endif; ?>
+	<div class="forprinters">
+		Original content on the Internet :
+		<br />
+		<strong><?php echo current_url(true); ?></strong>
+		<br />
+		Page rendered in <?php echo round((microtime(true) - $_SERVER['REQUEST_TIME']), 3); ?> seconds
+		&nbsp;|&nbsp;
+		<?php echo date('D d M Y H:i:s'); ?>
+	</div>
+	</div>
+
+</body>
+</html>

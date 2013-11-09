@@ -1,0 +1,9 @@
+<p>Your system seems empty (<em>no database found</em>) ...</p>
+<ul>
+	<li><a href="<?php echo build_url(array(
+		'action'=>'check_system', 'altdb'=>!empty($altdb) ? $altdb : null,
+	)); ?>">clic here to check if your system allows this application to work</a></li>
+	<li><a href="<?php echo build_url(array(
+		'action'=>'install', 'altdb'=>!empty($altdb) ? $altdb : null,
+	)); ?>">clic here to install it</a></li>
+</ul>

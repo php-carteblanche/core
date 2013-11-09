@@ -1,0 +1,55 @@
+{
+    "name": "carte-blanche/core",
+    "type": "carte-blanche-core",
+    "description": "The core of the PHP MVC framework",
+    "keywords": [ "mvc", "framework", "modular", "carte blanche" ],
+    "homepage": "http://github.com/php-carteblanche/core",
+    "license": "Apache-2.0",
+    "authors": [{
+        "name": "Les Ateliers Pierrot & contributors",
+        "email": "contact@ateliers-pierrot.fr",
+        "homepage": "http://www.ateliers-pierrot.fr/"
+    }],
+    "support": {
+        "issues": "http://github.com/php-carteblanche/core/issues",
+        "wiki": "http://github.com/php-carteblanche/carteblanche/wiki",
+        "email": "carte-blanche@ateliers-pierrot.fr"
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "psr/log": "dev-master",
+        "atelierspierrot/patterns": "1.*",
+        "atelierspierrot/library": "1.*",
+        "atelierspierrot/internationalization": "1.*",
+        "atelierspierrot/webfilesystem": "1.*",
+        "atelierspierrot/markdown-extended": "dev-master",
+        "atelierspierrot/assets-manager": "1.*",
+        "atelierspierrot/templatengine": "1.*",
+        "atelierspierrot/devdebug": "1.*",
+        "atelierspierrot/git-api": "1.*",
+        "atelierspierrot/media-processing": "1.*",
+        "atelierspierrot/mime-mailer": "1.*",
+        "atelierspierrot/webservices": "1.*",
+        "atelierspierrot/validators": "1.*",
+        "carte-blanche/installer": "dev-master"
+    },
+    "require-dev": {
+        "composer/composer": "1.*@dev",
+        "sami/sami": "dev-master",
+        "phpmd/phpmd" : "1.4.*"
+    },
+    "autoload": {
+        "psr-0": { "CarteBlanche": "src" },
+        "files": [ "src/CarteBlanche/CarteBlanche.php" ]
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "views-functions": "src/views_aliases.php",
+        "i18n-dir": "i18n",
+        "doc-dir": "doc",
+        "config-dir": "config",
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    }
+}
