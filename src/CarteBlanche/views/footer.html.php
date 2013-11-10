@@ -119,7 +119,9 @@ $dbgfooter_id = _getid('debug_footer',true,true);
 			<?php echo date_default_timezone_get(); ?> [<abbr title="ISO date"><em><?php echo date('c'); ?></em></abbr>]
 			&nbsp;&nbsp;|&nbsp;&nbsp;PHP vers. <strong><?php echo phpversion(); ?></strong> (<?php echo php_sapi_name(); ?>)
 			&nbsp;&nbsp;|&nbsp;&nbsp;SQLite vers. <strong><?php echo sqlite_libversion(); ?></strong>
+			<?php if (function_exists('apache_get_version')) : ?>
 			<br />Webserver system :&nbsp;&nbsp;<strong><?php echo apache_get_version(); ?></strong>
+			<?php endif; ?>
 			<br />Server OS :&nbsp;&nbsp;<strong><?php echo php_uname(); ?></strong>
 			<br />Browser / Device :&nbsp;&nbsp;<strong><?php echo $_SERVER['HTTP_USER_AGENT']; ?></strong>
 			</td>
