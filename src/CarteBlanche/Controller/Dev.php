@@ -176,7 +176,7 @@ class Dev extends AbstractController
 			}
 		}
 
-		return array('app_map', array(
+		return array(self::$views_dir.'app_map', array(
             'title' => 'Application full map',
             'debug' => defined('_APP_MODE') && _APP_MODE==='dev',
             'app_controllers'=>$app_controllers,
@@ -195,7 +195,7 @@ class Dev extends AbstractController
 	    $reflection_cb = new \ReflectionClass('\CarteBlanche\App\Kernel');
 	    $constants = $reflection_cb->getConstants();
 
-		return array('app_config', array(
+		return array(self::$views_dir.'app_config', array(
             'title' => 'Application full config',
             'debug' => defined('_APP_MODE') && _APP_MODE==='dev',
             'constants'=>$constants,
@@ -248,7 +248,7 @@ TODO
 		    exit('yo');
 		}
 		
-		return array('app_admin', array(
+		return array(self::$views_dir.'app_admin', array(
             'title' => 'App admin',
 			'form'=>$form,
 		));

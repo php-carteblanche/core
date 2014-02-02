@@ -254,10 +254,26 @@ final class Kernel implements StaticCreatorInterface
 		$this->getContainer()->set('kernel', $this);
 		$this->getContainer()->set('config', new \CarteBlanche\App\Config);
         $config = $this->getContainer()->get('config');
+/*/
 		$this->getContainer()->set('loader', new \CarteBlanche\App\Loader);
 		$this->getContainer()->set('locator', new \CarteBlanche\App\Locator);
 		$this->getContainer()->set('response', new \CarteBlanche\App\Response);
-
+//*/
+        foreach(array('loader', 'locator', 'response') as $type) {
+            $class_name = isset($user_config['base_objects'][$type]) ?
+                $user_config['base_objects'][$type] : '\CarteBlanche\App\\'.ucfirst($type);
+            if (class_exists($class_name)) {
+        		$this->getContainer()->set($type, new $class_name);
+            } else {
+                $this->addBootError(
+                    sprintf('Required base object type "%s" not found! (searching class "%s")',
+                        $type,
+                        $class_name
+                    )
+                );
+            }
+        }
+//*/
         spl_autoload_register(array('\CarteBlanche\App\Loader', 'autoload'));
         register_shutdown_function(array($this, 'shutdown'));
 
