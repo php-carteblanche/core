@@ -177,6 +177,19 @@ class DefaultController extends AbstractController
         ));
 	}
 
+	/**
+	 * Test content page
+	 *
+	 * @return string A loremipsum content
+	 */
+	public function loremIpsumAction($type = 'html')
+	{
+	    $view = $type==='text' ? 'lorem_ipsum.txt' : 'lorem_ipsum.html';
+        return array($view, array(
+            'title'=>'Lorem Ipsum'
+        ));
+	}
+
 }
 
 // Endfile

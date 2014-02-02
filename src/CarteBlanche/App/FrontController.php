@@ -165,6 +165,8 @@ class FrontController
 		if (empty($routing['controller'])) {
 			if (CarteBlanche::getContainer()->get('request')->isCli()) {
 				$routing['controller'] = CarteBlanche::getConfig('routing.cli.default_controller');
+			} elseif (CarteBlanche::getContainer()->get('request')->isAjax()) {
+				$routing['controller'] = CarteBlanche::getConfig('routing.ajax.default_controller');
 			} else {
 				$routing['controller'] = CarteBlanche::getConfig('routing.mvc.default_controller');
 			}
@@ -174,6 +176,8 @@ class FrontController
 		if (empty($routing['action'])) {
 			if (CarteBlanche::getContainer()->get('request')->isCli()) {
 				$routing['action'] = CarteBlanche::getConfig('routing.cli.default_action');
+			} elseif (CarteBlanche::getContainer()->get('request')->isAjax()) {
+				$routing['action'] = CarteBlanche::getConfig('routing.ajax.default_action');
 			} else {
 				$routing['action'] = CarteBlanche::getConfig('routing.mvc.default_action');
 			}

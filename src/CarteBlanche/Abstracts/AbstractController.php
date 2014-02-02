@@ -69,6 +69,9 @@ abstract class AbstractController
 	 */
 	public function __construct()
 	{
+		if (CarteBlanche::getContainer()->get('request')->isAjax()) {
+    	    self::$template = 'empty.txt';
+		}
 		// the initializer if so
 		$this->init();
 	}

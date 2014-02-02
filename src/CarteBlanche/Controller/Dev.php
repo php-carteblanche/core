@@ -268,6 +268,9 @@ TODO
 	public function testAction($arg1 = null, $arg2 = 'value')
 	{
 
+		return array('test', array(
+            'title' => 'Test page',
+		));
 /*
 echo '<pre>';
 
@@ -778,6 +781,18 @@ trigger_error('qmlskdjfmqlksj2', E_USER_WARNING);
 		));
 	}
 
+	/**
+	 * Page of test for ajax requests
+	 * @return string The view content
+	 */
+	public function testajaxAction()
+	{
+	    self::$template = 'empty.txt';
+		return array('lorem_ipsum', array(
+            'title' => 'Test page',
+		));
+	}
+	
 }
 
 // Endfile
