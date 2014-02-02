@@ -4,8 +4,7 @@ if (empty($original_errors)) $original_errors = $errors;
 ?>
 <div class="content">
 
-    <p>The following errors had been found booting the system. You MUST correct them to use CarteBlanche correctly.</p>
-
+<p>The following errors had been found booting the system. You MUST correct them to use CarteBlanche correctly.</p>
 <?php foreach ($original_errors as $_error) : ?>
 
     <div class="<?php 

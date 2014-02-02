@@ -133,29 +133,29 @@ class Locator
             if (!empty($views_mapping) && array_key_exists($view, $views_mapping)) {
                 $view = $views_mapping[$view];
                 if ($remaped = self::locateView($view, false)) {
-                    return $remaped;
+                    return self::fallback($view, $remaped);
                 }
             }
         }
 
 		// from the application
 		if ($_f = self::locate(CarteBlanche::getPath('views_dir').$view)) {
-			return $_f;
+			return self::fallback($view, $_f);
 		}
 		
 		// from a bundle
 		if ($_f = self::locate(CarteBlanche::getPath('bundles_dir').$view)) {
-			return $_f;
+			return self::fallback($view, $_f);
 		}
 
 		// from a tool
 		if ($_f = self::locate(CarteBlanche::getPath('tools_dir').$view)) {
-			return $_f;
+			return self::fallback($view, $_f);
 		}
 
 		// globally
 		if ($_f = self::locate($view)) {
-			return $_f;
+			return self::fallback($view, $_f);
 		}
 
         $views_dir = CarteBlanche::getPath('views_dir');
@@ -180,7 +180,7 @@ class Locator
 		}
 
 		if (self::locate($view_file)) {
-		    return $view_file;
+		    return self::fallback($view_file);
 		}
 		
 		// not found: try with one of configured extensions
@@ -190,7 +190,7 @@ class Locator
                 foreach ($views_extensions as $_ext) {
                     $_extended_view = $view.'.'.$_ext;
                     if ($found = self::locateView($_extended_view, false)) {
-                        return $found;
+                        return self::fallback($_extended_view, $found);
                     }
                 }
             }
@@ -240,6 +240,24 @@ class Locator
 		}
 		return false;
 	}
+
+    /**
+     * For user overridings
+     * This will search a version of `$file` in `user/` and return it in replacement if so.
+     *
+     * @param string $file The relative file path to search
+     * @param string $path The default file path
+     * @return string
+     */
+    public static function fallback($file = null, $path = null)
+    {
+        $user_dir = CarteBlanche::getPath('user_path');
+        if (file_exists($user_dir.$file)) {
+            return $user_dir.$file;
+        } else {
+            return $path;
+        }
+    }
 
 }
 
