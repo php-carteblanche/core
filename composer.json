@@ -30,8 +30,7 @@
         "atelierspierrot/media-processing": "1.*",
         "atelierspierrot/mime-mailer": "1.*",
         "atelierspierrot/webservices": "1.*",
-        "atelierspierrot/validators": "1.*",
-        "carte-blanche/installer": "dev-master"
+        "atelierspierrot/validators": "1.*"
     },
     "require-dev": {
         "composer/composer": "1.*@dev",
