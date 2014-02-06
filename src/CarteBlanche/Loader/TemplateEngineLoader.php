@@ -32,23 +32,27 @@ class TemplateEngineLoader implements DependencyLoaderInterface
         $web_path = $container->get('kernel')->getPath('web_path');
         $views_dir = $container->get('kernel')->getPath('views_dir');
         $cbcore_dir = $container->get('kernel')->getPath('carte_blanche_core');
+        $base_cache_dir = $container->get('kernel')->getPath('tmp_dir');
+        if (empty($base_cache_dir)) {
+            $base_cache_dir = 'www/tmp/';
+        }
+        $base_cache_path = $container->get('kernel')->getPath('tmp_path');
+        if (empty($base_cache_path)) {
+            $base_cache_path = $root_path.'www/tmp/';
+        }
 
         $assets_tmp_path = $container->get('kernel')->getPath('asset_tmp_path');
         if (empty($assets_tmp_dir)) {
-            $assets_tmp_dir = $container->get('kernel')
-                ->getPath('tmp_dir').'assets'.DIRECTORY_SEPARATOR;
-            $assets_tmp_path = $container->get('kernel')
-                ->getPath('tmp_path').'assets'.DIRECTORY_SEPARATOR;
+            $assets_tmp_dir = $base_cache_dir.'assets'.DIRECTORY_SEPARATOR;
+            $assets_tmp_path = $base_cache_path.'assets'.DIRECTORY_SEPARATOR;
             $container->get('kernel')->addPath('asset_tmp_dir', $assets_tmp_dir);
             $container->get('kernel')->addPath('asset_tmp_path', $assets_tmp_path, true, true);
         }
 
         $cache_path = $container->get('kernel')->getPath('cache_path');
         if (empty($cache_path)) {
-            $cache_dir = $container->get('kernel')
-                ->getPath('tmp_dir').'cache'.DIRECTORY_SEPARATOR;
-            $cache_path = $container->get('kernel')
-                ->getPath('tmp_path').'cache'.DIRECTORY_SEPARATOR;
+            $cache_dir = $base_cache_dir.'cache'.DIRECTORY_SEPARATOR;
+            $cache_path = $base_cache_path.'cache'.DIRECTORY_SEPARATOR;
             $container->get('kernel')->addPath('cache_dir', $cache_dir);
             $container->get('kernel')->addPath('cache_path', $cache_path, true, true);
         }

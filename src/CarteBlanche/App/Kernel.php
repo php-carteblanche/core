@@ -295,12 +295,13 @@ final class Kernel implements StaticCreatorInterface
                 // user fallbacks
                 ->initConstantPath('_USERDIR', 'user_dir')
                 ->addPath('user_path', $this->getPath('root_path').$this->getPath('user_dir'))
+                // www/tmp/
+                ->initConstantPath('_WEBTMPDIR', 'tmp_dir')
                 ;
-            if (defined('_CLI_CALL') && false===_CLI_CALL) {
+            if (!$this->isCli()) {
                 $this
                     ->initConstantPath('_ROOTHTTP', 'root_http')
                     // paths from www
-                    ->initConstantPath('_WEBTMPDIR', 'tmp_dir')
                     ->initConstantPath('_ASSETSDIR', 'assets_dir')
                     ->addPath('assets_path', $this->getPath('web_path').$this->getPath('assets_dir'))
                     ->initConstantPath('_SKINSDIR', 'skins_dir')
@@ -308,11 +309,11 @@ final class Kernel implements StaticCreatorInterface
             }
         } catch (ErrorException $e) {
             $this->addBootError(
-                sprintf('An error occured while booting: "%s"', $e->getMessage())
+                sprintf('An error occured while booting: "%s" [01]', $e->getMessage())
             );
         } catch (Exception $e) {
             $this->addBootError(
-                sprintf('An error occured while booting: "%s"', $e->getMessage())
+                sprintf('An error occured while booting: "%s" [02]', $e->getMessage())
             );
         }
 
@@ -333,20 +334,16 @@ final class Kernel implements StaticCreatorInterface
                 // internal logs dir
                 ->initConstantPath('_APPLOGSDIR', 'log_dir')
                 ->addPath('log_path', $this->getPath('root_path').$this->getPath('log_dir'), true, true)
+                // paths from www
+                ->addPath('tmp_path', $this->getPath('root_path').$this->getPath('tmp_dir'), true, true)
                 ;
-            if (defined('_CLI_CALL') && false===_CLI_CALL) {
-                $this
-                    // paths from www
-                    ->addPath('tmp_path', $this->getPath('root_path').$this->getPath('tmp_dir'), true, true)
-                    ;
-            }
         } catch (ErrorException $e) {
             $this->addBootError(
-                sprintf('An error occured while booting: "%s"', $e->getMessage())
+                sprintf('An error occured while booting: "%s" [03]', $e->getMessage())
             );
         } catch (Exception $e) {
             $this->addBootError(
-                sprintf('An error occured while booting: "%s"', $e->getMessage())
+                sprintf('An error occured while booting: "%s" [04]', $e->getMessage())
             );
         }
 
@@ -721,6 +718,19 @@ final class Kernel implements StaticCreatorInterface
         $cmd = new \Library\Command;
         $whoami = $cmd->run('whoami');
         return !empty($whoami[0]) ? $whoami[0] : null;
+    }
+
+    /**
+     * Check if app is in 'CLI' call mode
+     *
+     * @return bool
+     */
+    public function isCli()
+    {
+        return (
+            !defined('_CLI_CALL') ||
+            (defined('_CLI_CALL') && true===_CLI_CALL)
+        );
     }
 
     /**
