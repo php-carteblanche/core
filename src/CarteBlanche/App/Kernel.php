@@ -85,6 +85,11 @@ final class Kernel implements StaticCreatorInterface
     const CARTE_BLANCHE_SERVER_SETTING_PREFIX = 'CARTE_BLANCHE__';
 
     /**
+     * The internal views directory
+     */
+    const CARTE_BLANCHE_INTERNAL_VIEWSDIR = 'views';
+
+    /**
      * The global CarteBlanche namespace
      */
     const CARTE_BLANCHE_NAMESPACE = '\CarteBlanche';
@@ -254,26 +259,7 @@ final class Kernel implements StaticCreatorInterface
 		$this->getContainer()->set('kernel', $this);
 		$this->getContainer()->set('config', new \CarteBlanche\App\Config);
         $config = $this->getContainer()->get('config');
-/*/
-		$this->getContainer()->set('loader', new \CarteBlanche\App\Loader);
-		$this->getContainer()->set('locator', new \CarteBlanche\App\Locator);
-		$this->getContainer()->set('response', new \CarteBlanche\App\Response);
-//*/
-        foreach(array('loader', 'locator', 'response') as $type) {
-            $class_name = isset($user_config['base_objects'][$type]) ?
-                $user_config['base_objects'][$type] : '\CarteBlanche\App\\'.ucfirst($type);
-            if (class_exists($class_name)) {
-        		$this->getContainer()->set($type, new $class_name);
-            } else {
-                $this->addBootError(
-                    sprintf('Required base object type "%s" not found! (searching class "%s")',
-                        $type,
-                        $class_name
-                    )
-                );
-            }
-        }
-//*/
+
         spl_autoload_register(array('\CarteBlanche\App\Loader', 'autoload'));
         register_shutdown_function(array($this, 'shutdown'));
 
@@ -302,8 +288,8 @@ final class Kernel implements StaticCreatorInterface
                 ->initConstantPath('_BUNDLESDIR', 'bundles_dir')
                 ->initConstantPath('_TOOLSDIR', 'tools_dir')
                 ->initConstantPath('_VIEWSDIRNAME', 'views_dir')
-                ->addPath('bundles_path', $this->getPath('src_path').$this->getPath('bundles_dir'), true)
-                ->addPath('tools_path', $this->getPath('src_path').$this->getPath('tools_dir'), true)
+                ->addPath('bundles_path', $this->getPath('src_path').$this->getPath('bundles_dir'))
+                ->addPath('tools_path', $this->getPath('src_path').$this->getPath('tools_dir'))
                 // global CarteBlanche path
                 ->addPath('carte_blanche_core', $this->getPath('src_path').'/vendor/carte-blanche/core/src/CarteBlanche/')
                 // user fallbacks
@@ -344,6 +330,9 @@ final class Kernel implements StaticCreatorInterface
                 ->addPath('var_path', $this->getPath('root_path').$this->getPath('var_dir'), true, true)
                 // internal cache dir
                 ->addPath('app_cache_path', $this->getPath('root_path').$this->getPath('app_cache_dir'), true, true)
+                // internal logs dir
+                ->initConstantPath('_APPLOGSDIR', 'log_dir')
+                ->addPath('log_path', $this->getPath('root_path').$this->getPath('log_dir'), true, true)
                 ;
             if (defined('_CLI_CALL') && false===_CLI_CALL) {
                 $this
@@ -390,7 +379,7 @@ final class Kernel implements StaticCreatorInterface
 		if (!empty($config_files)) {
 			if (!is_array($config_files)) $config_files = array($config_files);
 			foreach($config_files as $cfgf) {
-        		$user_cfgfile = \CarteBlanche\App\Locator::locateConfig($cfgf);
+        		$user_cfgfile = Locator::locateConfig($cfgf);
 				if (!file_exists($user_cfgfile)) {
         			throw new ErrorException( 
 		        	    sprintf('Defined configuration file not found in "%s" [%s]!', $this->getPath('config_dir'), $cfgf)
@@ -415,6 +404,28 @@ final class Kernel implements StaticCreatorInterface
 		if (!empty($user_config)) {
             $config->set($user_config, true, 'user');
 		}
+
+/*/
+		$this->getContainer()->set('loader', new \CarteBlanche\App\Loader);
+		$this->getContainer()->set('locator', new \CarteBlanche\App\Locator);
+		$this->getContainer()->set('response', new \CarteBlanche\App\Response);
+//*/
+        $base_objects = $config->get('carte_blanche.base_objects');
+        foreach(array('loader', 'locator', 'response') as $type) {
+            $class_name = isset($base_objects[$type]) ?
+                $base_objects[$type] : '\CarteBlanche\App\\'.ucfirst($type);
+            if (class_exists($class_name)) {
+        		$this->getContainer()->set($type, new $class_name);
+            } else {
+                $this->addBootError(
+                    sprintf('Required base object type "%s" not found! (searching class "%s")',
+                        $type,
+                        $class_name
+                    )
+                );
+            }
+        }
+//*/
 	}
 
 	/**
@@ -436,9 +447,13 @@ final class Kernel implements StaticCreatorInterface
 
         // load internal dependencies
         $internal_deps = $config->get('carte_blanche.internal_dependencies');
-        foreach ($internal_deps as $dep) {
+        foreach ($internal_deps as $name=>$dep) {
             try {
-                $this->getContainer()->load($dep);
+                $this->getContainer()->load(
+                    is_numeric($name) ? $dep : $name,
+                    array(),
+                    $dep
+                );
             } catch (Exception $e) {
                 $this->addBootError(
                     sprintf('An error occured while loading a dependency: "%s"', $e->getMessage())
@@ -448,9 +463,11 @@ final class Kernel implements StaticCreatorInterface
 
         // load the app bootstrap
 		if (false===$this->is_booted) {
-			if ($_f = \CarteBlanche\App\Locator::locateData('bootstrap.php')) {
+            $namespace = $config->get('carte_blanche.app_namespace', 'App');
+			if ($_f = Locator::locateData('bootstrap.php')) {
 				include_once $_f;
-				$cont = new \App\Bootstrap\ContainerBootstrap($this);
+				$bootstrap_class = '\\'.$namespace.'\Bootstrap\ContainerBootstrap';
+				$cont = new $bootstrap_class($this);
 			} else {
 				throw new ErrorException("Bootstrap file can't be found!");
 			}
