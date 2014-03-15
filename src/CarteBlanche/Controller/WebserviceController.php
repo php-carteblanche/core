@@ -20,7 +20,7 @@ use \CarteBlanche\CarteBlanche,
  *
  * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
-class DefaultController
+class WebserviceController
     extends AbstractControllerCarteBlancheDefault
 {
 

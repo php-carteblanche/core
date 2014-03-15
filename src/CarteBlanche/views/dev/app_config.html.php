@@ -6,7 +6,7 @@ if (!isset($debug)) $debug=false;
 
 ?>
 
-<h3>Constants list</h3>
+<h3><?php _trans('Constants list'); ?></h3>
 <ul>
 <?php if (0!=count($constants)) : ?>
 
@@ -23,7 +23,7 @@ if (!isset($debug)) $debug=false;
 	    ) : ?>
     	    <a href="<?php _echo(
     	        \CarteBlanche\Library\Dev\DevHelper::getDocUrl($_val)
-    	    ); ?>" title="See documentation"><?php _echo($_val); ?></a>
+    	    ); ?>" title="<?php _trans_js('See documentation'); ?>"><?php _echo($_val); ?></a>
 	    <?php else : ?>
     	    <?php _echo($_val); ?>
 	    <?php endif; ?>
@@ -33,5 +33,6 @@ if (!isset($debug)) $debug=false;
 <?php endif; ?>
 </ul>
 
-<h3>Internal configuration</h3>
+<h3><?php _trans('Internal configuration'); ?></h3>
+
 <?php view('default_list', array('items'=>$config)); ?>

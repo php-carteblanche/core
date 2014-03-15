@@ -1,8 +1,136 @@
 index;fr;en
 datetime_mask;%e %B %Y %H:%M:%S;%a %e %m %Y %H:%M:%S
+datetime_mask_icu;d LLLL Y HH:mm:ss;eee d MM Y HH:mm:ss
 test;Test en français;Test in english
 test_args;J'ai eu les arguments : « %arg1% » et « %arg2% »;I received arguments : « %arg1% » and « %arg2% »
 test_item_zero;Aucun item;No item
 test_item_one;Un seul item;Just one item
 test_item_two;Deux items;Two items
 test_item_multi;Il y a %nb% items;There are %nb% items
+;Bonjour;Hello
+;Votre système CarteBlanche semble fonctionner parfaitement !;Your CarteBlanche system seems to work perfectly!
+;Un test de chaîne traduite non-indéxée;Test of non-indexed string
+html_test;"Un test avec des <b>tags</b> <abbr title=""Hyper Text Markup Language"">HTML</abbr> …";"A test with <abbr title=""Hyper Text Markup Language"">HTML</abbr> <b>tags</b> …"
+;Accueil;Home
+;Versions;Versions
+;Structure des tables;Tables structure
+;doc;doc
+;Crédits;Credits
+;"Le répertoire ""%dirname%"" existe.";"Directory ""%dirname%"" exists."
+;"Le répertoire ""%dirname%"" n'existe pas !";"Directory ""%dirname%"" does not exist!"
+;Veuillez le créer manuellement.;Please create it manually.
+;"Le répertoire ""%dirname%"" est inscriptible.";"Directory ""%dirname%"" is writable."
+;"Le répertoire ""%dirname%"" n'est pas inscriptible !";"Directory ""%dirname%"" is not writable!"
+;Veuillez autoriser l'utilisateur web du système à y écrire.;Please authorize system's web user to write in it.
+;"Le répertoire ""%dirname%"" n'existe pas et n'a pas pu être créé !";"Directory ""%dirname%"" doesn't exist and can not be created!"
+;Veuillez le créer manuellement et autoriser l'utilisateur web du système à y écrire.;Please create it manually and authorize system\'s web user to write in it.
+;Version de PHP : %version%;PHP version: %version%
+;Version de SQLite: %version%;SQLite version: %version%
+;"Votre version de PHP n'est pas suffisante. Veuillez vous reporter au <a href=""http://www.php.net/manual/fr/"">manuel PHP</a>.";"Your PHP version is not enough. Please check the <a href=""http://www.php.net/manual/en/"">PHP manual</a>."
+;"SQLite n'est pas installé. Veuillez vous reporter au <a href=""http://www.php.net/manual/fr/book.sqlite.php"">manuel PHP</a>.";"SQLite is not installed. Please check the <a href=""http://www.php.net/manual/en/book.sqlite.php"">PHP manual</a>."
+;OK – Votre système semble suffisant pour faire fonctionner l'application correctement.;OK - Your system seems to be enough to let this application work correctly.
+;! - Votre système ne semble pas suffisant pour faire fonctionner l'application correctement ! (<em>voyez les ereurs ci-dessous</em>);! - Your system doesn\'t seem to be enough to let this application work correctly! (<em>see errors below</em>).
+;Profileur pour la requête : %url%;Profiler for request: %url%
+;+ profileur;+ profiler
+;Montrer ou cacher le profileur;Show or hide profiler
+;debug;debug
+;carte de l'app;app map
+;config CB;CB config
+;page de test;test page
+;documentation;documentation
+;%nb% requêtes en BDD;%nb% DB queries
+;une requête en BDD;1 DB query
+;aucune requête en BDD;no DB query
+;%nb% vues construites;%nb% views parsed
+;1 vue construite;1 view parsed
+;aucune vue construite;no view parsed
+;Contrôleur / action;controller / action
+;%nb% entrées en session;%nb% session entries
+;1 entrée en session;1 session entry
+;aucune entrée en session;no session entry
+;%nb% entrées flash en session;%nb% session flash entries
+;1 entrée flash en session;1 session flash entry
+;aucune entrée flash en session;no session flash entry
+;app:;app:
+;clone;clone
+;date:;date:
+;date ISO;ISO date
+;PHP vers.:;PHP vers.:
+;SQLite vers.:;SQLite vers.:
+;Système du serveur web:;Webserver system:
+;Serveur OS:;Server OS:
+;Navigateur/Appareil:;Browser/Device:
+;Retour à l'accueil;Go back home
+;Voir les versions du système;See system versions
+;Voir la structure des tables;See tables structure
+;Voir la documentation;See documentation
+;Voir les crédits de l'application;See application credits
+;Test du système;System checker
+;À propos;About
+;Carte complète de l'application;Application full map
+;Configuration complète de l'application;Application full config
+;Liste des contrôleurs;Controllers list
+;Tester l'action par défaut de ce contrôleur;Test the default action of this controller
+;Tester l'action par défaut de ce contrôleur dans une nouvelle fenêtre;Test the default action of this controller in a new window
+;Voir la liste des méthodes du contrôleur;See controller's methods list
+;méthodes;methods
+;Tester cette méthode;Test this method
+;Tester cette méthode dans une nouvelle fenêtre;Test this method in a new window
+;arguments attendus;arguments expected
+;"Dans le bundle ""<strong>%name%</strong>""";"In bundle ""<strong>%name%</strong>"""
+;Liste des constantes;Constants list
+;Configuration interne;Internal configuration
+;Système non installé;System not installed
+;Votre système semble vide (<em>aucune base de données trouvée</em>) ...;Your system seems empty (<em>no database found</em>) ...
+;cliquez ici pour vérifier que votre système est suffisant pour exécuter l'application;clic here to check if your system allows this application to work
+;cliquez ici pour l'installer;clic here to install it
+;Erreurs système;System errors
+;Les erreurs suivantes ont été détectées en démarrant le système. Vous DEVEZ les corriger pour utiliser CarteBlanche correctement.;The following errors had been found booting the system. You MUST correct them to use CarteBlanche correctly.
+;"Pour information et un déboguage, l'application tourne avec l'utilisateur système ""%user%""";"For information and debugging, the application is running using the system's user ""%user%"""
+;OOPS ! La page n'a pas été trouvée !!;OOPS ! The page was not found !!
+;OOPS ! Une erreur est survenue !!;OOPS ! An error occurred !!
+;Liste complète des contenus du site;Complete list of website contents
+;Aller au plan du site;Go to sitemap
+;Transmettre un email à l'administrateur du site avec des informations sur l'erreur et l'environnement courant.;Transmit an email to the website administrators with your error informations and environement
+;Transmettre un rapport;Transmit a report
+;OK – Un rapport a été envoyé concernant votre erreur. Merci.;OK - A report has been sent concerning your error. Thank you.
+;ERREUR – Une erreur est survenue en tentant d'envoyer un email …;ERROR - An error occured while trying to send email ...
+;Traduire;Translate
+;Traduire l'application;Translate the application
+;Langue sélectionnée;Selected language
+;Sélectionner cette langue;Choose this language
+;Soumettre;Submit
+en;Anglais;English
+fr;Français;French
+;Soumettre votre choix;Submit your choice
+;Langage;Language
+;Page générée en %time% secondes;Page rendered in %time% seconds
+;Précédent;Previous
+;Suivant;Next
+;Voir le contenu précédent;See previous content
+;Voir le contenu suivant;See next content
+;Documentation;Documentation
+;Montre/cacher les outils;Show/Hide tools
+;Augmenter la taille de la police du bloc de contenu;Increase font-size of block's content
+;Diminuer la taille de la police du bloc de contenu;Decrease font-size of block's content
+;Retourner à la taille par défaut pour la police du bloc de contenu;Back to the original font-size of block's content
+;+ Outils;+ Toolbox
+;"Paginer&nbsp;:&nbsp;";"Paginate&nbsp;:&nbsp;"
+;"Entrées par page&nbsp;:&nbsp;";"Items per page&nbsp;:&nbsp;"
+;Aller à la première page;Reach first page
+;Aller à la page précédente;Reach previous page
+;Aller à cette page;Reach this page
+;Aller à la page suivante;Reach next page
+;Aller à la dernière page;Reach last page
+;Choisir le nombre d'entrées par page;Choose number of items per page
+;Chaîne de recherche;Search string
+;Tapez une chaîne ou une expression à recherche. L'utilisation des opérateurs logiques est autorisée.;Type a string or expression to search. Logical operators are allowed.
+;vider;clear
+;Obtenir de l'aide sur le fonctionnement de cette boîte de recherche …;Get some help on how this search box works ...
+;rechercher;search
+;Lancer la recherche;Launch this search
+;Vider le champ de recherche;Empty search field
+;Fermer cette boîte de message;Close this message box
+;Voir plus;Read more
+;Retour à l'accueil;Back to homepage
+;Retour à %url%;Back to %url%

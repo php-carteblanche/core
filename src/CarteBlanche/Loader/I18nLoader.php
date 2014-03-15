@@ -1,10 +1,13 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche\Loader;
@@ -14,7 +17,7 @@ use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 use \I18n\Loader as OriginalI18nLoader;
 
 /**
- * @author 		Piero Wbmstr <piero.wbmstr@gmail.com>
+ * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class I18nLoader
     extends OriginalI18nLoader
@@ -32,26 +35,23 @@ class I18nLoader
         $root_path = CarteBlanche::getPath('root_path');
         $var_path = CarteBlanche::getPath('var_path');
         $langs = isset($config['available_languages']) ?
-            $config['available_languages'] : array('en');
+            $config['available_languages'] : array('en'=>'en_US_USD');
 
-        $options = array(
+        $language_strings_db_filename_locator = function($i) {
+            return str_replace(
+                    CarteBlanche::getPath('root_path'), '',
+                    CarteBlanche::getContainer()->get('locator')->locateLanguage($i)
+                );
+        };
+        $options = array_merge($config, array(
             'available_languages'       => $langs,
-            'arg_wrapper_mask'          => $config['arg_wrapper_mask'],
-            'language_varname'          => $config['language_vars_mask'],
-            'language_filename'         => $config['language_files_mask'],
             'language_directory'        => $var_path.$config['language_directory'],
-//            'language_strings_db_directory'  => $root_path._CarteBlanche_DIR,
             'language_strings_db_directory'  => $root_path,
-            'language_strings_db_filename'  => str_replace($root_path, '', CarteBlanche::getContainer()->get('locator')
-                ->locateLanguage($config['language_strings_db_filename'])),
+            'language_strings_db_filename_closure'  => $language_strings_db_filename_locator,
             'force_rebuild' => true,
-        );
-        if (
-            (isset($config['show_untranslated']) && $config['show_untranslated']) ||
-            CarteBlanche::getKernel()->getMode()==='dev'
-        ) {
+        ));
+        if (strtolower(CarteBlanche::getKernel()->getMode())==='dev') {
             $options['show_untranslated'] = true;
-            $options['show_untranslated_wrapper'] = '<span class="untranslated"><strong>%s</strong> (%s)</span>';
         }
 
         \Library\Helper\Directory::ensureExists($options['language_directory']);

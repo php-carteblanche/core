@@ -1,22 +1,37 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche\Controller;
 
-use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\Abstracts\AbstractController;
-use \CarteBlanche\Library\Form\Field;
+use \CarteBlanche\CarteBlanche,
+    \CarteBlanche\Abstracts\AbstractController,
+    \CarteBlanche\Library\Form\Field,
+    \CarteBlanche\Library\Helper;
+
+use \CarteBlanche\Exception\NotFoundException,
+    \CarteBlanche\Exception\AccessForbiddenException,
+    \CarteBlanche\Exception\InternalServerErrorException,
+    \CarteBlanche\Exception\Exception,
+    \CarteBlanche\Exception\ErrorException,
+    \CarteBlanche\Exception\DomainException,
+    \CarteBlanche\Exception\RuntimeException,
+    \CarteBlanche\Exception\InvalidArgumentException,
+    \CarteBlanche\Exception\UnexpectedValueException;
+
 
 /**
  * Default dvelopment controller extending abstract \CarteBlanche\Abstracts\AbstractController class
  *
- * @author 		Piero Wbmstr <piero.wbmstr@gmail.com>
+ * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class Dev extends AbstractController
 {
@@ -176,9 +191,10 @@ class Dev extends AbstractController
 			}
 		}
 
+        $mode_data = \CarteBlanche\CarteBlanche::getKernelMode(true);
 		return array(self::$views_dir.'app_map', array(
-            'title' => 'Application full map',
-            'debug' => defined('_APP_MODE') && _APP_MODE==='dev',
+            'title' => $this->trans('Application full map'),
+            'debug' => isset($mode_data['debug']) ? $mode_data['debug'] : false,
             'app_controllers'=>$app_controllers,
             'bundles_controllers' => $bundles_controllers,
 		));
@@ -195,9 +211,10 @@ class Dev extends AbstractController
 	    $reflection_cb = new \ReflectionClass('\CarteBlanche\App\Kernel');
 	    $constants = $reflection_cb->getConstants();
 
+        $mode_data = \CarteBlanche\CarteBlanche::getKernelMode(true);
 		return array(self::$views_dir.'app_config', array(
-            'title' => 'Application full config',
-            'debug' => defined('_APP_MODE') && _APP_MODE==='dev',
+            'title' => $this->trans('Application full config'),
+            'debug' => isset($mode_data['debug']) ? $mode_data['debug'] : false,
             'constants'=>$constants,
             'config' => $config,
 		));
@@ -267,9 +284,17 @@ TODO
 	 */
 	public function testAction($arg1 = null, $arg2 = 'value')
 	{
+//				throw new InternalServerErrorException("Capture l'exception par défaut", 12);
+				throw new NotFoundException("Capture l'exception par défaut", 12);
+
+        $lang_sel = new \Tool\LanguageSelector(array(
+            'home'=>$this->getContainer()->get('router')->buildUrl(array('controller'=>'cms', 'altdb'=>$_altdb)),
+            'current'=>$title,
+        ));
 
 		return array('test', array(
             'title' => 'Test page',
+            'language_selector' => $lang_sel,
 		));
 /*
 echo '<pre>';
@@ -404,10 +429,10 @@ echo '<p>Tests in english</p>';
 
 echo _D($date);
 
-echo _T('test');
+_trans('test');
 
 echo '<br /><br />';
-echo _T('test_args', array('arg1'=>'AZERTY', 'arg2'=>4.657));
+_trans('test_args', array('arg1'=>'AZERTY', 'arg2'=>4.657));
 
 echo '<br /><br />';
 $counter=0;
@@ -459,10 +484,10 @@ echo '<p>Same tests in french</p>';
 
 echo _D($date, null, 'UTF-8', 'fr');
 
-echo _T('test', array(), 'fr');
+_trans('test', array(), 'fr');
 
 echo '<br /><br />';
-echo _T('test_args', array('arg1'=>'AZERTY', 'arg2'=>4.657), 'fr');
+_trans('test_args', array('arg1'=>'AZERTY', 'arg2'=>4.657), 'fr');
 
 echo '<br /><br />';
 $counter=0;
@@ -595,10 +620,10 @@ echo '<p>Tests in english</p>';
 
 echo _D($date);
 
-echo _T('test');
+_trans('test');
 
 echo '<br /><br />';
-echo _T('test_args', array('arg1'=>'AZERTY', 'arg2'=>4.657));
+_trans('test_args', array('arg1'=>'AZERTY', 'arg2'=>4.657));
 
 echo '<br /><br />';
 $counter=0;
@@ -650,10 +675,10 @@ echo '<p>Same tests in french</p>';
 
 echo _D($date, null, 'UTF-8', 'fr');
 
-echo _T('test', array(), 'fr');
+_trans('test', array(), 'fr');
 
 echo '<br /><br />';
-echo _T('test_args', array('arg1'=>'AZERTY', 'arg2'=>4.657), 'fr');
+_trans('test_args', array('arg1'=>'AZERTY', 'arg2'=>4.657), 'fr');
 
 echo '<br /><br />';
 $counter=0;

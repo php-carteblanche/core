@@ -1,10 +1,13 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche\Controller;
@@ -20,9 +23,10 @@ use \Library\CommandLine\Helper,
 /**
  * Default controller for command line operations
  *
- * @author 		Piero Wbmstr <piero.wbmstr@gmail.com>
+ * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
-class CommandLine extends AbstractCommandLineController
+class CommandLineController
+    extends AbstractCommandLineController
 {
 
 	/**
@@ -34,6 +38,28 @@ class CommandLine extends AbstractCommandLineController
 	{
 		$this->render(array(
 			'output'=> 'YO'
+		));
+	}
+
+	/**
+	 * Page of system errors
+	 *
+	 * @return string The view content
+	 */
+	public function bootErrorAction(array $errors = null)
+	{
+	    $session = $this->getContainer()->get('session');
+	    $original_errors = $session->has('boot_errors') ? $session->get('boot_errors') : $errors;
+	    $running_user = $this->getKernel()->whoAmI();
+
+        $output = $this->view(self::$views_dir.'errors', array(
+            'title'=>$this->trans('System errors'),
+            'original_errors'=>$original_errors,
+            'running_user' => $running_user,
+            'errors'=>$errors
+        ));
+		$this->render(array(
+			'output'=> $output
 		));
 	}
 

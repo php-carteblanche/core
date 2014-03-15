@@ -1,16 +1,19 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche;
 
 /**
- * @author 		Piero Wbmstr <piero.wbmstr@gmail.com>
+ * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class CarteBlanche
 {
@@ -58,7 +61,7 @@ class CarteBlanche
     }
 
     /**
-     * @alias \App\Logger::log()
+     * @alias \CarteBlanche\App\Logger::log()
      */
     public static function log($message, $level = \Library\Logger::DEBUG, array $context = array(), $logname = null)
     {
@@ -75,6 +78,14 @@ class CarteBlanche
 	public static function getlocale()
 	{
 		return \Locale::getDefault();
+	}	
+
+    /**
+     * @alias \CarteBlanche\App\Kernel::getMode($config)
+     */
+	public static function getKernelMode($config = 'dev')
+	{
+		return \CarteBlanche\App\Container::getInstance()->get('kernel')->getMode($config);
 	}	
 
     /**

@@ -57,7 +57,7 @@ $_template->getTemplateObject('MetaTag')->reset();
 
 // => charset and others
 $_template->getTemplateObject('MetaTag')
-	->add('Content-Type', 'text/html; charset=UTF-8', true)
+	->add('charset', (isset($charset) ? $charset : 'UTF-8'))
 	->add('X-UA-Compatible', 'IE=edge,chrome=1', true)
 	->add('viewport', 'width=device-width');
 
@@ -162,8 +162,13 @@ $_template->getTemplateObject('LinkTag')->set($old_links);
 $old_titles = $_template->getTemplateObject('TitleTag')->get();
 $_template->getTemplateObject('TitleTag')->reset();
 
-// => $title
-if (!empty($title))
+// => $page_title or $title
+if (!empty($page_title))
+{
+	$_template->getTemplateObject('TitleTag')
+		->add( $page_title );
+}
+elseif (!empty($title))
 {
 	$_template->getTemplateObject('TitleTag')
 		->add( $title );
@@ -223,12 +228,15 @@ if (empty($content)) $content = '<p>Test content</p>';
 
 //echo '<pre>';var_dump($_template);exit('yo');
 
+// lang info
+$lang_info = isset($lang) ? ' lang="'.$lang.'"' : '';
+
 ?><!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
+<!--[if lt IE 7]>      <html<?php echo $lang_info; ?> class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html<?php echo $lang_info; ?> class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html<?php echo $lang_info; ?> class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html<?php echo $lang_info; ?> class="no-js"> <!--<![endif]-->
+<head>
 <?php
 echo
 	$_template->getTemplateObject('MetaTag')->write("\n\t\t %s "),
@@ -251,17 +259,29 @@ else
 
 echo "\n";
 ?>
-    </head>
-    <body>
-    <div id="page-wrapper">
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
-        <a id="top"></a>
+</head>
+<body>
+<div id="page-wrapper">
+    <!--[if lt IE 7]>
+        <p class="chromeframe">
+            <?php _trans('You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.'); ?>
+        </p>
+    <![endif]-->
+    <a id="top"></a>
 
 <?php if (!empty($title)) : ?>
 	<div id="page_header" class="header">
-		<h1><?php _echo($title); ?></h1>
+    	<div class="float-left">
+    		<h1><?php _echo($title); ?></h1>
+    	</div>
+
+    <?php if (!empty($language_selector)) : ?>
+    	<div class="float-right">
+            <?php echo $language_selector; ?>
+    	</div>
+    <?php endif; ?>
+
+    	<br class="clearer" />
 	</div>
 <?php endif; ?>
 
@@ -275,13 +295,17 @@ echo "\n";
 
 	<div id="page_content" class="content">
 
-	<?php if (!empty($flash_messages)) : ?>
-		<?php foreach ($flash_messages as $_flash) : ?>
-			<div class="<?php _echo( !empty($_flash['class']) ? $_flash['class'] : 'ok' ); ?>_message">
-			<?php _echo($_flash['content']); ?>
-			</div>
-		<?php endforeach; ?>
-	<?php endif; ?>
+<?php if (!empty($flash_messages)) : ?>
+    <?php foreach ($flash_messages as $_flash) : 
+        $msg_id = _getid(null, null, true);
+    ?>
+        <div class="<?php _echo( !empty($_flash['class']) ? $_flash['class'] : 'ok' ); ?>_message" id="<?php echo $msg_id; ?>">
+            <a href="#0" onclick="closeMessageBox('<?php echo $msg_id; ?>');" class="message_closer"
+                title="<?php _trans_js('Close this message box'); ?>">&nbsp;x&nbsp;</a>
+            <?php _echo($_flash['content']); ?>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 
 	<?php _echo($output); ?>
 
@@ -303,19 +327,19 @@ echo "\n";
 	'action'=>$action,
   ) ); ?>
 <?php endif; ?>
-	<div class="forprinters">
-		Original content on the Internet :
-		<br />
-		<strong><?php _echo(current_url(true)); ?></strong>
-		<br />
-		Page rendered in <?php _echo(round((microtime(true) - $_SERVER['REQUEST_TIME']), 3)); ?> seconds
-		&nbsp;|&nbsp;
-		<?php _echo(date('D d M Y H:i:s')); ?>
-	</div>
+        <div class="forprinters">
+            <?php _trans('Original content on the Internet :'); ?>
+            <br />
+            <strong><?php _echo(current_url(true)); ?></strong>
+            <br />
+            <?php _trans('Page rendered in') . ' ' . _echo(round((microtime(true) - $_SERVER['REQUEST_TIME']), 3)) . ' ' . _T('seconds'); ?>
+            &nbsp;|&nbsp;
+            <?php _echo(date('D d M Y H:i:s')); ?>
+        </div>
 	</div>
 
-        <a id="bottom"></a>
-    </div>
+    <a id="bottom"></a>
+</div>
 
 <?php
 if (true===$minify_js)
@@ -330,6 +354,5 @@ echo
 	$_template->getTemplateObject('CssTag')->write("%s"),
 	"\n";
 ?>
-
-    </body>
+</body>
 </html>

@@ -1,6 +1,29 @@
 CarteBlanche - Controllers
 ==========================
 
+Related PHP classes:
+
+-   `\CarteBlanche\Abstracts\AbstractController`
+-   `\CarteBlanche\Interfaces\ControllerInterface`
+
+Controllers of the distribution:
+
+-   `\CarteBlanche\Controller\DefaultController`
+-   `\CarteBlanche\Controller\AjaxController`
+-   `\CarteBlanche\Controller\ErrorController`
+-   `\CarteBlanche\Controller\CommandLineController`
+-   they must all extend the `\CarteBlanche\Abstracts\AbstractControllerCarteBlancheDefault` class
+
+Other useful classes:
+
+-   `\CarteBlanche\Abstracts\AbstractControllerConfigurable`
+
+Classic HTML errors:
+
+-   `\CarteBlanche\Exception\NotFoundException` (404 not found error)
+-   `\CarteBlanche\Exception\AccessForbiddenException` (403 forbidden error)
+-   `\CarteBlanche\Exception\InternalServerErrorException` (500 internal server error)
+
 
 ## What is a controller?
 
@@ -11,12 +34,12 @@ seems to mean, control the requested action of the application.
 
 ## How does it work in CarteBlanche?
 
-In CarteBlanche, controllers must extend the `\CarteBlanche\App\Abstracts\AbstractController` class or
-its descendants or at least implement the `\CarteBlanche\App\Interfaces\ControllerInterface` interface.
+In CarteBlanche, controllers must extend the `\CarteBlanche\Abstracts\AbstractController` class or
+its descendants or at least implement the `\CarteBlanche\Interfaces\ControllerInterface` interface.
 Each action of a controller is defined as a method named `[action_name]Action()` that can
-handles some parameters, required or not, that will be fetched from treated request (most 
-of the time a `\CarteBlanche\App\Request` instance). Finally, the action must return a "thing" that permits
-to send a final response, by default with the `\CarteBlanche\App\Response` class.
+handles some parameters, required or not, which will be fetched from treated request (by default the
+`\CarteBlanche\App\Request` instance). Finally, the action must return a "thing" that permits
+to send a final response (by default with the `\CarteBlanche\App\Response` class).
 
 ### Fetching arguments
 
@@ -50,17 +73,17 @@ In CarteBlanche, controller's methods MUST return one of the followings:
 
 -   **nothing** if the PHP process stops before method's return (with a `die()` for example)
 -   **a string** that will be considered as the final response main content and will be loaded
-    in the global `$container->get('response')` object
+    in the global `$container->get('response')` object or in the global template
 -   **an array** of values, constructed like `array ( view_file , parameters )`, that will
     be considered as the name of a view to include followed by an array of parameters to load
     to this view ; in this case, the final content will be the string of the rendering of the
-    view, passing it the parameters, and will be finally loaded in the `$container->get('response')` main content
+    view, passing it the parameters, and will be finally loaded in the `$container->get('response')`
+    main content
 -   **a Response object** which will replace the global response prepared by the Kernel.
 
 
 
-
 ----
-**Copyleft (c) 2013 [Les Ateliers Pierrot](http://www.ateliers-pierrot.fr/)** - Paris, France - Some rights reserved.
+**(c) 2013-2014 [Les Ateliers Pierrot](http://www.ateliers-pierrot.fr/)** - Paris, France - Some rights reserved.
 
 This documentation is licensed under the [Creative Commons - Attribution - Share Alike - Unported - version 3.0](http://creativecommons.org/licenses/by-sa/3.0/) license.

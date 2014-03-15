@@ -17,14 +17,14 @@ use \CarteBlanche\CarteBlanche,
     \CarteBlanche\Exception\Exception as BaseException;
 
 /**
- * Exception application handler for not-found objects and "404 not found" page
+ * Exception application handler for not-found objects and "500 internal server error" page
  *
  * All exceptions are written in the logs (by default in the "error.log" file)
  * except if `app.modes._APP_MODE.log_exceptions=false`
  *
  * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
-class NotFoundException
+class InternalServerErrorException
     extends BaseException
 {
 
@@ -38,7 +38,7 @@ class NotFoundException
 	public function __construct($message, $code = 0, $previous = null) 
 	{
 		// parent constructor
-		parent::__construct($message, $code, $previous, false);
+		parent::__construct($message, $code, $previous);
 	}
 
 	/**
@@ -50,7 +50,7 @@ class NotFoundException
 	{
         $args = array('message'=>$this->getAppMessage());
         return FrontController::getInstance()
-            ->renderProductionError($args, 404);
+            ->renderProductionError($args, 500);
 	}
 
     /**
@@ -60,7 +60,7 @@ class NotFoundException
      */
     public function getAppMessage()
     {
-        return sprintf('[%s] "%s" (HTTP status 404)', get_class($this), $this->getMessage());
+        return sprintf('[%s] "%s" (HTTP status 500)', get_class($this), $this->getMessage());
     }
 
 }

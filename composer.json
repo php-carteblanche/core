@@ -21,16 +21,11 @@
         "atelierspierrot/patterns": "1.*",
         "atelierspierrot/library": "1.*",
         "atelierspierrot/internationalization": "1.*",
-        "atelierspierrot/webfilesystem": "1.*",
-        "atelierspierrot/markdown-extended": "dev-master",
         "atelierspierrot/assets-manager": "1.*",
         "atelierspierrot/templatengine": "1.*",
         "atelierspierrot/devdebug": "1.*",
-        "atelierspierrot/git-api": "1.*",
-        "atelierspierrot/media-processing": "1.*",
         "atelierspierrot/mime-mailer": "1.*",
-        "atelierspierrot/webservices": "1.*",
-        "atelierspierrot/validators": "1.*"
+        "atelierspierrot/webservices": "1.*"
     },
     "require-dev": {
         "composer/composer": "1.*@dev",

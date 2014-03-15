@@ -15,17 +15,29 @@ namespace CarteBlanche\Interfaces;
 /**
  * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
-interface ConfigFiletypeInterface
+interface CarteBlancheExceptionInterface
 {
 
+	/**
+	 * Render of a production error
+	 *
+	 * @return void
+	 */
+	function productionRendering();
+
+	/**
+	 * Log the exception in `error.log`
+	 *
+	 * @return void
+	 */
+	function log();
+
     /**
-     * Parse a file content
+     * Get the CarteBlanche information string about an Exception
      *
-     * @param object SplFileInfo for the file to parse
-     *
-     * @return array
+     * @return string
      */
-    function parse(\SplFileInfo $file);
+    function getAppMessage();
 
 }
 

@@ -50,8 +50,8 @@ namespace CarteBlanche\App\Bootstrap {
 				}
 //echo "<br />assigning bundle '$bundle_namespace' in directory '$bundle_dir' to container";
 			}
-			if (defined('_APP_MODE')) {
-				$_p=_APP_MODE.'_stacks';
+			if ($mode = $this->kernel->getMode()) {
+				$_p = $mode . '_stacks';
 				if (property_exists($this, $_p))
 				foreach( $this->$_p as $obj_name=>$obj_callback ) {
 					if (method_exists($this, $obj_callback))
