@@ -1,10 +1,13 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche\App;
@@ -29,9 +32,9 @@ use \Library\Helper\Html as HtmlHelper,
     \Library\Helper\Directory as DirectoryHelper;
 
 /**
- * This is the global singleton instance of the application
+ * This is the global singleton instance of the CarteBlanche application
  *
- * @author 		Piero Wbmstr <piero.wbmstr@gmail.com>
+ * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 final class Kernel implements StaticCreatorInterface
 {
@@ -220,9 +223,14 @@ final class Kernel implements StaticCreatorInterface
 	protected $is_debug = false;
 
 	/**
+	 * @var bool
+	 */
+	protected $is_shutdown = false;
+
+	/**
 	 * @var string
 	 */
-	protected $mode = 'prod';
+	protected $mode = 'dev';
 
 	/**
 	 * Constructor : defines the current URL and gets the routes
@@ -230,7 +238,6 @@ final class Kernel implements StaticCreatorInterface
 	 * @param string|array $config_file
 	 * @param array $user_config
 	 * @param string $mode
-	 *
 	 * @return \CarteBlanche\App\Kernel
 	 */
 	public static function create($config_files = null, array $user_config = null, $mode = null)
@@ -246,16 +253,14 @@ final class Kernel implements StaticCreatorInterface
 	 *
 	 * @param string|array $config_files
 	 * @param array $user_config
-	 * @param string $mode The kernel mode, can be 'prod' or 'dev' (for now)
+	 * @param string $mode_arg      The kernel mode, can be 'prod' or 'dev' (for now)
+	 * @return void
 	 *
 	 * @throws ErrorException if the application default configuration file is not found
 	 * @throws ErrorException if the user configuration file is defined but not found
 	 */
-	public function init($config_files = null, array $user_config = null, $mode = null)
+	public function init($config_files = null, array $user_config = null, $mode_arg = null)
 	{
-	    if (!empty($mode)) {
-	        $this->setMode($mode);
-	    }
 		$this->getContainer()->set('kernel', $this);
 		$this->getContainer()->set('config', new \CarteBlanche\App\Config);
         $config = $this->getContainer()->get('config');
@@ -314,11 +319,6 @@ final class Kernel implements StaticCreatorInterface
             $this->addBootError(
                 sprintf('An error occured while booting: "%s"', $e->getMessage())
             );
-        }
-
-        // error reporting
-        if (defined('_APP_MODE') && _APP_MODE==='prod') {
-            @ini_set('display_errors','0');
         }
 
         // app temporary or writables paths
@@ -426,10 +426,19 @@ final class Kernel implements StaticCreatorInterface
             }
         }
 //*/
+
+        // error reporting
+        $this->__setMode(
+            !empty($mode_arg) ? $mode_arg : (
+                defined('_APP_MODE') ? _APP_MODE : 'dev'
+            )
+        );
 	}
 
 	/**
 	 * Boot: execute the app bootstrap and creates necessary dirs
+	 *
+	 * @return void
 	 */
 	private function boot()
 	{
@@ -482,13 +491,16 @@ final class Kernel implements StaticCreatorInterface
      */
     public function shutdown(&$arg = null, $callback = null)
     {
-        if ($this->getDebug()) {
+        if ($this->getDebug() && false===$this->is_shutdown) {
             return \DevDebug\Debugger::shutdown(true, $callback);
         }
     }
 
 	/**
 	 * Defines the request to treat
+	 *
+	 * @param object $request   \CarteBlanche\App\Request
+	 * @return self
 	 */
 	public function handles(Request $request)
 	{
@@ -497,6 +509,13 @@ final class Kernel implements StaticCreatorInterface
     	}
 	    $this->getContainer()->set('request', $request);
     	$this->getContainer()->get('router')->setUrl($request->buildUrl());
+        $mode_data = $this->getMode(true);
+        if (isset($mode_data['log_requests']) && $mode_data['log_requests']) {
+            \CarteBlanche\CarteBlanche::log(
+                get_class($request).' :: '.$this->getContainer()->get('request')->getUrl(),
+                \Library\Logger::INFO
+            );
+        }
 	    return $this;
 	}
 
@@ -505,6 +524,7 @@ final class Kernel implements StaticCreatorInterface
 	 *
 	 * If no request is defined yet, this will handle current HTTP request if so.
 	 *
+	 * @return string|void
 	 * @see \CarteBlanche\App\FrontController::distribute()
 	 */
 	public function distribute()
@@ -516,49 +536,42 @@ final class Kernel implements StaticCreatorInterface
     	if (empty($req)) {
     	    $this->handles(new Request);
     	}
-	    return $this->getContainer()->get('front_controller')->distribute();
+	    return $this->getContainer()->get('front_controller')
+	            ->distribute();
 	}
+
+    /**
+     * Load a new bundle namespace and map it to its path
+     *
+     * @param string $space
+     * @param string $dir
+     * @return bool
+     */
+    public function initBundle($space, $dir)
+    {
+        $bundle = new \CarteBlanche\App\Bundle($space, $dir);
+        return $this->getContainer()->setBundle($space, $bundle);
+    }
 
 // ------------------------
 // Setters / Getters
 // ------------------------
 
 	/**
-	 * Define the current kernel mode
+	 * Get the current kernel mode or mode configuration settings
 	 *
-	 * @param string $mode
-	 *
-	 * @return self
-	 */
-    public function setMode($mode)
-    {
-        $this->mode = strtoupper($mode);
-        switch ($this->mode) {
-            case 'DEV':
-                $this->setDebug(true);
-                break;
-            case 'PROD': default:
-                $this->setDebug(false);
-                break;
-        }
-        return $this;
-    }
-
-	/**
-	 * Get the current kernel mode
-	 *
+	 * @param bool $data    Get the configuration data (`true`) or just the mode name (default)
 	 * @return string
 	 */
-    public function getMode()
+    public function getMode($data = false)
     {
-        return $this->mode;
+        return true===$data ? $this->mode_data : $this->mode;
     }
 
 	/**
 	 * Define the current kernel debug mode
 	 *
-	 * @param string $debug
-	 *
+	 * @param bool|string $debug
 	 * @return self
 	 */
     public function setDebug($debug)
@@ -581,7 +594,6 @@ final class Kernel implements StaticCreatorInterface
 	 * Add a booting error
 	 *
 	 * @param string $string
-	 *
 	 * @return self
 	 */
     public function addBootError($string)
@@ -591,7 +603,7 @@ final class Kernel implements StaticCreatorInterface
     }
 
 	/**
-	 * Test if current kernel has botting errors
+	 * Test if current kernel has booting errors
 	 *
 	 * @return bool
 	 */
@@ -601,7 +613,7 @@ final class Kernel implements StaticCreatorInterface
     }
 
 	/**
-	 * Get the botting errors stack
+	 * Get the booting errors stack
 	 *
 	 * @return array
 	 */
@@ -623,11 +635,10 @@ final class Kernel implements StaticCreatorInterface
 	/**
 	 * Initialize a path from a constant
 	 *
-	 * @param string $cst A constant name
-	 * @param string $path_ref The path reference
-	 * @param bool $must_exists Check if concerned path exists
-	 * @param bool $must_be_writable Check if concerned path is writable
-	 *
+	 * @param string $cst               A constant name
+	 * @param string $path_ref          The path reference
+	 * @param bool $must_exists         Check if concerned path exists
+	 * @param bool $must_be_writable    Check if concerned path is writable
 	 * @return self
 	 *
 	 * @throws ErrorException if the constant is not defined
@@ -647,11 +658,10 @@ final class Kernel implements StaticCreatorInterface
 	/**
 	 * References a path value
 	 *
-	 * @param string $name The path reference
-	 * @param string $value The path value
-	 * @param bool $must_exists Check if concerned path exists
-	 * @param bool $must_be_writable Check if concerned path is writable
-	 *
+	 * @param string $name              The path reference
+	 * @param string $value             The path value
+	 * @param bool $must_exists         Check if concerned path exists
+	 * @param bool $must_be_writable    Check if concerned path is writable
 	 * @return self
 	 *
 	 * @throws RuntimeException if the path does not exists and `$must_exists` is true
@@ -697,8 +707,7 @@ final class Kernel implements StaticCreatorInterface
 	/**
 	 * Get a path value
 	 *
-	 * @param string $name The path reference
-	 *
+	 * @param string $name  The path reference
 	 * @return string|null
 	 */
     public function getPath($name)
@@ -710,6 +719,22 @@ final class Kernel implements StaticCreatorInterface
         }
         return $path;
     }
+
+	/**
+	 * Define if current kernel must launch its `shutdown` steps
+	 *
+	 * @param bool $bool
+	 * @return self
+	 */
+	public function setShutdown($bool = false)
+	{
+        $this->is_shutdown = $bool;
+        return $this;
+	}
+	
+// ------------------------
+// Utilities
+// ------------------------
 
     /**
      * Get current user name running the app
@@ -724,18 +749,57 @@ final class Kernel implements StaticCreatorInterface
     }
 
     /**
-     * Load a new bundle namespace and map it to its path
-     *
-     * @param string $space
-     * @param string $dir
+     * Check if app is in 'CLI' call mode
      *
      * @return bool
      */
-    public function initBundle($space, $dir)
+    public function isCli()
     {
-        $bundle = new \CarteBlanche\App\Bundle($space, $dir);
-        return $this->getContainer()->setBundle($space, $bundle);
+        return (
+            !defined('_CLI_CALL') ||
+            (defined('_CLI_CALL') && true===_CLI_CALL)
+        );
     }
+
+// ------------------------
+// Private Setters / Getters
+// ------------------------
+
+	/**
+	 * Define the current kernel mode
+	 *
+	 * Launch settings according to the MODE config entry
+	 *
+	 * @param string $mode
+	 * @return void
+	 */
+	private function __setMode($mode = 'dev')
+	{
+        $config = $this->getContainer()->get('config');
+		$mode_data = $config->get('carte_blanche.modes', array(), 'app');		
+
+		if (array_key_exists($mode, $mode_data)) {
+    		$this->mode = strtolower($mode);
+    	} else {
+    		$this->mode = isset($mode_data['default']) ? strtolower($mode_data['default']) : 'dev';
+    	}
+
+    	if (isset($mode_data[$this->mode])) {
+            $this->mode_data = $mode_data[$this->mode];
+            if (isset($this->mode_data['display_errors'])) {
+                @ini_set('display_errors',$this->mode_data['display_errors']);
+            }
+            if (isset($this->mode_data['error_reporting'])) {
+                @error_reporting($this->mode_data['error_reporting']);
+            }
+            if (isset($this->mode_data['debug']) && $this->mode_data['debug']) {
+                $this->setDebug(true);
+            } else {
+                $this->setDebug(false);
+            }
+    	}
+        return $this;
+	}
 
 }
 

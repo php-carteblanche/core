@@ -11,12 +11,12 @@
 
 namespace CarteBlanche\Abstracts;
 
-use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\App\Kernel;
-use \CarteBlanche\App\FrontController;
-use \CarteBlanche\Abstracts\AbstractTool;
-use \CarteBlanche\Interfaces\StorageEngineInterface;
-use \CarteBlanche\Library\StorageEngine\StorageEngineAwareInterface;
+use \CarteBlanche\CarteBlanche,
+    \CarteBlanche\App\Kernel,
+    \CarteBlanche\App\FrontController,
+    \CarteBlanche\Abstracts\AbstractTool,
+    \CarteBlanche\Interfaces\StorageEngineInterface,
+    \CarteBlanche\Library\StorageEngine\StorageEngineAwareInterface;
 
 /**
  * Any tool class must extend this abstract one

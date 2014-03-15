@@ -1,15 +1,34 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche\Exception;
 
-class InvalidArgumentException extends \InvalidArgumentException
+use \CarteBlanche\CarteBlanche,
+    \CarteBlanche\App\FrontController,
+    \CarteBlanche\Interfaces\CarteBlancheExceptionInterface;
+
+use \InvalidArgumentException as BaseException;
+
+/**
+ * Special application "invalid argument" exception handler
+ *
+ * All exceptions are written in the logs (by default in the "error.log" file)
+ * except if `app.modes._APP_MODE.log_exceptions=false`
+ *
+ * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ */
+class InvalidArgumentException
+    extends BaseException
+    implements CarteBlancheExceptionInterface
 {
 
 	/**
@@ -21,11 +40,90 @@ class InvalidArgumentException extends \InvalidArgumentException
 	 */
 	public function __construct($message, $code = 0, $previous = null) 
 	{
-	    \CarteBlanche\CarteBlanche::log($message, \Library\Logger::ERROR);
-
 		// parent constructor
 		parent::__construct($message, $code, $previous);
+
+		// kernel configuration data
+        $mode_data = CarteBlanche::getKernelMode(true);
+
+        // log?
+		if (is_array($mode_data)
+		    && isset($mode_data['log_errors'])
+		    && true==$mode_data['log_errors']) {
+    		    $this->log();
+        }
+
+        // rendering?
+		if (!is_array($mode_data)
+		    || !isset($mode_data['debug'])
+		    || false==$mode_data['debug']) {
+		        $this->productionRendering();
+		}
 	}
+
+	/**
+	 * Render the Exception as string
+	 *
+	 * @return string
+	 */
+    public function __toString()
+    {
+        $mode_data = CarteBlanche::getKernelMode(true);
+		if (!is_array($mode_data)
+		    || !isset($mode_data['debug'])
+		    || false==$mode_data['debug']) {
+		        return $this->productionRendering();
+		} else {
+        	return $this->debugRendering();
+		}
+    }
+
+	/**
+	 * Render of a production error
+	 *
+	 * @return void
+	 */
+	public function productionRendering() 
+	{
+        $args = array('message'=>$this->getAppMessage());
+        return FrontController::getInstance()
+            ->renderProductionError($args, 500);
+	}
+
+	/**
+	 * Render of a debug error
+	 *
+	 * @return void
+	 */
+	public function debugRendering() 
+	{
+        $args = array('message'=>$this->getAppMessage());
+        return FrontController::getInstance()
+            ->renderError($args, $this);
+	}
+
+	/**
+	 * Log the exception in `history.log`
+	 *
+	 * @return void
+	 */
+	public function log() 
+	{
+        CarteBlanche::log(
+	        $this->getAppMessage()."\n".$this->getTraceAsString(),
+            \Library\Logger::ERROR
+        );
+	}
+
+    /**
+     * Get the CarteBlanche information string about an Exception
+     *
+     * @return string
+     */
+    public function getAppMessage()
+    {
+        return sprintf('[%s] "%s" (%d)', get_class($this), $this->getMessage(), $this->getCode());
+    }
 
 }
 

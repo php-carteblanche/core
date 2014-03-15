@@ -1,10 +1,13 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  *
  * Common functions aliases
  *
@@ -103,6 +106,36 @@ if (!function_exists('_trans'))
 	function _trans()
 	{
 		return _echo(
+		    call_user_func_array(array('\CarteBlanche\CarteBlanche', 'trans'), func_get_args())
+		);
+	}	
+}
+
+if (!function_exists('_pluralize')) 
+{
+	function _pluralize()
+	{
+		return _echo(
+		    call_user_func_array(array('\CarteBlanche\CarteBlanche', 'trans'), func_get_args())
+		);
+	}	
+}
+
+if (!function_exists('_javascriptize')) 
+{
+	function _javascriptize($str = '', $protect_quotes = false)
+	{
+		return _echo(
+		    \Library\Helper\HTML::javascriptProtect($str, $protect_quotes)
+		);
+	}	
+}
+
+if (!function_exists('_trans_js')) 
+{
+	function _trans_js()
+	{
+		return _javascriptize(
 		    call_user_func_array(array('\CarteBlanche\CarteBlanche', 'trans'), func_get_args())
 		);
 	}	

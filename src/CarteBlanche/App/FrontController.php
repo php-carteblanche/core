@@ -1,10 +1,13 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche\App;
@@ -12,23 +15,24 @@ namespace CarteBlanche\App;
 use \CarteBlanche\CarteBlanche,
     \CarteBlanche\App\Container,
     \CarteBlanche\Exception\NotFoundException,
-    \CarteBlanche\Interfaces\FrontControllerInterface;
+    \CarteBlanche\Interfaces\FrontControllerInterface,
+    \CarteBlanche\Library\Helper;
 
 use \Patterns\Abstracts\AbstractSingleton;
 
-use \Library\Helper\Html as HtmlHelper;
-use \Library\Helper\Directory as DirectoryHelper;
-use \Library\Helper\Code as CodeHelper;
+use \Library\Helper\Html as HtmlHelper,
+    \Library\Helper\Directory as DirectoryHelper,
+    \Library\Helper\Code as CodeHelper;
 
 /**
- * @author 		Piero Wbmstr <piero.wbmstr@gmail.com>
+ * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class FrontController
     extends AbstractSingleton
 {
 
 	/**
-	 * @var object The current controller, must hinerit `\CarteBlanche\Abstracts\AbstractController`
+	 * @var object The current controller, must inherit `\CarteBlanche\Abstracts\AbstractController`
 	 */
 	protected $controller;
 
@@ -56,8 +60,7 @@ class FrontController
 	/**
 	 * Set the current controller
 	 *
-	 * @param object $ctrl \CarteBlanche\Interfaces\ControllerInterface
-	 *
+	 * @param object $ctrl  \CarteBlanche\Interfaces\ControllerInterface
 	 * @return self
 	 */
     public function setController(\CarteBlanche\Interfaces\ControllerInterface $ctrl)
@@ -80,7 +83,6 @@ class FrontController
 	 * Set the current controller name
 	 *
 	 * @param string $name
-	 *
 	 * @return self
 	 */
     public function setControllerName($name)
@@ -103,7 +105,6 @@ class FrontController
 	 * Set the current action requested by the router
 	 *
 	 * @param string $type
-	 *
 	 * @return self
 	 */
     public function setActionName($type)
@@ -149,39 +150,51 @@ class FrontController
 	 */
 	public function distribute()
 	{
+        $this
+            ->processSessionValues()
+            ->processQueryArguments()
+            ;
+
 	    // if kernerl has booting errors, treat them first
 	    if (CarteBlanche::getContainer()->get('kernel')->hasBootErrors()) {
-            return $this->dispatch(
-                'defaultController', 'bootError',
-                array(CarteBlanche::getContainer()->get('kernel')->getBootErrors())
-            );
+            $routing = array(CarteBlanche::getContainer()->get('kernel')->getBootErrors());
+            if (CarteBlanche::getContainer()->get('request')->isCli()) {
+                $routing['controller'] = CarteBlanche::getConfig('routing.cli.default_controller');
+                $routing['action'] = CarteBlanche::getConfig('routing.cli.booterrors_action');
+            } elseif (CarteBlanche::getContainer()->get('request')->isAjax()) {
+                $routing['controller'] = CarteBlanche::getConfig('routing.ajax.default_controller');
+                $routing['action'] = CarteBlanche::getConfig('routing.ajax.booterrors_action');
+            } else {
+                $routing['controller'] = CarteBlanche::getConfig('routing.mvc.default_controller');
+                $routing['action'] = CarteBlanche::getConfig('routing.mvc.booterrors_action');
+            }
+	    } else {
+            $routing = CarteBlanche::getContainer()->get('router')
+                ->distribute()
+                ->getRouteParsed();
+
+            // controller
+            if (empty($routing['controller'])) {
+                if (CarteBlanche::getContainer()->get('request')->isCli()) {
+                    $routing['controller'] = CarteBlanche::getConfig('routing.cli.default_controller');
+                } elseif (CarteBlanche::getContainer()->get('request')->isAjax()) {
+                    $routing['controller'] = CarteBlanche::getConfig('routing.ajax.default_controller');
+                } else {
+                    $routing['controller'] = CarteBlanche::getConfig('routing.mvc.default_controller');
+                }
+            }
+
+            // action
+            if (empty($routing['action'])) {
+                if (CarteBlanche::getContainer()->get('request')->isCli()) {
+                    $routing['action'] = CarteBlanche::getConfig('routing.cli.default_action');
+                } elseif (CarteBlanche::getContainer()->get('request')->isAjax()) {
+                    $routing['action'] = CarteBlanche::getConfig('routing.ajax.default_action');
+                } else {
+                    $routing['action'] = CarteBlanche::getConfig('routing.mvc.default_action');
+                }
+            }
 	    }
-
-		$routing = CarteBlanche::getContainer()->get('router')
-		    ->distribute()
-		    ->getRouteParsed();
-
-		// controller
-		if (empty($routing['controller'])) {
-			if (CarteBlanche::getContainer()->get('request')->isCli()) {
-				$routing['controller'] = CarteBlanche::getConfig('routing.cli.default_controller');
-			} elseif (CarteBlanche::getContainer()->get('request')->isAjax()) {
-				$routing['controller'] = CarteBlanche::getConfig('routing.ajax.default_controller');
-			} else {
-				$routing['controller'] = CarteBlanche::getConfig('routing.mvc.default_controller');
-			}
-		}
-
-		// action
-		if (empty($routing['action'])) {
-			if (CarteBlanche::getContainer()->get('request')->isCli()) {
-				$routing['action'] = CarteBlanche::getConfig('routing.cli.default_action');
-			} elseif (CarteBlanche::getContainer()->get('request')->isAjax()) {
-				$routing['action'] = CarteBlanche::getConfig('routing.ajax.default_action');
-			} else {
-				$routing['action'] = CarteBlanche::getConfig('routing.mvc.default_action');
-			}
-		}
 
         // arguments
         $primary_args = $routing;
@@ -200,7 +213,6 @@ class FrontController
 	 * @param string $controller_classname
 	 * @param string $action
 	 * @param array $arguments
-	 *
 	 * @return void
 	 */
 	public function dispatch($controller_classname, $action = 'index', array $arguments = null)
@@ -209,8 +221,11 @@ class FrontController
 		$_ctrl = CarteBlanche::getContainer()
 		    ->get('locator')->locateController($controller_classname);
 		if (!empty($_ctrl) && class_exists($_ctrl)) {
+			$ctrl = new $_ctrl(CarteBlanche::getContainer());
+
 			$this
-			    ->setControllerName($_ctrl)
+			    ->setControllerName($_ctrl);
+			$this
 			    ->setController(new $_ctrl(CarteBlanche::getContainer()));
 		} else {
 			throw new NotFoundException( 
@@ -226,9 +241,9 @@ class FrontController
 		
 		// dispatch
 		if (method_exists($this->getController(), $this->getActionName())) {
-			$result = CodeHelper::fetchArguments(
-			    $this->getActionName(), $arguments, $this->getController()
-			);
+            $result = CodeHelper::fetchArguments(
+                $this->getActionName(), $arguments, $this->getController()
+            );
 			
 			// controller method return treatment
 			    // string : content
@@ -283,8 +298,8 @@ class FrontController
 	/**
 	 * Render the full application page view
 	 *
-	 * @param array $params An array of the parameters passed for the view parsing
-	 * @param bool/str $debug Object to debug if so
+	 * @param array $params     An array of the parameters passed for the view parsing
+	 * @param bool/str $debug   Object to debug if so
 	 * @see self::view()
 	 */
 	public function render($params = null, $debug = null, $exception = null) 
@@ -304,9 +319,11 @@ class FrontController
 	  		else
   				$params['title'] = 'Welcome';
 		}
+  		$params['page_title'] = Helper::buildPageTitle($params['title']);
 		if ($_db) {
     	  	$params['db_queries'] = $_db->getCache();
     	}
+        $params['profiler'] = Helper::getProfiler();
   		$params['altdb'] = $request->getUrlArg('altdb');
 	  	$params['controller'] = get_class($this->getController());
 	  	$params['action'] = $this->getActionName();
@@ -315,6 +332,21 @@ class FrontController
 		$params['flashsession'] = $session->getBackup('flashes');
 		if ($session->hasFlash()) 
 			$params['flash_messages'] = $this->getFlashMessages();
+
+
+        $i18n_cfg = CarteBlanche::getConfig('i18n', array(), true);
+        $languages_cfg = CarteBlanche::getConfig('languages', array(), true);
+		$i18n = CarteBlanche::getContainer()->get('i18n');
+		$default_lang = CarteBlanche::getContainer()->get('i18n')->getLocale();
+		$lang_data = isset($languages_cfg[$default_lang]) ? $languages_cfg[$default_lang] : null;
+    	$params['lang'] = CarteBlanche::getContainer()->get('i18n')->getLanguageCode()
+    	    .'-'.CarteBlanche::getContainer()->get('i18n')->getRegionCode();
+		if (!empty($lang_data) && isset($lang_data['charset'])) {
+    		$params['charset'] = $lang_data['charset'];
+		} else {
+    		$params['charset'] = CarteBlanche::getConfig('html.charset', 'utf-8', true);
+		}
+		$params['request'] = \Library\Helper\Url::getRequestUrl();
 
 		$_app_globals = CarteBlanche::getConfig('globals', null, true);
 		$_cfg_globals = CarteBlanche::getConfig('globals');
@@ -335,14 +367,29 @@ class FrontController
 				);
 		}
   	
+		$_manifest = CarteBlanche::getContainer()->get('config')
+		    ->getRegistry()->dumpStack('manifest');
+		if (!empty($_manifest['manifest'])) {
+			$params['manifest'] = $_app['manifest'];
+		}
+  	
 		$router_views = array();
 		$_views = CarteBlanche::getContainer()->get('config')
 		    ->getRegistry()->dumpStack('views');
-		if (!empty($_views)) 
-			$router_views = $_views;
+		if (!empty($_views)) {
+		    foreach ($_views as $_view) {
+		        $viewid = isset($_view['tpl']) ? $_view['tpl'] : uniqid();
+		        if (!isset($router_views[$viewid])) {
+        			$router_views[$viewid] = $_view;
+        			$router_views[$viewid]['iterations'] = 1;
+		        } else {
+        			$router_views[$viewid]['iterations']++;
+		        }
+		    }
+		}
 
 		\CarteBlanche\App\Debugger::shutdown(true, '\CarteBlanche\App\FrontController::renderExceptionStatic', $params);
-		if (isset($exception)) $this->renderException($params, $exception);
+		if (isset($exception)) $this->renderError($params, $exception);
 		elseif (isset($debug)) $this->renderDebug($params, $debug);
   	
 		$ctrl_class = get_class($this->getController());
@@ -369,8 +416,8 @@ class FrontController
 	/**
 	 * Render an application error page view
 	 *
-	 * @param array $params An array of the parameters passed for the view parsing (passed by reference)
-	 * @param int $code The error code
+	 * @param array $params     An array of the parameters passed for the view parsing (passed by reference)
+	 * @param int $code         The error code
 	 * @see self::render()
 	 */
 	public function renderProductionError($params = null, $code = 404) 
@@ -384,53 +431,39 @@ class FrontController
 		} else {
 			trigger_error("Controller 'Error' can't be found!", E_USER_ERROR);
 		}
-		return $this->getController()->$action( $params );
+        $result = CodeHelper::fetchArguments(
+            $action, $params, $this->getController()
+        );
+		return $result;
 	}
   
-	/**
-	 * Static call to render an application error page view
-	 *
-	 * @see self::renderProductionError()
-	public static function renderProductionErrorStatic($params = null, $code = 404) 
-	{
-		$_this = self::getInstance();
-	    $_this->renderProductionError($params, $code);
-	}
-	 */
-	
 	/**
 	 * Render an application exception page view
 	 *
-	 * @param array $params An array of the parameters passed for the view parsing (passed by reference)
-	 * @param null/string $exception The exception info
+	 * @param array $params             An array of the parameters passed for the view parsing (passed by reference)
+	 * @param null/string $exception    The exception info
 	 * @see self::view()
 	 */
-	public function renderException($params = null, $exception = null) 
+	public function renderError($params = null, $exception = null) 
 	{
-		$debug = \App\Debugger::getInstance();
+		$debug = \CarteBlanche\App\Debugger::getInstance();
 		$this->renderDebug($params, null, false);
 		$params['title'] = $debug->getDebuggerTitle();
-		$tpl = 'profiler/template_profiler.htm';
-		return $this->view( $tpl, $params, true, true);
+		$tpl = 'profiler/template_profiler';
+
+        // don't execute `shutdown` kernel steps
+		CarteBlanche::getContainer()->get('kernel')
+		    ->setShutdown(true);
+		
+		return $this->view($tpl, $params, true, true);
 	}
-  
-	/**
-	 * Static call to render an application exception page view
-	 *
-	 * @see self::renderException()
-	public static function renderExceptionStatic($params = null, $exception = null) 
-	{
-		$_this = self::getInstance();
-		return $_this->renderException($params, $exception);
-	}
-	 */
   
 	/**
 	 * Render a debug application page view
 	 *
-	 * @param array $params An array of the parameters passed for the view parsing (passed by reference)
-	 * @param string/array $dbg Which object variable to debug (default is 'all')
-	 * @param bool $parse_template Parse the debug template or not (default is TRUE)
+	 * @param array $params         An array of the parameters passed for the view parsing (passed by reference)
+	 * @param string/array $dbg     Which object variable to debug (default is 'all')
+	 * @param bool $parse_template  Parse the debug template or not (default is TRUE)
 	 * @see self::render()
 	 */
 	public function renderDebug(&$params = null, $dbg = 'all', $parse_template = true) 
@@ -497,11 +530,10 @@ class FrontController
 	/**
 	 * Render a view
 	 *
-	 * @param string $view The view filename in `$views_dir`
-	 * @param array $params An array of the parameters passed for the view parsing
-	 * @param bool $display Display the view or return it (default is FALSE)
-	 * @param bool $exit Exit after rendering (default is FALSE)
-	 *
+	 * @param string $view      The view filename in `$views_dir`
+	 * @param array $params     An array of the parameters passed for the view parsing
+	 * @param bool $display     Display the view or return it (default is FALSE)
+	 * @param bool $exit        Exit after rendering (default is FALSE)
 	 * @return string|void
 	 *
 	 * @see TemplateEngine\TemplateEngine::render()
@@ -531,6 +563,60 @@ class FrontController
 		    return $output;
 		}
 	}
+
+// ---------------------
+// User settings
+// ---------------------
+
+    /**
+     * @return self
+     */
+    protected function processQueryArguments()
+    {
+        $args = CarteBlanche::getContainer()->get('request')->getArguments();
+        if (!empty($args)) {
+            $this->parseUserSettings($args);
+        }
+        return $this;
+    }
+    
+    /**
+     * @return self
+     */
+    protected function processSessionValues()
+    {
+        $session = CarteBlanche::getContainer()->get('session');
+        $session_data = $session->getSessionTable();
+        if (!empty($session_data[$session::SESSION_ATTRIBUTESNAME])) {
+            $this->parseUserSettings($session_data[$session::SESSION_ATTRIBUTESNAME]);
+        }
+        return $this;
+    }
+    
+    /**
+     * @params array $args
+     * @return void
+     */
+    protected function parseUserSettings(array $args)
+    {
+        if (!empty($args)) {
+            foreach ($args as $param=>$value) {
+                
+                if ($param==='lang') {
+                    $langs = CarteBlanche::getContainer()->get('i18n')->getAvailableLanguages();
+                    if (array_key_exists($value, $langs)) {
+                        CarteBlanche::getContainer()->get('i18n')->setLanguage($value);
+                        $session = CarteBlanche::getContainer()->get('session');
+                        $true_language = CarteBlanche::getContainer()->get('i18n')->getLanguage();
+                        if (!$session->has('lang') || $session->get('lang')!==$true_language) {
+                            $session->set('lang', $true_language);
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
 
 }
 

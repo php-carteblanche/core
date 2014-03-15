@@ -1,18 +1,21 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche\Abstracts;
 
-use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\Interfaces\ControllerInterface;
-use \CarteBlanche\Abstracts\AbstractController;
-use \CarteBlanche\App\FrontController;
+use \CarteBlanche\CarteBlanche,
+    \CarteBlanche\Interfaces\ControllerInterface,
+    \CarteBlanche\Abstracts\AbstractController,
+    \CarteBlanche\App\FrontController;
 
 use \Library\Helper\Text as TextHelper;
 
@@ -27,7 +30,7 @@ use \Library\Helper\Text as TextHelper;
  * -   `indexAction()` : the "home" view of the controller,
  * -   `emptyAction()` : a special method for an empty application (not yet installed)
  *
- * @author  Piero Wbmstr <piero.wbmstr@gmail.com>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 abstract class AbstractControllerConfigurable
     extends AbstractController
