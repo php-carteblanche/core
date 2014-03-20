@@ -75,7 +75,7 @@ if ($show_profiler) {
                     )); ?>" title="<?php _trans_js('See application test page'); ?>"><?php _trans('test page'); ?></a>
                     &nbsp;|&nbsp;
                     <a href="<?php
-                        _echo(@file_exists(_ROOTPATH.'/phpdoc/') ? '../phpdoc/' : \CarteBlanche\App\Kernel::$CARTE_BLANCHE_DOCUMENTATION);
+                        _echo(@file_exists(_ROOTPATH.'/phpdoc/') ? '../phpdoc/' : \CarteBlanche\App\Kernel::CARTE_BLANCHE_DOCUMENTATION);
                     ?>" title="<?php _trans_js('See application documentation'); ?>"><?php _trans('documentation'); ?></a>
                 </p>
                 </td>

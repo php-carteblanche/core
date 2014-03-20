@@ -12,12 +12,12 @@
 
 namespace CarteBlanche\App;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\App\Loader,
-    \CarteBlanche\App\Kernel,
-    \CarteBlanche\App\FrontController;
-
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\App\Loader;
+use \CarteBlanche\App\Kernel;
+use \CarteBlanche\App\FrontController;
 use \Library\Helper\Text as TextHelper;
+use \Library\Helper\Directory as DirectoryHelper;
 
 /**
  * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
@@ -60,7 +60,7 @@ class Locator
     public static function getToolPath($name, $is_class = false)
     {
         $name_parts = explode('\\', $name);
-        $tools_dir = CarteBlanche::getPath('tools_dir');
+        $tools_dir = CarteBlanche::getFullPath('tools_dir');
         $tool_path = false;
         if ($name_parts[0]==='Tool') {
             $tool_path = str_replace('Tool'.DIRECTORY_SEPARATOR, $tools_dir, str_replace('\\', DIRECTORY_SEPARATOR, $name));
@@ -142,17 +142,23 @@ class Locator
         }
 
 		// from the application
-		if ($_f = self::locate(CarteBlanche::getPath('views_dir').$view)) {
+		if ($_f = self::locate(
+		    DirectoryHelper::slashDirname(CarteBlanche::getPath('views_dir')).$view
+		)) {
 			return self::fallback($view, $_f);
 		}
 		
 		// from a bundle
-		if ($_f = self::locate(CarteBlanche::getPath('bundles_dir').$view)) {
+		if ($_f = self::locate(
+		    DirectoryHelper::slashDirname(CarteBlanche::getPath('bundles_dir')).$view
+		)) {
 			return self::fallback($view, $_f);
 		}
 
 		// from a tool
-		if ($_f = self::locate(CarteBlanche::getPath('tools_dir').$view)) {
+		if ($_f = self::locate(
+		    DirectoryHelper::slashDirname(CarteBlanche::getPath('tools_dir')).$view
+		)) {
 			return self::fallback($view, $_f);
 		}
 
@@ -161,7 +167,7 @@ class Locator
 			return self::fallback($view, $_f);
 		}
 
-        $views_dir = CarteBlanche::getPath('views_dir');
+        $views_dir = DirectoryHelper::slashDirname(CarteBlanche::getPath('views_dir'));
 
 		if (!self::locate($view)) {
 			$view_file = $views_dir.$view;

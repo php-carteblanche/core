@@ -41,7 +41,7 @@ class Bundle
 	 */
 	public function __construct($namespace, $directory)
 	{
-	    $bundles_dir = CarteBlanche::getPath('bundles_dir');
+	    $bundles_dir = CarteBlanche::getFullPath('bundles_dir');
 		if (!Locator::locate($bundles_dir)) {
 			throw new ErrorException("Bundles directory does not exist!");
 		}

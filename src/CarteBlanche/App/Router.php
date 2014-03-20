@@ -13,11 +13,9 @@
 namespace CarteBlanche\App;
 
 use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\App\Kernel,
-    \CarteBlanche\App\Request;
-
+use \CarteBlanche\App\Kernel;
+use \CarteBlanche\App\Request;
 use \Library\Router as BaseRouter;
-
 use \Library\Helper\Url as UrlHelper;
 use \Library\Helper\Text as TextHelper;
 use \Patterns\Interfaces\RouterInterface;

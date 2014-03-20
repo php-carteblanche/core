@@ -14,6 +14,7 @@ namespace CarteBlanche\Loader;
 
 use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\Interfaces\DependencyLoaderInterface;
+use \Library\Helper\Directory as DirectoryHelper;
 
 /**
  * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
@@ -32,38 +33,45 @@ class TemplateEngineLoader implements DependencyLoaderInterface
     {
         $root_path = $container->get('kernel')->getPath('root_path');
         $web_dir = $container->get('kernel')->getPath('web_dir');
-        $web_path = $container->get('kernel')->getPath('web_path');
         $views_dir = $container->get('kernel')->getPath('views_dir');
         $cbcore_dir = $container->get('kernel')->getPath('carte_blanche_core');
+        $base_cache_dir = $container->get('kernel')->getPath('web_tmp_dir');
+        if (empty($base_cache_dir)) {
+            $base_cache_dir = 'www'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR;
+        }
+        $base_cache_path = DirectoryHelper::slashDirname($root_path).$base_cache_dir;
 
         $assets_tmp_path = $container->get('kernel')->getPath('asset_tmp_path');
         if (empty($assets_tmp_dir)) {
-            $assets_tmp_dir = $container->get('kernel')
-                ->getPath('tmp_dir').'assets'.DIRECTORY_SEPARATOR;
-            $assets_tmp_path = $container->get('kernel')
-                ->getPath('tmp_path').'assets'.DIRECTORY_SEPARATOR;
-            $container->get('kernel')->addPath('asset_tmp_dir', $assets_tmp_dir);
-            $container->get('kernel')->addPath('asset_tmp_path', $assets_tmp_path, true, true);
+            $assets_tmp_path = DirectoryHelper::slashDirname($base_cache_path).'assets'.DIRECTORY_SEPARATOR;
+            $container->get('kernel')->addPath('asset_tmp_dir', $assets_tmp_path, true, true);
         }
 
-        $cache_path = $container->get('kernel')->getPath('cache_path');
+        $cache_path = $container->get('kernel')->getPath('web_cache_dir');
         if (empty($cache_path)) {
-            $cache_dir = $container->get('kernel')
-                ->getPath('tmp_dir').'cache'.DIRECTORY_SEPARATOR;
-            $cache_path = $container->get('kernel')
-                ->getPath('tmp_path').'cache'.DIRECTORY_SEPARATOR;
-            $container->get('kernel')->addPath('cache_dir', $cache_dir);
-            $container->get('kernel')->addPath('cache_path', $cache_path, true, true);
+            $cache_path = DirectoryHelper::slashDirname($base_cache_path).'cache'.DIRECTORY_SEPARATOR;
+            $container->get('kernel')->addPath('web_cache_dir', $cache_path, true, true);
         }
-
+/*
+echo '<br />'; var_export($root_path);
+echo '<br />'; var_export(basename($web_dir));
+echo '<br />'; var_export($web_dir);
+echo '<br />'; var_export($cbcore_dir.$views_dir );
+echo '<br />'; var_export($web_dir );
+echo '<br />'; var_export($cache_path );
+echo '<br />'; var_export($assets_tmp_path );
+echo '<br />'; var_export($cbcore_dir);
+echo '<br />'; var_export(DirectoryHelper::slashDirname($cbcore_dir).$views_dir );
+//exit('yo');
+//*/
         return \TemplateEngine\TemplateEngine::getInstance()
-            ->guessFromAssetsLoader(\Assets\Loader::getInstance($root_path, $web_dir, $web_path))
+            ->guessFromAssetsLoader(\Assets\Loader::getInstance($root_path, basename($web_dir), $web_dir))
             ->setLayoutsDir( $cbcore_dir.$views_dir )
-            ->setToTemplate('setWebRootPath', $web_path )
+            ->setToTemplate('setWebRootPath', $web_dir )
             ->setToTemplate('setCachePath', $cache_path )
             ->setToTemplate('setAssetsCachePath', $assets_tmp_path )
             ->setToView('setIncludePath', $cbcore_dir)
-            ->setToView('setIncludePath', $cbcore_dir.$views_dir )
+            ->setToView('setIncludePath', DirectoryHelper::slashDirname($cbcore_dir).$views_dir )
             ;
     }
 

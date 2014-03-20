@@ -12,9 +12,9 @@
 
 namespace CarteBlanche\Exception;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\App\FrontController,
-    \CarteBlanche\Exception\Exception as BaseException;
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\App\FrontController;
+use \CarteBlanche\Exception\Exception as BaseException;
 
 /**
  * Exception application handler for not-found objects and "500 internal server error" page

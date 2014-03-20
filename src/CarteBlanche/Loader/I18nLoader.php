@@ -33,7 +33,7 @@ class I18nLoader
     {
         $config = CarteBlanche::getConfig('i18n');
         $root_path = CarteBlanche::getPath('root_path');
-        $var_path = CarteBlanche::getPath('var_path');
+        $var_path = CarteBlanche::getPath('var_dir');
         $langs = isset($config['available_languages']) ?
             $config['available_languages'] : array('en'=>'en_US_USD');
 

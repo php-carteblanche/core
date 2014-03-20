@@ -58,7 +58,7 @@ class ManifestParser
             $objType = new $clsType;
             if (!($objType instanceof AbstractType)) {
                 throw new Exception(
-                    sprintf('Manifest type class "%s" must extends "Lib\Manifest\Type\AbstractType"!', $clsType)
+                    sprintf('Manifest type class "%s" must extend "Lib\Manifest\Type\AbstractType"!', $clsType)
                 );
             }
         } else {
@@ -75,7 +75,7 @@ class ManifestParser
                 $objField = new $clsField;
                 if (!($objField instanceof AbstractField)) {
                     throw new Exception(
-                        sprintf('Manifest field class "%s" must extends "Lib\Manifest\Field\AbstractField"!', $clsField)
+                        sprintf('Manifest field class "%s" must extend "Lib\Manifest\Field\AbstractField"!', $clsField)
                     );
                 }
             } else {

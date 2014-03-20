@@ -16,11 +16,9 @@ use \Patterns\Abstracts\AbstractSingleton;
 use \Patterns\Commons\Registry;
 use \Library\Helper\Code as CodeHelper;
 use \Library\Helper\Text as TextHelper;
-
 use \CarteBlanche\App\Kernel;
 use \CarteBlanche\App\Bundle;
 use \CarteBlanche\Interfaces\ContainerInterface;
-
 use \Psr\Log\LoggerAwareInterface;
 use \Psr\Log\LoggerInterface;
 

@@ -1,19 +1,21 @@
 <?php
 /**
  * CarteBlanche - PHP framework package
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
  *
- * The default tool abstract class
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche\Abstracts;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\App\Kernel,
-    \CarteBlanche\App\FrontController;
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\App\Kernel;
+use \CarteBlanche\App\FrontController;
+use \Library\Helper\Directory as DirectoryHelper;
 
 /**
  * Any tool class must extend this abstract one
@@ -86,7 +88,7 @@ abstract class AbstractTool
 
 		if (!empty($this->view)) {
 			return FrontController::getInstance()
-			    ->view( $this->views_dir.$this->view, $args );
+			    ->view( DirectoryHelper::slashDirname($this->views_dir).$this->view, $args );
 		} elseif (isset($this->output)) {
 			return $this->output;
 		} else {

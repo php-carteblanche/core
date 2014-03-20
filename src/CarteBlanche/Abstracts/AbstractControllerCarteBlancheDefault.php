@@ -12,8 +12,8 @@
 
 namespace CarteBlanche\Abstracts;
 
-use \CarteBlanche\Abstracts\AbstractController,
-    \CarteBlanche\Interfaces\ControllerInterface;
+use \CarteBlanche\Abstracts\AbstractController;
+use \CarteBlanche\Interfaces\ControllerInterface;
 
 /**
  * The default distribution controller class

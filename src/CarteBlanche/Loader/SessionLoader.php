@@ -30,9 +30,9 @@ class SessionLoader implements DependencyLoaderInterface
 	 */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
-			$session = new \CarteBlanche\Library\Session;
-			$session->start();
-			return $session;
+        $session = new \CarteBlanche\Library\Session;
+        $session->start();
+        return $session;
     }
 
 }

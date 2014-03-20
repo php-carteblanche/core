@@ -16,6 +16,7 @@ use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\App\Kernel;
 use \CarteBlanche\Library\StorageEngine\DatabaseAdapter\AbstractDatabaseAdapter;
 use \CarteBlanche\Library\StorageEngine\DatabaseAdapter\DatabaseAdapterInterface;
+use \Library\Helper\Directory as DirectoryHelper;
 
 /**
  * Database full driver
@@ -43,12 +44,11 @@ class SqliteAdapter extends AbstractDatabaseAdapter implements DatabaseAdapterIn
 	public function __construct(\CarteBlanche\Library\StorageEngine\Database $database, $db_name, array $db_options = null)
 	{
 	    $container = CarteBlanche::getContainer();
-        $db_path = $container->get('kernel')->getPath('db_path');
+        $db_path = $container->get('kernel')->getPath('db_dir');
         if (empty($db_path)) {
-            $db_dir = $container->get('kernel')->getPath('var_dir').'db'.DIRECTORY_SEPARATOR;
-            $db_path = $container->get('kernel')->getPath('var_path').'db'.DIRECTORY_SEPARATOR;
-            $container->get('kernel')->addPath('db_dir', $db_dir);
-            $container->get('kernel')->addPath('db_path', $db_path, true, true);
+            $db_path = DirectoryHelper::slashDirname($container->get('kernel')->getPath('var_dir'))
+                .'db'.DIRECTORY_SEPARATOR;
+            $container->get('kernel')->addPath('db_dir', $db_path, true, true);
         }
 //			$_altdb = $this->container->get('request')->getUrlArg('altdb');
 //			return \AutoObject\AutoObjectMapper::getEntityManager( $_altdb );
@@ -86,7 +86,7 @@ class SqliteAdapter extends AbstractDatabaseAdapter implements DatabaseAdapterIn
 	public function isInstalled($db_name)
 	{
 		if (empty($dbname)) $dbname='default';
-		return file_exists(CarteBlanche::getPath('db_path') . CarteBlanche::getConfig($dbname.'_database.db_name'));
+		return file_exists(CarteBlanche::getFullPath('db_dir') . CarteBlanche::getConfig($dbname.'_database.db_name'));
 	}
 
 }

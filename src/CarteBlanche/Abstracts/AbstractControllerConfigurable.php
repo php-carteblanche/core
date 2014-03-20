@@ -12,11 +12,10 @@
 
 namespace CarteBlanche\Abstracts;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\Interfaces\ControllerInterface,
-    \CarteBlanche\Abstracts\AbstractController,
-    \CarteBlanche\App\FrontController;
-
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\Interfaces\ControllerInterface;
+use \CarteBlanche\Abstracts\AbstractController;
+use \CarteBlanche\App\FrontController;
 use \Library\Helper\Text as TextHelper;
 
 /**

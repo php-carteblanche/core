@@ -106,10 +106,10 @@ class Loader
      */
     public static function classExists($classname, $autoload = true)
     {
-        if (true===@class_exists($classname, false)) return true;
+        if (true===class_exists($classname, false)) return true;
         if ($autoload) {
             try {
-                if (true===@class_exists($classname)) return true;
+                if (true===class_exists($classname)) return true;
             } catch (\Exception $e) {}
         }
         return false;

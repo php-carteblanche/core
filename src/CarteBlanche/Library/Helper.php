@@ -12,20 +12,18 @@
 
 namespace CarteBlanche\Library;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\App\Container,
-    \CarteBlanche\Exception\NotFoundException,
-    \CarteBlanche\Interfaces\FrontControllerInterface;
-
-use \Library\Command,
-    \Library\Helper\Directory as DirectoryHelper,
-    \Library\Helper\Text as TextHelper,
-    \Library\Helper\Html as HtmlHelper,
-    \Library\Helper\Code as CodeHelper,
-    \Library\Helper\Url as UrlHelper;
-
-use \DateTime,
-    \ReflectionMethod;
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\App\Container;
+use \CarteBlanche\Exception\NotFoundException;
+use \CarteBlanche\Interfaces\FrontControllerInterface;
+use \Library\Command;
+use \Library\Helper\Directory as DirectoryHelper;
+use \Library\Helper\Text as TextHelper;
+use \Library\Helper\Html as HtmlHelper;
+use \Library\Helper\Code as CodeHelper;
+use \Library\Helper\Url as UrlHelper;
+use \DateTime;
+use \ReflectionMethod;
 
 /**
  */
@@ -58,7 +56,6 @@ class Helper
     {
         $docbook = CarteBlanche::getContainer()->get('front_controller');
         CarteBlanche::getContainer()->get('front_controller');
-        $tmp = DirectoryHelper::slashDirname(CarteBlanche::getPath('var_path'));
 
         $du_cmd = Command::getCommandPath('du');
         $grep_cmd = Command::getCommandPath('grep');

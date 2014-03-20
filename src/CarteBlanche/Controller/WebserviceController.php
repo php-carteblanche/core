@@ -12,8 +12,8 @@
 
 namespace CarteBlanche\Controller;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\Abstracts\AbstractControllerCarteBlancheDefault;
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\Abstracts\AbstractControllerCarteBlancheDefault;
 
 /**
  * The default application controller

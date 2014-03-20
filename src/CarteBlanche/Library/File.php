@@ -13,6 +13,7 @@
 namespace CarteBlanche\Library;
 
 use \CarteBlanche\CarteBlanche;
+use \Library\Helper\Directory as DirectoryHelper;
 
 /**
  * File object extending PHP SplFileInfo
@@ -103,7 +104,7 @@ class File extends \SplFileInfo
 	 */
 	public function getWebPath()
 	{
-		return str_replace(CarteBlanche::getPath('web_path'), '', $this->getRealPath());
+		return str_replace(CarteBlanche::getPath('web_dir'), '', $this->getRealPath());
 	}
 
 	/**
@@ -205,7 +206,7 @@ class File extends \SplFileInfo
 		$extension = end(explode('/', $mime));
 		if (is_null($filename)) {
 			$_tmp_filename = md5( $file_content ).'.'.$extension;
-			$filename = CarteBlanche::getPath('tmp_path').$_tmp_filename;
+			$filename = CarteBlanche::getFullPath('web_tmp_dir').$_tmp_filename;
 			if (file_exists($filename)) {
 				return new File( $filename, $client_file_name );
 			}

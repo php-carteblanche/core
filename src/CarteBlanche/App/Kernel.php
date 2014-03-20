@@ -12,31 +12,30 @@
 
 namespace CarteBlanche\App;
 
-use \CarteBlanche\App\Container,
-    \CarteBlanche\App\Config,
-    \CarteBlanche\App\Locator,
-    \CarteBlanche\App\Loader,
-    \CarteBlanche\App\FrontController,
-    \CarteBlanche\Exception\Exception,
-    \CarteBlanche\Exception\ErrorException,
-    \CarteBlanche\Exception\NotFoundException,
-    \CarteBlanche\Exception\DomainException,
-    \CarteBlanche\Exception\InvalidArgumentException,
-    \CarteBlanche\Exception\RuntimeException,
-    \CarteBlanche\Exception\UnexpectedValueException;
-
-use \Patterns\Commons\Registry,
-    \Patterns\Interfaces\StaticCreatorInterface;
-
-use \Library\Helper\Html as HtmlHelper,
-    \Library\Helper\Directory as DirectoryHelper;
+use \CarteBlanche\App\Container;
+use \CarteBlanche\App\Config;
+use \CarteBlanche\App\Locator;
+use \CarteBlanche\App\Loader;
+use \CarteBlanche\App\FrontController;
+use \CarteBlanche\Exception\Exception;
+use \CarteBlanche\Exception\ErrorException;
+use \CarteBlanche\Exception\NotFoundException;
+use \CarteBlanche\Exception\DomainException;
+use \CarteBlanche\Exception\InvalidArgumentException;
+use \CarteBlanche\Exception\RuntimeException;
+use \CarteBlanche\Exception\UnexpectedValueException;
+use \Patterns\Commons\Registry;
+use \Patterns\Interfaces\StaticCreatorInterface;
+use \Library\Helper\Html as HtmlHelper;
+use \Library\Helper\Directory as DirectoryHelper;
 
 /**
  * This is the global singleton instance of the CarteBlanche application
  *
  * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
-final class Kernel implements StaticCreatorInterface
+final class Kernel
+    implements StaticCreatorInterface
 {
 
 // -----------------------------------
@@ -46,27 +45,27 @@ final class Kernel implements StaticCreatorInterface
     /**
      * The package name
      */
-    public static $CARTE_BLANCHE_PACKAGE = 'atelierspierrot/carte-blanche';
+    const CARTE_BLANCHE_PACKAGE = 'atelierspierrot/carte-blanche';
 
     /**
      * The kernel name
      */
-    public static $CARTE_BLANCHE_NAME = 'CarteBlanche';
+    const CARTE_BLANCHE_NAME = 'CarteBlanche';
 
     /**
      * The kernel version
      */
-    public static $CARTE_BLANCHE_VERSION = '0.1.0';
+    const CARTE_BLANCHE_VERSION = '0.1.0';
 
     /**
      * The kernel homepage
      */
-    public static $CARTE_BLANCHE_HOMEPAGE = 'http://github.com/php-carteblanche/carteblanche';
+    const CARTE_BLANCHE_HOMEPAGE = 'http://github.com/php-carteblanche/carteblanche';
 
     /**
      * The kernel online documentation
      */
-    public static $CARTE_BLANCHE_DOCUMENTATION = 'http://carte-blanche.docs.ateliers-pierrot.fr/';
+    const CARTE_BLANCHE_DOCUMENTATION = 'http://carte-blanche.docs.ateliers-pierrot.fr/';
 
 // -----------------------------------
 // CarteBlanche constants
@@ -267,128 +266,41 @@ final class Kernel implements StaticCreatorInterface
 
         spl_autoload_register(array('\CarteBlanche\App\Loader', 'autoload'));
         register_shutdown_function(array($this, 'shutdown'));
+        set_include_path( get_include_path().PATH_SEPARATOR._ROOTPATH );
 
-        // app paths
-        try {
-            $this
-                // global required current application paths
-                ->initConstantPath('_ROOTFILE', 'root_file')
-                ->initConstantPath('_ROOTPATH', 'root_path', true)
-                ->initConstantPath('_VENDORDIRNAME', 'vendor_dir_name')                
-                // global required relative/absolute paths
-                ->initConstantPath('_CONFIGDIR', 'config_dir')
-                ->initConstantPath('_LANGUAGEDIR', 'i18n_dir')
-                ->initConstantPath('_VARDIR', 'var_dir')
-                ->initConstantPath('_SRCDIR', 'src_dir')
-                ->initConstantPath('_BINDIR', 'bin_dir')
-                ->initConstantPath('_WEBDIR', 'web_dir')
-                ->initConstantPath('_LIBDIR', 'lib_dir')
-                ->addPath('src_path', $this->getPath('root_path').$this->getPath('src_dir'), true)
-                ->addPath('bin_path', $this->getPath('root_path').$this->getPath('bin_dir'), true)
-                ->addPath('web_path', $this->getPath('root_path').$this->getPath('web_dir'), true)
-                ->addPath('lib_path', $this->getPath('src_path').$this->getPath('lib_dir'))
-                // internal cache dir
-                ->initConstantPath('_APPCACHEDIR', 'app_cache_dir')
-                // paths from src
-                ->initConstantPath('_BUNDLESDIR', 'bundles_dir')
-                ->initConstantPath('_TOOLSDIR', 'tools_dir')
-                ->initConstantPath('_VIEWSDIRNAME', 'views_dir')
-                ->addPath('bundles_path', $this->getPath('src_path').$this->getPath('bundles_dir'))
-                ->addPath('tools_path', $this->getPath('src_path').$this->getPath('tools_dir'))
-                // global CarteBlanche path
-                ->addPath('carte_blanche_core', $this->getPath('src_path').'/vendor/carte-blanche/core/src/CarteBlanche/')
-                // user fallbacks
-                ->initConstantPath('_USERDIR', 'user_dir')
-                ->addPath('user_path', $this->getPath('root_path').$this->getPath('user_dir'))
-                ;
-            if (defined('_CLI_CALL') && false===_CLI_CALL) {
-                $this
-                    ->initConstantPath('_ROOTHTTP', 'root_http')
-                    // paths from www
-                    ->initConstantPath('_WEBTMPDIR', 'tmp_dir')
-                    ->initConstantPath('_ASSETSDIR', 'assets_dir')
-                    ->addPath('assets_path', $this->getPath('web_path').$this->getPath('assets_dir'))
-                    ->initConstantPath('_SKINSDIR', 'skins_dir')
-                    ->addPath('skins_path', $this->getPath('web_path').$this->getPath('skins_dir'));
-            }
-        } catch (ErrorException $e) {
-            $this->addBootError(
-                sprintf('An error occured while booting: "%s"', $e->getMessage())
-            );
-        } catch (Exception $e) {
-            $this->addBootError(
-                sprintf('An error occured while booting: "%s"', $e->getMessage())
-            );
+        // base required paths
+        $this
+            ->initConstantPath('_ROOTFILE', 'root_file')
+            ->initConstantPath('_ROOTPATH', 'root_path', true)
+            ->addPath('carte_blanche_core', realpath(__DIR__.'/../'))
+            ;
+        if (!$this->isCli()) {
+            $this->initConstantPath('_ROOTHTTP', 'root_http');
         }
 
-        // app temporary or writables paths
-        try {
-            $this
-                // global required relative/absolute paths
-                ->addPath('config_path', $this->getPath('root_path').$this->getPath('config_dir'), true, true)
-                ->addPath('i18n_path', $this->getPath('root_path').$this->getPath('i18n_dir'), true, true)
-                ->addPath('var_path', $this->getPath('root_path').$this->getPath('var_dir'), true, true)
-                // internal cache dir
-                ->addPath('app_cache_path', $this->getPath('root_path').$this->getPath('app_cache_dir'), true, true)
-                // internal logs dir
-                ->initConstantPath('_APPLOGSDIR', 'log_dir')
-                ->addPath('log_path', $this->getPath('root_path').$this->getPath('log_dir'), true, true)
-                ;
-            if (defined('_CLI_CALL') && false===_CLI_CALL) {
-                $this
-                    // paths from www
-                    ->addPath('tmp_path', $this->getPath('root_path').$this->getPath('tmp_dir'), true, true)
-                    ;
-            }
-        } catch (ErrorException $e) {
-            $this->addBootError(
-                sprintf('An error occured while booting: "%s"', $e->getMessage())
-            );
-        } catch (Exception $e) {
-            $this->addBootError(
-                sprintf('An error occured while booting: "%s"', $e->getMessage())
-            );
-        }
-
-        // manifest file
-        if (file_exists($_f = $this->getPath('root_path').self::CARTE_BLANCHE_MANIFEST)) {
-            $manifest = @json_decode(@file_get_contents($_f), true);
-            if (!empty($manifest) && isset($manifest['name']) && $manifest['name']===self::$CARTE_BLANCHE_PACKAGE) {
-                self::$CARTE_BLANCHE_VERSION = $manifest['version'];
-                self::$CARTE_BLANCHE_HOMEPAGE = $manifest['homepage'];
-        		$config->set($manifest, false, 'manifest');
-            }
-        }
-
-		// default config
-		    // internal
-		$app_cfgfile = Locator::locateConfig(self::CARTE_BLANCHE_CONFIG_FILE, true);
-		if (!file_exists($app_cfgfile)) {
-			throw new ErrorException( 
-			    sprintf('Application configuration file not found in "%s" [%s]!', $this->getPath('config_dir'), $app_cfgfile)
-			);
-		}
-		$config->load($app_cfgfile, true, 'app');
-		    // user
-		$app_usr_cfgfile = Locator::locateConfig(self::CARTE_BLANCHE_CONFIG_FILE);
-		if (file_exists($app_usr_cfgfile)) {
-    		$config->load($app_usr_cfgfile, true, 'app');
-		}
-	
 	    // user config file
+	    $_defconf = false;
+		if (!is_array($config_files)) $config_files = array($config_files);
+		$config_files = array_filter($config_files);
 		if (!empty($config_files)) {
-			if (!is_array($config_files)) $config_files = array($config_files);
 			foreach($config_files as $cfgf) {
-        		$user_cfgfile = Locator::locateConfig($cfgf);
-				if (!file_exists($user_cfgfile)) {
-        			throw new ErrorException( 
-		        	    sprintf('Defined configuration file not found in "%s" [%s]!', $this->getPath('config_dir'), $cfgf)
-			        );
-				}
-        		$config->load($user_cfgfile, true, 'config');
+			    if (substr_count($cfgf, self::CARTE_BLANCHE_CONFIG_FILE)) {
+            	    $_defconf = true;
+			    }
 			}
 		}
-		
+		if (true!==$_defconf) {
+		    $this->__loadDefaultConfig();
+		}
+		if (!empty($config_files)) {
+			foreach($config_files as $cfgf) {
+			    if ( ! file_exists($cfgf)) {
+    			    $cfgf = $this->getPath('root_path').$cfgf;
+			    }
+			    $config->load($cfgf);
+			}
+		}
+
 		// server config
 		if (!empty($_SERVER)) {
     		foreach ($_SERVER as $_name=>$_conf) {
@@ -405,11 +317,56 @@ final class Kernel implements StaticCreatorInterface
             $config->set($user_config, true, 'user');
 		}
 
-/*/
-		$this->getContainer()->set('loader', new \CarteBlanche\App\Loader);
-		$this->getContainer()->set('locator', new \CarteBlanche\App\Locator);
-		$this->getContainer()->set('response', new \CarteBlanche\App\Response);
-//*/
+        // error reporting
+        if (!empty($mode_arg)) {
+            $this->__setMode($mode_arg);
+        }
+
+        // manifest file
+        $_f = $this->getPath('root_path').'/composer.json';
+        if (file_exists($_f = $this->getPath('root_path').self::CARTE_BLANCHE_MANIFEST)) {
+            $manifest = @json_decode(@file_get_contents($_f), true);
+        	$config->set($manifest, false, 'manifest');
+        }
+
+        // application directories
+        $app_dirs = $config->get('carte_blanche.app_dirs', null, true);
+        foreach ($app_dirs as $name=>$dir) {
+            $this->addPath($name, $dir);
+        }
+
+        // application required directories
+        $app_dirs = $config->get('carte_blanche.required_dirs', Config::NOT_FOUND_GRACEFULLY, array());
+        foreach ($app_dirs as $i=>$name) {
+            try {
+                $this->addPath($name, $this->getPath($name), true);
+            } catch (ErrorException $e) {
+                $this->addBootError(
+                    sprintf('An error occured while booting: "%s" [03]', $e->getMessage())
+                );
+            } catch (Exception $e) {
+                $this->addBootError(
+                    sprintf('An error occured while booting: "%s" [04]', $e->getMessage())
+                );
+            }
+        }
+
+        // application required directories
+        $app_dirs = $config->get('carte_blanche.writable_dirs', Config::NOT_FOUND_GRACEFULLY, array());
+        foreach ($app_dirs as $i=>$name) {
+            try {
+                $this->addPath($name, $this->getPath($name), true, true);
+            } catch (ErrorException $e) {
+                $this->addBootError(
+                    sprintf('An error occured while booting: "%s" [05]', $e->getMessage())
+                );
+            } catch (Exception $e) {
+                $this->addBootError(
+                    sprintf('An error occured while booting: "%s" [06]', $e->getMessage())
+                );
+            }
+        }
+
         $base_objects = $config->get('carte_blanche.base_objects');
         foreach(array('loader', 'locator', 'response') as $type) {
             $class_name = isset($base_objects[$type]) ?
@@ -425,14 +382,6 @@ final class Kernel implements StaticCreatorInterface
                 );
             }
         }
-//*/
-
-        // error reporting
-        $this->__setMode(
-            !empty($mode_arg) ? $mode_arg : (
-                defined('_APP_MODE') ? _APP_MODE : 'dev'
-            )
-        );
 	}
 
 	/**
@@ -599,6 +548,11 @@ final class Kernel implements StaticCreatorInterface
     public function addBootError($string)
     {
         $this->boot_errors[] = $string;
+        if ($this->getMode()==='dev') {
+            die(
+                sprintf("[boot error] : %s", $string)
+            );
+        }
         return $this;
     }
 
@@ -671,7 +625,7 @@ final class Kernel implements StaticCreatorInterface
     {
 	    $config = $this->getContainer()->get('config');
         if ($must_exists) {
-            $realpath = realpath($value);
+            $realpath = $this->getAbsolutePath($value);
             if (!empty($realpath)) {
                 $value = $realpath;
             } else {
@@ -690,7 +644,7 @@ final class Kernel implements StaticCreatorInterface
         }
         if ($must_be_writable && !is_writable($value)) {
 	        $this->addBootError(
-                sprintf('Directory "%s" must be writable!', $value)
+                sprintf('Directory "%s" must be writable! (%s)', $value, $name)
             );
 /*
             throw new RuntimeException(
@@ -707,17 +661,42 @@ final class Kernel implements StaticCreatorInterface
 	/**
 	 * Get a path value
 	 *
-	 * @param string $name  The path reference
-	 * @return string|null
+	 * @param   string    $name       The path reference
+	 * @param   bool      $full_path  Must return an absolute path or not (default)
+	 * @return  string|null
 	 */
-    public function getPath($name)
+    public function getPath($name, $full_path = false)
     {
 	    $config = $this->getContainer()->get('config');
         $path = $config->getRegistry()->getStackEntry($name, null, 'paths');
         if (file_exists($path) && is_dir($path)) {
             $path = DirectoryHelper::slashDirname($path);
         }
+        if (true===$full_path) {
+            return $this->getAbsolutePath($path);
+        }
         return $path;
+    }
+
+	/**
+	 * Build an app absolute path
+	 *
+	 * @param   string    $path       The relative path to build
+	 * @return  string|null
+	 */
+    public function getAbsolutePath($path)
+    {
+        $root = $this->getPath('root_path');
+        if (empty($root)) {
+            return null;
+        }
+        if (empty($path)) {
+            return $root;
+        }
+        if (0===substr_count($path, $root)) {
+            $path = DirectoryHelper::slashDirname($root).$path;
+        }
+        return file_exists($path) ? DirectoryHelper::slashDirname(realpath($path)) : null;
     }
 
 	/**
@@ -755,10 +734,7 @@ final class Kernel implements StaticCreatorInterface
      */
     public function isCli()
     {
-        return (
-            !defined('_CLI_CALL') ||
-            (defined('_CLI_CALL') && true===_CLI_CALL)
-        );
+        return (strtolower(php_sapi_name()) == 'cli');
     }
 
 // ------------------------
@@ -801,6 +777,17 @@ final class Kernel implements StaticCreatorInterface
         return $this;
 	}
 
+    private function __loadDefaultConfig()
+    {
+        $app_cfgfile = __DIR__.'/../../../config/'.self::CARTE_BLANCHE_CONFIG_FILE;
+        if (!file_exists($app_cfgfile)) {
+            throw new ErrorException( 
+                sprintf('Default application configuration file not found in "%s" [%s]!', $this->getPath('config_dir'), $app_cfgfile)
+            );
+        }
+        $this->getContainer()->get('config')->load($app_cfgfile);
+    }
+    
 }
 
 // Endfile

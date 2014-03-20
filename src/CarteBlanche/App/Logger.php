@@ -37,7 +37,7 @@ class Logger extends BaseLogger
 	protected function init(array $user_options = array(), $logname = null)
 	{
 		$app_config = CarteBlanche::getConfig('log', array(), true);
-		$app_config['directory'] = CarteBlanche::getPath('log_dir');
+		$app_config['directory'] = CarteBlanche::getFullPath('log_dir');
 		$user_config = CarteBlanche::getConfig('log', array());
 		if (!empty($user_config)) {
     		$config = array_merge($app_config, $user_config, $user_options);
@@ -57,10 +57,8 @@ class Logger extends BaseLogger
 	 */
 	protected function getFilePath($level = 100)
 	{
-	    $root_path = CarteBlanche::getPath('root_path');
 	    $mode = CarteBlanche::getKernel()->getMode();
-		return $root_path
-		    .DirectoryHelper::slashDirname($this->directory)
+		return DirectoryHelper::slashDirname($this->directory)
 		    .$this->getFileName($level)
 			.($mode!='prod' ? '_'.$mode : '' )
 			.'.'.trim($this->logfile_extension, '.');
