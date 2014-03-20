@@ -13,7 +13,6 @@
 namespace CarteBlanche\App;
 
 use \Library\Converter\Html2Text;
-
 use DevDebug\Debugger as BaseDebugger;
 
 /**

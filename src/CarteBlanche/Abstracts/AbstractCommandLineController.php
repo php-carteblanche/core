@@ -12,14 +12,13 @@
 
 namespace CarteBlanche\Abstracts;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\App\Container,
-    \CarteBlanche\App\FrontController,
-    \CarteBlanche\Abstracts\AbstractController;
-
-use \Library\CommandLine\AbstractCommandLineController as Original,
-    \Library\CommandLine\CommandLineControllerInterface,
-    \Library\CommandLine\Helper;
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\App\Container;
+use \CarteBlanche\App\FrontController;
+use \CarteBlanche\Abstracts\AbstractController;
+use \Library\CommandLine\AbstractCommandLineController as Original;
+use \Library\CommandLine\CommandLineControllerInterface;
+use \Library\CommandLine\Helper;
 
 /**
  * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>

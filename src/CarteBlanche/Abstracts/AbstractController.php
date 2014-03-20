@@ -12,9 +12,9 @@
 
 namespace CarteBlanche\Abstracts;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\Interfaces\ControllerInterface,
-    \CarteBlanche\App\FrontController;
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\Interfaces\ControllerInterface;
+use \CarteBlanche\App\FrontController;
 
 /**
  * The default controller abstract class

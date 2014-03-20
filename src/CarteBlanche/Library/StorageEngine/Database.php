@@ -163,7 +163,7 @@ class Database
 			}
 			if (!($this->__adapter instanceof \Lib\DatabaseAdapter\AbstractDatabaseAdapter)) {
 				throw new \DomainException(
-					sprintf('A Database Adapter must extends the "\Lib\DatabaseAdapter\AbstractDatabaseAdapter" class (got "%s")!', $_adapter_class)
+					sprintf('A Database Adapter must extend the "\Lib\DatabaseAdapter\AbstractDatabaseAdapter" class (got "%s")!', $_adapter_class)
 				);
 			}
 			if (!($this->__adapter instanceof \Lib\DatabaseAdapter\DatabaseAdapterInterface)) {

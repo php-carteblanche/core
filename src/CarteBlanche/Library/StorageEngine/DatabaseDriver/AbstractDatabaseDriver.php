@@ -13,7 +13,7 @@
 namespace CarteBlanche\Library\StorageEngine\DatabaseDriver;
 
 /**
- * Any database driver must extends this abstract class
+ * Any database driver must extend this abstract class
  *
  * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */

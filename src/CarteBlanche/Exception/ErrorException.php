@@ -12,10 +12,9 @@
 
 namespace CarteBlanche\Exception;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\App\FrontController,
-    \CarteBlanche\Interfaces\CarteBlancheExceptionInterface;
-
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\App\FrontController;
+use \CarteBlanche\Interfaces\CarteBlancheExceptionInterface;
 use \DevDebug\ErrorException as BaseErrorException;
 
 /**

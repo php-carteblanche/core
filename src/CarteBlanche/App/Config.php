@@ -43,6 +43,11 @@ class Config
 	protected $registry;
 
     /**
+     * @var array
+     */
+	protected $files_loaded;
+
+    /**
      * The current global configuration stack ID
      * @var mtime
      */
@@ -89,6 +94,9 @@ class Config
             $values = $config->parse($file);
             if (!empty($values)) {
                 $this->set($values, $merge_globals, $stack_name);
+                $this->_registerConfigFile($filename, count($values));
+            } else {
+                $this->_registerConfigFile($filename, 'empty content');
             }
         } else {
             throw new \ErrorException(
@@ -159,12 +167,12 @@ class Config
     	    if ($this->getRegistry()->isStack($stack_name)) {
     	        $config = $this->getRegistry()->dumpStack($stack_name);
     	    } else {
-                if ($flag & self::NOT_FOUND_GRACEFULLY) {
-                    return $default;
-                } else {
+                if ($flag & self::NOT_FOUND_ERROR) {
                     throw new \InvalidArgumentException(
                         sprintf('Unknonwn configuration stack "%s"!', $stack_name)
                     );
+                } else {
+                    return $default;
                 }
     	    }
     	}
@@ -243,6 +251,29 @@ class Config
     public function getRegistry()
     {
         return $this->registry;
+    }
+
+    /**
+     * Add a configuration file in the files registry
+     *
+     * @param   string  $filename
+     * @param   int     $length
+     * @return self
+     */
+    protected function _registerConfigFile($file_name, $length)
+    {
+        $this->files_loaded[$file_name] = $length;
+        return $this;
+    }
+
+    /**
+     * Get the configuration files loaded
+     *
+     * @return array
+     */
+    public function getRegisteredConfigFiles()
+    {
+        return $this->files_loaded;
     }
 
 // ---------------------------------
@@ -379,6 +410,7 @@ class Config
 			$this->parseConfigRecursive($conf, null, $stack_name);
 		} elseif (is_array($conf)) {
 			array_walk_recursive($conf, array($this, 'parseConfigRecursive'), $stack_name);
+			$conf = array_filter($conf);
 		}
 		return $conf;
 	}
@@ -397,16 +429,30 @@ class Config
 	{
 	    if (!is_string($value)) return;
 	    
+	    // escape any '\%'
+	    $hash = 'XH'.uniqid();
+	    $value = str_replace('\%', $hash, $value);
+	    
 		// configuration value notation : %name%
-		if (0!=preg_match('/^\%(.*)\%$/i', $value, $matches)) {
-			$_cf = $matches[1];
+		while (is_string($value) && 0!=preg_match('/^(.*)\%(.*)\%(.*)$/i', $value, $matches) && count($matches)>1) {
+			$_cf = $matches[2];
 			if ($_cfg_val = $this->get($_cf, self::NOT_FOUND_GRACEFULLY, null, $stack_name)) {
-    			$value = $_cfg_val;
+			    if (is_array($_cfg_val)) {
+        			$value = $_cfg_val;
+			    } else {
+        			$value = $matches[1].$_cfg_val.$matches[3];
+			    }
     		}
+    		$matches = array();
 		}
 
+	    // un-escape any '\%'
+	    if (is_string($value)) {
+    	    $value = str_replace($hash, '%', $value);
+    	}
+
 		// configuration stack notation : {name}
-		elseif (0!=preg_match('/^\{(.*)\}$/i', $value, $matches)) {
+		if (is_string($value) && 0!=preg_match('/^\{(.*)\}$/i', $value, $matches)) {
 			$_cf = $matches[1];
 			if (substr(trim($_cf), 0, strlen('function'))!=='function') {
 			    $_cf = 'function(){ '.$_cf.'; }';

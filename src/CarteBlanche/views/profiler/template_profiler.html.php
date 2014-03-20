@@ -110,9 +110,10 @@ $_template->getTemplateObject('CssFile')
 	->add($boilerplate_assets.'css/main.css')
 	->add($tple_assets.'css/styles.css')
 	// => styles.css
-	->add($global_assets.'css/styles.css')
+	->addIfExists($global_assets.'css/styles.css')
 	// => print : printer_styles.css
-	->add($global_assets.'css/printer_styles.css','print');
+	->addIfExists($global_assets.'css/printer_styles.css','print')
+    ;
 	// => profiler.css
 if (@file_exists(_ASSETS.'css/profiler.css'))
 	$_template->getTemplateObject('CssFile')
@@ -141,7 +142,8 @@ $_template->getTemplateObject('JavascriptFile', 'jsfiles_footer')
 	->add($boilerplate_assets.'js/plugins.js')
 	->add($tple_assets.'js/scripts.js')
 	// => scripts.js
-	->add($global_assets.'js/scripts.js');
+	->addIfExists($global_assets.'js/scripts.js')
+	;
 	// => profiler.js
 if (@file_exists(_ASSETS.'js/profiler.js'))
 	$_template->getTemplateObject('JavascriptFile')

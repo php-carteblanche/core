@@ -12,20 +12,19 @@
 
 namespace CarteBlanche\Controller;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\Abstracts\AbstractController,
-    \CarteBlanche\Library\Form\Field,
-    \CarteBlanche\Library\Helper;
-
-use \CarteBlanche\Exception\NotFoundException,
-    \CarteBlanche\Exception\AccessForbiddenException,
-    \CarteBlanche\Exception\InternalServerErrorException,
-    \CarteBlanche\Exception\Exception,
-    \CarteBlanche\Exception\ErrorException,
-    \CarteBlanche\Exception\DomainException,
-    \CarteBlanche\Exception\RuntimeException,
-    \CarteBlanche\Exception\InvalidArgumentException,
-    \CarteBlanche\Exception\UnexpectedValueException;
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\Abstracts\AbstractController;
+use \CarteBlanche\Library\Form\Field;
+use \CarteBlanche\Library\Helper;
+use \CarteBlanche\Exception\NotFoundException;
+use \CarteBlanche\Exception\AccessForbiddenException;
+use \CarteBlanche\Exception\InternalServerErrorException;
+use \CarteBlanche\Exception\Exception;
+use \CarteBlanche\Exception\ErrorException;
+use \CarteBlanche\Exception\DomainException;
+use \CarteBlanche\Exception\RuntimeException;
+use \CarteBlanche\Exception\InvalidArgumentException;
+use \CarteBlanche\Exception\UnexpectedValueException;
 
 
 /**
@@ -77,7 +76,6 @@ class Dev extends AbstractController
 	    $root_path = CarteBlanche::getPath('root_path');
 		$base_path = $root_path;
 		$bundles_base_path = $root_path
-		    .CarteBlanche::getPath('src_dir')
 		    .CarteBlanche::getPath('bundles_dir');
 		$controller_dirname = 'Controller';
 		
@@ -129,8 +127,8 @@ class Dev extends AbstractController
         foreach ($known_bundles_lower as $key=>$k) {
             $known_bundles_lower[strtolower($key)] = $k;
         }
-		$_dir->setPath(CarteBlanche::getPath('src_path'));
-		$_dir->setDirname(CarteBlanche::getPath('bundles_dir'));
+		$_dir->setPath(dirname($bundles_base_path));
+		$_dir->setDirname(basename($bundles_base_path));
 		$_bundles = $_dir->scanDir();
 		if ($_bundles) {
 			$_bundle_dir = new \CarteBlanche\Model\DirectoryModel;
@@ -329,7 +327,7 @@ exit('yo');
 		$ctt .= '<br />Tous les arguments reçus: '.var_export(func_get_args(),1);
 
 /*
-     $to      = 'piero.wbmstr@gmail.com';
+     $to      = 'piwi@ateliers-pierrot.fr';
      $subject = 'le sujet';
      $message = 'Bonjour !';
      $headers = 'From: webmaster@example.com' . "\r\n" .
@@ -393,12 +391,12 @@ $mailchimp
 	->parse();
 
 		$file = _ROOTPATH.'CHANGELOG.md';
-//		$mail = new \MimeEmail\Lib\MimeEmail('Piero', 'piero.wbmstr@gmail.com', 'pierre.cassat@gmail.com', 'Mail de test', $txt_message_iso);
-//		$mail = new \MimeEmail\Lib\MimeEmail('Piero', 'piero.wbmstr@gmail.com', null, 'Mail de test', $txt_message_iso);
+//		$mail = new \MimeEmail\Lib\MimeEmail('Piero', 'piwi@ateliers-pierrot.fr', 'pierre.cassat@gmail.com', 'Mail de test', $txt_message_iso);
+//		$mail = new \MimeEmail\Lib\MimeEmail('Piero', 'piwi@ateliers-pierrot.fr', null, 'Mail de test', $txt_message_iso);
 		$mail = new \MimeEmail\Lib\MimeEmail();
 
 		$mail
-			->setTo('piero.wbmstr@gmail.com', 'PieroWbmstr')
+			->setTo('piwi@ateliers-pierrot.fr', 'PieroWbmstr')
 			->setFrom( 'pierre.cassat@gmail.com', 'Piero' )
 //			->setCc( array( 'Piero'=>'pierre.cassat@gmail.com' ) )
 //			->setCc( array( 'Piero'=>'pierre.cassat@gmail.com', 'oim'=>'oim@gmail.com' ) )

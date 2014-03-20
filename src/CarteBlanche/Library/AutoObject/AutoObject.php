@@ -1,10 +1,13 @@
 <?php
 /**
- * CarteBlanche - PHP framework package - AutoObject bundle
- * Copyleft (c) 2013 Pierre Cassat and contributors
- * <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
- * License Apache-2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * CarteBlanche - PHP framework package
+ * (c) Pierre Cassat and contributors
+ * 
  * Sources <http://github.com/php-carteblanche/carteblanche>
+ *
+ * License Apache-2.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace CarteBlanche\Library\AutoObject;
@@ -15,9 +18,7 @@ use \CarteBlanche\Library\AutoObject\Table;
 use \CarteBlanche\Library\AutoObject\Field;
 use \CarteBlanche\Library\AutoObject\Relation;
 use \CarteBlanche\Library\AutoObject\AutoObjectMapper;
-
 use \CarteBlanche\Model\BaseModel;
-
 use \Patterns\Commons\Collection;
 
 /**
@@ -135,7 +136,7 @@ class AutoObject
 				sprintf('Object model name is invalid! (must be a string, got "%s")', var_export($name,1))
 			);
 		}
-		if (false===appClassExists($name)) {
+		if (false===\CarteBlanche\App\Loader::classExists($name)) {
 			throw new \InvalidArgumentException(
 				sprintf('Object model\'s class can\'t be found! (got "%s")', var_export($name,1))
 			);
@@ -237,7 +238,7 @@ class AutoObject
 	 */
 	protected function _buildModel($auto_populate = true, $advanced_search = false)
 	{
-		if (appClassExists($this->object_model_name)) {
+		if (\CarteBlanche\App\Loader::classExists($this->object_model_name)) {
 			try {
 				$this->object_model = new $this->object_model_name(
 					$this->getTableName(), 

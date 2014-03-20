@@ -36,13 +36,11 @@ class LoggerLoader implements DependencyLoaderInterface
             $logger = new \Psr\Log\NullLogger;
         } else {
 */
-            $log_path = $container->get('kernel')->getPath('log_path');
-            if (empty($log_path)) {
+            $log_dir = $container->get('kernel')->getPath('log_dir');
+            if (empty($log_dir)) {
                 $log_dir = $container->get('kernel')->getPath('var_dir').'logs'.DIRECTORY_SEPARATOR;
-                $container->get('kernel')->addPath('log_dir', $log_dir);
-                $log_path = $container->get('kernel')->getPath('root_path').$log_dir;
-                $container->get('kernel')->addPath('log_path', $log_path, true, true);
             }
+            $container->get('kernel')->addPath('log_dir', $log_dir, true, true);
             $logger = new \CarteBlanche\App\Logger;
 //        }
         return $logger;

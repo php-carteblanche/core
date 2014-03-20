@@ -40,7 +40,7 @@ class CarteBlanche
 	public static function getConfig($var, $default = null, $app_only = false)
     {
         return \CarteBlanche\App\Container::getInstance()->get('config')
-	        ->get($var, $default, $app_only);
+	        ->get($var, \CarteBlanche\App\Config::NOT_FOUND_GRACEFULLY, $default);
     }
 
     /**
@@ -58,6 +58,14 @@ class CarteBlanche
     public function getPath($name)
     {
         return \CarteBlanche\App\Container::getInstance()->get('kernel')->getPath($name);
+    }
+
+    /**
+     * @alias \CarteBlanche\App\Config::getPath(xxx, true)
+     */
+    public function getFullPath($name)
+    {
+        return \CarteBlanche\App\Container::getInstance()->get('kernel')->getPath($name, true);
     }
 
     /**

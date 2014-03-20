@@ -23,6 +23,7 @@
         "atelierspierrot/internationalization": "1.*",
         "atelierspierrot/assets-manager": "1.*",
         "atelierspierrot/templatengine": "1.*",
+        "atelierspierrot/assets-library": "1.*",
         "atelierspierrot/devdebug": "1.*",
         "atelierspierrot/mime-mailer": "1.*",
         "atelierspierrot/webservices": "1.*"
@@ -38,7 +39,7 @@
     },
     "minimum-stability": "dev",
     "extra": {
-        "views-functions": "src/views_aliases.php",
+        "views-functions": "src/views_functions.php",
         "i18n-dir": "i18n",
         "doc-dir": "doc",
         "config-dir": "config",

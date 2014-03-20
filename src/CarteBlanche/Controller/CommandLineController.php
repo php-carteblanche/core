@@ -15,10 +15,9 @@ namespace CarteBlanche\Controller;
 use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\App\Container;
 use \CarteBlanche\Abstracts\AbstractCommandLineController;
-
-use \Library\CommandLine\Helper,
-    \Library\CommandLine\Formater,
-    \Library\CommandLine\Stream;
+use \Library\CommandLine\Helper;
+use \Library\CommandLine\Formater;
+use \Library\CommandLine\Stream;
 
 /**
  * Default controller for command line operations

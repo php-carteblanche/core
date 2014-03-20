@@ -12,23 +12,22 @@
 
 namespace CarteBlanche\App;
 
-use \CarteBlanche\CarteBlanche,
-    \CarteBlanche\App\Container,
-    \CarteBlanche\Exception\NotFoundException,
-    \CarteBlanche\Interfaces\FrontControllerInterface,
-    \CarteBlanche\Library\Helper;
-
+use \CarteBlanche\CarteBlanche;
+use \CarteBlanche\App\Container;
+use \CarteBlanche\Exception\NotFoundException;
+use \CarteBlanche\Interfaces\FrontControllerInterface;
+use \CarteBlanche\Library\Helper;
 use \Patterns\Abstracts\AbstractSingleton;
-
-use \Library\Helper\Html as HtmlHelper,
-    \Library\Helper\Directory as DirectoryHelper,
-    \Library\Helper\Code as CodeHelper;
+use \Library\Helper\Html as HtmlHelper;
+use \Library\Helper\Directory as DirectoryHelper;
+use \Library\Helper\Code as CodeHelper;
 
 /**
  * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class FrontController
     extends AbstractSingleton
+    implements FrontControllerInterface
 {
 
 	/**
@@ -238,7 +237,7 @@ class FrontController
 		    $action .= 'Action';
 		}
 		$this->setActionName($action);
-		
+
 		// dispatch
 		if (method_exists($this->getController(), $this->getActionName())) {
             $result = CodeHelper::fetchArguments(
@@ -333,19 +332,21 @@ class FrontController
 		if ($session->hasFlash()) 
 			$params['flash_messages'] = $this->getFlashMessages();
 
+        $params['charset'] = CarteBlanche::getConfig('html.charset', 'utf-8', true);
 
         $i18n_cfg = CarteBlanche::getConfig('i18n', array(), true);
         $languages_cfg = CarteBlanche::getConfig('languages', array(), true);
 		$i18n = CarteBlanche::getContainer()->get('i18n');
-		$default_lang = CarteBlanche::getContainer()->get('i18n')->getLocale();
-		$lang_data = isset($languages_cfg[$default_lang]) ? $languages_cfg[$default_lang] : null;
-    	$params['lang'] = CarteBlanche::getContainer()->get('i18n')->getLanguageCode()
-    	    .'-'.CarteBlanche::getContainer()->get('i18n')->getRegionCode();
-		if (!empty($lang_data) && isset($lang_data['charset'])) {
-    		$params['charset'] = $lang_data['charset'];
-		} else {
-    		$params['charset'] = CarteBlanche::getConfig('html.charset', 'utf-8', true);
-		}
+		if ($i18n) {
+            $default_lang = CarteBlanche::getContainer()->get('i18n')->getLocale();
+            $lang_data = isset($languages_cfg[$default_lang]) ? $languages_cfg[$default_lang] : null;
+            $params['lang'] = CarteBlanche::getContainer()->get('i18n')->getLanguageCode()
+                .'-'.CarteBlanche::getContainer()->get('i18n')->getRegionCode();
+            if (!empty($lang_data) && isset($lang_data['charset'])) {
+                $params['charset'] = $lang_data['charset'];
+            }
+        }
+
 		$params['request'] = \Library\Helper\Url::getRequestUrl();
 
 		$_app_globals = CarteBlanche::getConfig('globals', null, true);
