@@ -37,6 +37,10 @@ Desktop.ini
 # the composer lock file
 composer.lock
 
+# the dev-tools config
+.devtools
+*/.devtools
+
 # any "tmp*" file or dir anywhere
 *tmp*
 
