@@ -30,15 +30,23 @@ class ErrorController
     static $views_dir = 'error/';
 
     /**
-     * @see self::back_home()
+     * @param   null/string/int  $id
+     * @see     self::back_home()
      */
     public function indexAction($id = null)
     {
+        if (!empty($id)) {
+            $_meth = 'error'.$id.'Action';
+            if (method_exists($this, $_meth)) {
+                return $this->{$_meth}();
+            }
+        }
         return self::back_home();
     }
 
     /**
-     * @see self::back_home()
+     * @param   null/string/int  $id
+     * @see     self::back_home()
      */
     public function emptyAction($altdb = null)
     {
@@ -144,32 +152,8 @@ class ErrorController
      */
     public function error404Action()
     {
+        $ctt = $this->_getErrorPageContent(404);
         $this->getContainer()->get('router')->setReferer();
-        $_args=array(
-            'offset'=>null,'limit'=>null,'table'=>null,'altdb'=>null,
-            'orderby'=>null, 'orderway'=>null
-        );
-        $url_args = CarteBlanche::getConfig('routing.arguments_mapping');
-        foreach ($_args as $_arg_var=>$_arg_val) {
-            if (!empty($_arg_val)) {
-                if (in_array($_arg_var, $url_args))
-                    $args[ array_search($_arg_var, $url_args) ] = $_arg_val;
-                else
-                    $args[ $_arg_var ] = $_arg_val;
-            }
-        }
-        $searchbox = class_exists('\Tool\SearchBox') ? new \Tool\SearchBox(array(
-            'hiddens'=>$_args, 'advanced_search'=>true
-        )) : '';
-        $ctt = (string) $searchbox;
-
-        $_f = CarteBlanche::getContainer()->get('locator')->locateView(self::$views_dir.'404.md');
-        $_txt = class_exists('\Tool\Text') ? new \Tool\Text(array(
-//          'original_str'=>file_get_contents(CarteBlanche::getPath('root_path')._CarteBlanche_DIR._VIEWSDIR.self::$views_dir.'500.md'),
-            'original_str'=>file_get_contents($_f),
-            'markdown'=>true,
-        )) : file_get_contents($_f);
-        $ctt .= (string) $_txt;
 
         $params = array(
             'title'=>$this->trans('OOPS ! The page was not found !!'),
@@ -233,6 +217,57 @@ class ErrorController
         $params['output'] = CarteBlanche::getContainer()->get('front_controller')
             ->view(self::$views_dir.'error', $params);
         return CarteBlanche::getContainer()->get('front_controller')->render($params);
+    }
+
+    /**
+     * @param   int     $code
+     * @param   string  $message
+     * @return  string
+     */
+    protected function _getErrorPageContent($code = 404, $message = '')
+    {
+        $ctt            = '';
+        $source_file    = CarteBlanche::getContainer()->get('locator')
+            ->locateView(self::$views_dir.$code.'.md');
+        $source_ctt     = file_exists($source_file) ? file_get_contents($source_file) : $message;
+
+        if (class_exists('\Tool\SearchBox')) {
+            $_args=array(
+                'offset'=>null,'limit'=>null,'table'=>null,'altdb'=>null,
+                'orderby'=>null, 'orderway'=>null
+            );
+            $url_args = CarteBlanche::getConfig('routing.arguments_mapping');
+            foreach ($_args as $_arg_var=>$_arg_val) {
+                if (!empty($_arg_val)) {
+                    if (in_array($_arg_var, $url_args))
+                        $args[ array_search($_arg_var, $url_args) ] = $_arg_val;
+                    else
+                        $args[ $_arg_var ] = $_arg_val;
+                }
+            }
+            $searchbox = new \Tool\SearchBox(array(
+                'hiddens'=>$_args, 'advanced_search'=>true
+            ));
+            $ctt .= (string) $searchbox;
+        }
+
+        if (class_exists('\Tool\Text')) {
+            $_txt = new \Tool\Text(array(
+                'original_str'=>$source_ctt,
+                'markdown'=>true,
+            ));
+            $ctt .= $_txt;
+       } elseif (class_exists('\MarkdownExtended\MarkdownExtended')) {
+            $content = \MarkdownExtended\MarkdownExtended::create()
+                ->get('Parser')
+                ->parse( new \MarkdownExtended\Content($source) )
+                ->getContent();
+           $ctt .= $content->getBody();
+        } else {
+            $ctt .= $source_ctt;
+        }
+
+        return $ctt;
     }
 
 }

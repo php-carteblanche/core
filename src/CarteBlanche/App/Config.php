@@ -13,6 +13,7 @@
 namespace CarteBlanche\App;
 
 use \CarteBlanche\App\Kernel;
+use \CarteBlanche\Interfaces\ConfigInterface;
 use \Patterns\Commons\Registry;
 use \Library\Helper\Code as CodeHelper;
 use \CarteBlanche\Exception\ErrorException;
@@ -24,6 +25,7 @@ use \CarteBlanche\Exception\InvalidArgumentException;
  * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class Config
+    implements ConfigInterface
 {
 
     /**

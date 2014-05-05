@@ -57,21 +57,6 @@ class Locator
         return false;
     }
 
-    public static function getToolPath($name, $is_class = false)
-    {
-        $name_parts = explode('\\', $name);
-        $tools_dir = CarteBlanche::getFullPath('tools_dir');
-        $tool_path = false;
-        if ($name_parts[0]==='Tool') {
-            $tool_path = str_replace('Tool'.DIRECTORY_SEPARATOR, $tools_dir, str_replace('\\', DIRECTORY_SEPARATOR, $name));
-            if (true===$is_class) {
-                if (count($name_parts)===2) $tool_path .= '/'.array_pop($name_parts);
-                $tool_path .= '.php';
-            }
-        }
-        return $tool_path;
-    }
-
     /**
      * Locate a file in "data/" directory
      *
@@ -256,6 +241,21 @@ class Locator
             return $_found;
         }
         return false;
+    }
+
+    public static function getToolPath($name, $is_class = false)
+    {
+        $name_parts = explode('\\', $name);
+        $tools_dir = CarteBlanche::getFullPath('tools_dir');
+        $tool_path = false;
+        if ($name_parts[0]==='Tool') {
+            $tool_path = str_replace('Tool'.DIRECTORY_SEPARATOR, $tools_dir, str_replace('\\', DIRECTORY_SEPARATOR, $name));
+            if (true===$is_class) {
+                if (count($name_parts)===2) $tool_path .= '/'.array_pop($name_parts);
+                $tool_path .= '.php';
+            }
+        }
+        return $tool_path;
     }
 
     /**

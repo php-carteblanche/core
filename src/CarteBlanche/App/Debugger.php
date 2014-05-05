@@ -18,7 +18,8 @@ use \DevDebug\Debugger as BaseDebugger;
 /**
  * The global application debugger singleton instance
  */
-class Debugger extends BaseDebugger
+class Debugger
+    extends BaseDebugger
 {
 
     /**

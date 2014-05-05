@@ -15,6 +15,7 @@ namespace CarteBlanche\App;
 use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\App\Kernel;
 use \Library\HttpFundamental\Request as BaseRequest;
+use \Patterns\Interfaces\RequestInterface;
 use \Library\Helper\Url as UrlHelper;
 
 /**
@@ -27,6 +28,7 @@ use \Library\Helper\Url as UrlHelper;
  */
 class Request
     extends BaseRequest
+    implements RequestInterface
 {
 
     /**

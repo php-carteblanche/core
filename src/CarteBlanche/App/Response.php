@@ -14,6 +14,7 @@ namespace CarteBlanche\App;
 
 use \CarteBlanche\App\Kernel;
 use \Library\HttpFundamental\Response as BaseResponse;
+use \Patterns\Interfaces\ResponseInterface;
 
 /**
  * The global response class
@@ -24,6 +25,7 @@ use \Library\HttpFundamental\Response as BaseResponse;
  */
 class Response
     extends BaseResponse
+    implements ResponseInterface
 {
 
     /**

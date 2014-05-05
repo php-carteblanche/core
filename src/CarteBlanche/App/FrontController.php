@@ -277,7 +277,7 @@ class FrontController
                     }
                 }
 
-                // response object
+            // response object
             } elseif (is_object($result) && ($result instanceof \CarteBlanche\App\Response)) {
                 CarteBlanche::getContainer()->set('response', $return, true);
                 $this->render();

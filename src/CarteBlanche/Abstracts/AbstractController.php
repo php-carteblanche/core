@@ -131,7 +131,8 @@ abstract class AbstractController
      */
     public function render($params = null, $debug = null, $exception = null)
     {
-        return FrontController::getInstance()->render($params, $debug, $exception);
+        return $this->getContainer()->get('front_controller')
+            ->render($params, $debug, $exception);
     }
 
     /**
@@ -145,7 +146,8 @@ abstract class AbstractController
      */
     public function view($view = null, $params = null, $display = false, $exit = false)
     {
-        return FrontController::getInstance()->view($view, $params, $display, $exit);
+        return $this->getContainer()->get('front_controller')
+            ->view($view, $params, $display, $exit);
     }
 
     /**
