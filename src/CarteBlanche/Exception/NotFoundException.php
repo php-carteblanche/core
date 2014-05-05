@@ -13,7 +13,7 @@
 namespace CarteBlanche\Exception;
 
 use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\App\FrontController;
+use \CarteBlanche\Interfaces\CarteBlancheExceptionInterface;
 use \CarteBlanche\Exception\Exception as BaseException;
 
 /**
@@ -22,36 +22,37 @@ use \CarteBlanche\Exception\Exception as BaseException;
  * All exceptions are written in the logs (by default in the "error.log" file)
  * except if `app.modes._APP_MODE.log_exceptions=false`
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class NotFoundException
     extends BaseException
+    implements CarteBlancheExceptionInterface
 {
 
-	/**
-	 * Construction of the exception - a message is needed (1st argument)
-	 *
-	 * @param string $message The exception message
-	 * @param numeric $code The exception code
-	 * @param misc $previous The previous exception if so
-	 */
-	public function __construct($message, $code = 0, $previous = null) 
-	{
-		// parent constructor
-		parent::__construct($message, $code, $previous, false);
-	}
+    /**
+     * Construction of the exception - a message is needed (1st argument)
+     *
+     * @param   string  $message    The exception message
+     * @param   int     $code       The exception code
+     * @param   mixed   $previous   The previous exception if so
+     */
+    public function __construct($message, $code = 0, $previous = null)
+    {
+        // parent constructor
+        parent::__construct($message, $code, $previous, false);
+    }
 
-	/**
-	 * Render of a production error
-	 *
-	 * @return void
-	 */
-	public function productionRendering() 
-	{
+    /**
+     * Render of a production error
+     *
+     * @return void
+     */
+    public function productionRendering()
+    {
         $args = array('message'=>$this->getAppMessage());
-        return FrontController::getInstance()
+        return CarteBlanche::getContainer()->get('front_controller')
             ->renderProductionError($args, 404);
-	}
+    }
 
     /**
      * Get the CarteBlanche information string about an Exception

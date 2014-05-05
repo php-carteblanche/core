@@ -17,22 +17,22 @@ use \CarteBlanche\App\Kernel;
 use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class EntityManagerLoader implements DependencyLoaderInterface
 {
 
-	/**
-	 * Instance loader
-	 *
-	 * @param array $config
-	 *
-	 * @return object
-	 */
-    public function load(array $config = null, \CarteBlanche\App\Container $container)
+    /**
+     * Instance loader
+     *
+     * @param   array   $config
+     * @param   \CarteBlanche\Interfaces\ContainerInterface $container
+     * @return  object
+     */
+    public function load(array $config = null, \CarteBlanche\Interfaces\ContainerInterface $container)
     {
         $em_name = isset($config['name']) ? $config['name'] : 'default';
-	    $em_fullname = $em_name.'_entity_manager';
+        $em_fullname = $em_name.'_entity_manager';
 
         $existing = $container->get($em_fullname);
         if (!empty($existing)) {
@@ -41,33 +41,34 @@ class EntityManagerLoader implements DependencyLoaderInterface
         return $this->_buildEntityManager($em_fullname);
     }
 
-	/**
-	 * Build a specific entity manager
-	 * @param string $emname The name of the entity manager to build
-	 * @return object Returns an object to manage the entity
-	 */
-	protected function _buildEntityManager($em_fullname) 
-	{
-		$em_cfg = CarteBlanche::getConfig($em_fullname);
+    /**
+     * Build a specific entity manager
+     *
+     * @param   string  $em_fullname    The name of the entity manager to build
+     * @return  null/object Returns an object to manage the entity
+     */
+    protected function _buildEntityManager($em_fullname)
+    {
+        $em_cfg = CarteBlanche::getConfig($em_fullname);
 
-		if (isset($em_cfg['class'])) {
-    		$em_class = $em_cfg['class'];
-		} else {
-			throw new \RuntimeException(
-				sprintf('An entity manager configuration must define a class name ("%s")!', $em_fullname)
-			);
-		}
+        if (isset($em_cfg['class'])) {
+            $em_class = $em_cfg['class'];
+        } else {
+            throw new \RuntimeException(
+                sprintf('An entity manager configuration must define a class name ("%s")!', $em_fullname)
+            );
+        }
 
         $em_options = array();
-		if (isset($em_cfg['options'])) {
-    		$em_options = $em_cfg['options'];
-/*
-		} else {
-			throw new \RuntimeException(
-				sprintf('An entity manager configuration must define an options array ("%s")!', $em_fullname)
-			);
-*/
-		}
+        if (isset($em_cfg['options'])) {
+            $em_options = $em_cfg['options'];
+    /*
+        } else {
+            throw new \RuntimeException(
+                sprintf('An entity manager configuration must define an options array ("%s")!', $em_fullname)
+            );
+    */
+        }
 
         if (!empty($em_class)) {
             $factory = \Library\Factory::create()
@@ -77,7 +78,7 @@ class EntityManagerLoader implements DependencyLoaderInterface
             return $factory->build($em_class, $em_options);
         }
         return null;
-	}
+    }
 
 }
 

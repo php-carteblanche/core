@@ -16,19 +16,19 @@ use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class DatabaseLoader implements DependencyLoaderInterface
 {
 
-	/**
-	 * Instance loader
-	 *
-	 * @param array $config
-	 *
-	 * @return object
-	 */
-    public function load(array $config = null, \CarteBlanche\App\Container $container)
+    /**
+     * Instance loader
+     *
+     * @param   array   $config
+     * @param   \CarteBlanche\Interfaces\ContainerInterface $container
+     * @return  object
+     */
+    public function load(array $config = null, \CarteBlanche\Interfaces\ContainerInterface $container)
     {
         $config = $container->get('kernel')->getPath('default_em');
         if (empty($db_path)) {
@@ -37,8 +37,8 @@ class DatabaseLoader implements DependencyLoaderInterface
             $container->get('kernel')->addPath('db_dir', $db_dir);
             $container->get('kernel')->addPath('db_path', $db_path, true, true);
         }
-//			$_altdb = $this->container->get('request')->getUrlArg('altdb');
-//			return \AutoObject\AutoObjectMapper::getEntityManager( $_altdb );
+//      $_altdb = $this->container->get('request')->getUrlArg('altdb');
+//      return \AutoObject\AutoObjectMapper::getEntityManager( $_altdb );
         return \CarteBlanche\Library\AutoObject\AutoObjectMapper::getEntityManager('default');
 /*
         $dbname = getContainer()->get('request')->getUrlArg('altdb');

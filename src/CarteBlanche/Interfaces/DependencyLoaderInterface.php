@@ -13,19 +13,18 @@
 namespace CarteBlanche\Interfaces;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 interface DependencyLoaderInterface
 {
 
-	/**
-	 * Instance loader
-	 *
-	 * @param array $config
-	 *
-	 * @return object
-	 */
-	public function load(array $config = null, \CarteBlanche\App\Container $container);
+    /**
+     * Instance loader
+     *
+     * @param   array   $config
+     * @param   \CarteBlanche\Interfaces\ContainerInterface $container
+     */
+    public function load(array $config = null, \CarteBlanche\Interfaces\ContainerInterface $container);
 
 }
 

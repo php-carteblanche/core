@@ -16,14 +16,12 @@ use \CarteBlanche\Interfaces\ModelInterface;
 use \CarteBlanche\Interfaces\StorageEngineInterface;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 interface RepositoryInterface
 {
 
-	/**
-	 */
-	public function __construct(array $options = null, ModelInterface $model, StorageEngineInterface $storage_engine);
+    public function __construct(array $options = null, ModelInterface $model, StorageEngineInterface $storage_engine);
 
     public function find($field_value, $field_name = 'id');
     

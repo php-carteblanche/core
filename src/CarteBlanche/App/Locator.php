@@ -20,16 +20,16 @@ use \Library\Helper\Text as TextHelper;
 use \Library\Helper\Directory as DirectoryHelper;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class Locator
 {
 
     /**
      * Hack to let the 'file_exists' function search in 'include_path'
-	 *
-     * @param string $file The filename to find
-     * @return bool|string The valid file path if found, false otherwise
+     *
+     * @param   string  $filename   The filename to find
+     * @return  bool|string         The valid file path if found, false otherwise
      */
     public static function locate($filename)
     {
@@ -74,8 +74,10 @@ class Locator
 
     /**
      * Locate a file in "data/" directory
-     * @param string $filename
-     */    
+     *
+     * @param   string  $filename
+     * @return  null/string
+     */
     public static function locateData($filename)
     {
         $etc_dir = CarteBlanche::getPath('config_dir');
@@ -89,7 +91,10 @@ class Locator
     
     /**
      * Locate a file in "config/" directory (vendor or not)
-     * @param string $filename
+     *
+     * @param   string  $filename
+     * @param   bool    $fallback
+     * @return  null/string
      */    
     public static function locateConfig($filename, $fallback = true)
     {
@@ -105,7 +110,10 @@ class Locator
     
     /**
      * Locate a file in "i18n/" directory (vendor or not)
-     * @param string $filename
+     *
+     * @param   string  $filename
+     * @param   bool    $fallback
+     * @return  null/string
      */    
     public static function locateLanguage($filename, $fallback = true)
     {
@@ -120,18 +128,18 @@ class Locator
     }
     
     /**
-	 * Search a view file in the views directory and sub-directories
-	 *
-	 * @param string $view The view filename
-	 * @param bool $remap
-	 * @return misc FALSE if nothing had been find, the filename otherwise
+     * Search a view file in the views directory and sub-directories
+     *
+     * @param   string  $view   The view filename
+     * @param   bool    $remap
+     * @return  mixed   FALSE if nothing had been find, the filename otherwise
      */    
     public static function locateView($view = null, $remap = true)
     {
-		if (empty($view)) return;
+        if (empty($view)) return;
 
-		// from views mapping
-		if (true===$remap) {
+        // from views mapping
+        if (true===$remap) {
             $views_mapping = CarteBlanche::getContainer()->get('config')->get('views');
             if (!empty($views_mapping) && array_key_exists($view, $views_mapping)) {
                 $view = $views_mapping[$view];
@@ -141,59 +149,59 @@ class Locator
             }
         }
 
-		// from the application
-		if ($_f = self::locate(
-		    DirectoryHelper::slashDirname(CarteBlanche::getPath('views_dir')).$view
-		)) {
-			return self::fallback($view, $_f);
-		}
-		
-		// from a bundle
-		if ($_f = self::locate(
-		    DirectoryHelper::slashDirname(CarteBlanche::getPath('bundles_dir')).$view
-		)) {
-			return self::fallback($view, $_f);
-		}
+        // from the application
+        if ($_f = self::locate(
+            DirectoryHelper::slashDirname(CarteBlanche::getPath('views_dir')).$view
+        )) {
+            return self::fallback($view, $_f);
+        }
 
-		// from a tool
-		if ($_f = self::locate(
-		    DirectoryHelper::slashDirname(CarteBlanche::getPath('tools_dir')).$view
-		)) {
-			return self::fallback($view, $_f);
-		}
+        // from a bundle
+        if ($_f = self::locate(
+            DirectoryHelper::slashDirname(CarteBlanche::getPath('bundles_dir')).$view
+        )) {
+            return self::fallback($view, $_f);
+        }
 
-		// globally
-		if ($_f = self::locate($view)) {
-			return self::fallback($view, $_f);
-		}
+        // from a tool
+        if ($_f = self::locate(
+            DirectoryHelper::slashDirname(CarteBlanche::getPath('tools_dir')).$view
+        )) {
+            return self::fallback($view, $_f);
+        }
+
+        // globally
+        if ($_f = self::locate($view)) {
+            return self::fallback($view, $_f);
+        }
 
         $views_dir = DirectoryHelper::slashDirname(CarteBlanche::getPath('views_dir'));
 
-		if (!self::locate($view)) {
-			$view_file = $views_dir.$view;
-		} else {
-			$view_file = $view;
-		}
+        if (!self::locate($view)) {
+            $view_file = $views_dir.$view;
+        } else {
+            $view_file = $view;
+        }
 
-		if (!self::locate($view_file)) {
-			$_ctrl = CarteBlanche::getContainer()
-			    ->get('front_controller')->getController();
-			if (!empty($_ctrl) && property_exists($_ctrl, 'views_dir')) {
+        if (!self::locate($view_file)) {
+            $_ctrl = CarteBlanche::getContainer()
+                ->get('front_controller')->getController();
+            if (!empty($_ctrl) && property_exists($_ctrl, 'views_dir')) {
                 $subdir = $_ctrl::$views_dir;
                 $view_file = $views_dir.$subdir.$view;
-			}
-		}
+            }
+        }
 
-		if (!self::locate($view_file)) {
-			$view_file = $view;
-		}
+        if (!self::locate($view_file)) {
+            $view_file = $view;
+        }
 
-		if (self::locate($view_file)) {
-		    return self::fallback($view_file);
-		}
-		
-		// not found: try with one of configured extensions
-		if (true===$remap) {
+        if (self::locate($view_file)) {
+            return self::fallback($view_file);
+        }
+
+        // not found: try with one of configured extensions
+        if (true===$remap) {
             $views_extensions = CarteBlanche::getContainer()->get('config')->get('views.extensions');
             if (!empty($views_extensions)) {
                 foreach ($views_extensions as $_ext) {
@@ -205,58 +213,58 @@ class Locator
             }
         }
 
-		return false;
+        return false;
     }
-    
-	/**
-	 * Search a controller : from the app or a bundle
-	 *
-	 * @param string $view The controller filename
-	 * @return misc FALSE if nothing had been find, the filename otherwise
-	 */
-	public static function locateController($ctrl)
-	{
-	    $ctrl = TextHelper::toCamelCase($ctrl);
+
+    /**
+     * Search a controller : from the app or a bundle
+     *
+     * @param   string  $ctrl   The controller filename
+     * @return  mixed   FALSE if nothing had been find, the filename otherwise
+     */
+    public static function locateController($ctrl)
+    {
+        $ctrl = TextHelper::toCamelCase($ctrl);
         if (Loader::classExists($ctrl)) {
             return $ctrl;
         }
 
-		// from the application
-		$controller = Kernel::CONTROLLER_DEFAULT_NAMESPACE.$ctrl;
-		if ($_found = Loader::autoload($controller)) {
-			return $_found;
-		}
+        // from the application
+        $controller = Kernel::CONTROLLER_DEFAULT_NAMESPACE.$ctrl;
+        if ($_found = Loader::autoload($controller)) {
+            return $_found;
+        }
 
-		// from CarteBlanche
-		$controller = Kernel::CARTE_BLANCHE_NAMESPACE.'\\'.Kernel::CONTROLLER_DEFAULT_NAMESPACE.$ctrl;
-		if ($_found = Loader::autoload($controller)) {
-			return $_found;
-		}
+        // from CarteBlanche
+        $controller = Kernel::CARTE_BLANCHE_NAMESPACE.'\\'.Kernel::CONTROLLER_DEFAULT_NAMESPACE.$ctrl;
+        if ($_found = Loader::autoload($controller)) {
+            return $_found;
+        }
 
-		// with a full name
-		$controller .= Kernel::CONTROLLER_SUFFIX;
-		if ($_found = Loader::autoload($controller)) {
-			return $_found;
-		}
-		
-		// from bundles
-		if ($_found = Loader::loadClass($ctrl, 'Controller', true)) {
-			return $_found;
-		}
-		// with a full name
-		if ($_found = Loader::loadClass($ctrl.Kernel::CONTROLLER_SUFFIX, 'Controller', true)) {
-			return $_found;
-		}
-		return false;
-	}
+        // with a full name
+        $controller .= Kernel::CONTROLLER_SUFFIX;
+        if ($_found = Loader::autoload($controller)) {
+            return $_found;
+        }
+
+        // from bundles
+        if ($_found = Loader::loadClass($ctrl, 'Controller', true)) {
+            return $_found;
+        }
+        // with a full name
+        if ($_found = Loader::loadClass($ctrl.Kernel::CONTROLLER_SUFFIX, 'Controller', true)) {
+            return $_found;
+        }
+        return false;
+    }
 
     /**
      * For user overridings
      * This will search a version of `$file` in `user/` and return it in replacement if so.
      *
-     * @param string $file The relative file path to search
-     * @param string $path The default file path
-     * @return string
+     * @param   string  $file   The relative file path to search
+     * @param   string  $path   The default file path
+     * @return  string
      */
     public static function fallback($file = null, $path = null)
     {

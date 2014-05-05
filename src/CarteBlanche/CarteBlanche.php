@@ -13,13 +13,13 @@
 namespace CarteBlanche;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author      Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class CarteBlanche
 {
 
     /**
-     * @return \CarteBlanche\App\Container singleton instance
+     * @return  \CarteBlanche\App\Container singleton instance
      */
     public static function getContainer()
     {
@@ -27,7 +27,7 @@ class CarteBlanche
     }
 
     /**
-     * @return \CarteBlanche\App\Kernel instance
+     * @return  \CarteBlanche\App\Kernel instance
      */
     public static function getKernel()
     {
@@ -35,25 +35,25 @@ class CarteBlanche
     }
 
     /**
-     * @alias \CarteBlanche\App\Config::getConfig()
+     * @alias   \CarteBlanche\App\Config::getConfig()
      */
-	public static function getConfig($var, $default = null, $app_only = false)
+    public static function getConfig($var, $default = null, $app_only = false)
     {
         return \CarteBlanche\App\Container::getInstance()->get('config')
-	        ->get($var, \CarteBlanche\App\Config::NOT_FOUND_GRACEFULLY, $default);
+           ->get($var, \CarteBlanche\App\Config::NOT_FOUND_GRACEFULLY, $default);
     }
 
     /**
-     * @alias \CarteBlanche\App\Config::addPath()
+     * @alias   \CarteBlanche\App\Config::addPath()
      */
     public static function addPath($name, $value, $must_exists = false, $must_be_writable = false)
     {
         return \CarteBlanche\App\Container::getInstance()->get('kernel')
-	        ->addPath($name, $value, $must_exists, $must_be_writable);
+            ->addPath($name, $value, $must_exists, $must_be_writable);
     }
 
     /**
-     * @alias \CarteBlanche\App\Config::getPath()
+     * @alias   \CarteBlanche\App\Config::getPath()
      */
     public function getPath($name)
     {
@@ -61,7 +61,7 @@ class CarteBlanche
     }
 
     /**
-     * @alias \CarteBlanche\App\Config::getPath(xxx, true)
+     * @alias   \CarteBlanche\App\Config::getPath(xxx, true)
      */
     public function getFullPath($name)
     {
@@ -69,7 +69,7 @@ class CarteBlanche
     }
 
     /**
-     * @alias \CarteBlanche\App\Logger::log()
+     * @alias   \CarteBlanche\App\Logger::log()
      */
     public static function log($message, $level = \Library\Logger::DEBUG, array $context = array(), $logname = null)
     {
@@ -81,20 +81,22 @@ class CarteBlanche
     }
 
     /**
-     * @alias \Locale::getDefault()
+     * @return  string
+     * @alias   \Locale::getDefault()
      */
-	public static function getlocale()
-	{
-		return \Locale::getDefault();
-	}	
+    public static function getlocale()
+    {
+        return \Locale::getDefault();
+    }
 
     /**
-     * @alias \CarteBlanche\App\Kernel::getMode($config)
+     * @param   string  $config
+     * @alias   \CarteBlanche\App\Kernel::getMode($config)
      */
-	public static function getKernelMode($config = 'dev')
-	{
-		return \CarteBlanche\App\Container::getInstance()->get('kernel')->getMode($config);
-	}	
+    public static function getKernelMode($config = 'dev')
+    {
+        return \CarteBlanche\App\Container::getInstance()->get('kernel')->getMode($config);
+    }
 
     /**
      * Full aliasing of internationalization
@@ -110,24 +112,36 @@ class CarteBlanche
      * - will `translate` if `$arg1` is a string and not 'number' or 'price':
      *      `\I18n\I18n::translate( index: $arg1 = string, [params: $arg2 = array] , [lang: $arg3 = null] )`
      *
-     * @alias \I18n\I18n::translate($index, $args, $lang)
-     * @alias \I18n\I18n::pluralize($indexes, $number, $args, $lang)
-     * @alias \I18n\I18n::getLocalizedDateString($date, $mask, $charset, $lang)
-     * @alias \I18n\I18n::getLocalizedNumberString($number, $lang)
-     * @alias \I18n\I18n::getLocalizedPriceString($number, $lang)
+     * @param   string/DateTime     $arg1
+     * @param   string/int          $arg2
+     * @param   array/string        $arg3
+     * @param   string              $arg4
+     * @param   string              $arg5
+     * @return  mixed
+     * @alias   \I18n\I18n::translate($index, $args, $lang)
+     * @alias   \I18n\I18n::pluralize($indexes, $number, $args, $lang)
+     * @alias   \I18n\I18n::getLocalizedDateString($date, $mask, $charset, $lang)
+     * @alias   \I18n\I18n::getLocalizedNumberString($number, $lang)
+     * @alias   \I18n\I18n::getLocalizedPriceString($number, $lang)
      */
     public static function trans($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
+        $i18n = self::getContainer()->get('i18n');
         if (is_object($arg1) && ($arg1 instanceof \DateTime)) {
+            if (is_null($i18n)) return $arg1;
             return \I18n\I18n::getLocalizedDateString($arg1, $arg2, $arg3, $arg4);
         } elseif (is_array($arg1)) {
+            if (is_null($i18n)) return $arg1;
             return \I18n\I18n::pluralize($arg1, $arg2, $arg3, $arg4);
         } elseif (is_string($arg1)) {
             if ($arg1==='number') {
+                if (is_null($i18n)) return $arg2;
                 return \I18n\I18n::getLocalizedNumberString($arg2, $arg3);
             } elseif($arg1==='price') {
+                if (is_null($i18n)) return $arg3;
                 return \I18n\I18n::getLocalizedPriceString($arg2, $arg3);
             } else {
+                if (is_null($i18n)) return $arg1;
                 return \I18n\I18n::translate($arg1, $arg2, $arg3);
             }
         } else {

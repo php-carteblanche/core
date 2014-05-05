@@ -13,24 +13,24 @@
 namespace CarteBlanche\Interfaces;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 interface CarteBlancheExceptionInterface
 {
 
-	/**
-	 * Render of a production error
-	 *
-	 * @return void
-	 */
-	function productionRendering();
+    /**
+     * Render of a production error
+     *
+     * @return void
+     */
+    function productionRendering();
 
-	/**
-	 * Log the exception in `error.log`
-	 *
-	 * @return void
-	 */
-	function log();
+    /**
+     * Log the exception in `error.log`
+     *
+     * @return void
+     */
+    function log();
 
     /**
      * Get the CarteBlanche information string about an Exception

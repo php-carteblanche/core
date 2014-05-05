@@ -30,202 +30,202 @@ use \CarteBlanche\Exception\UnexpectedValueException;
 /**
  * Default dvelopment controller extending abstract \CarteBlanche\Abstracts\AbstractController class
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class Dev extends AbstractController
 {
 
-	/**
-	 * The directory where to search the views files
-	 */
-	static $views_dir = 'dev/';
+    /**
+     * The directory where to search the views files
+     */
+    static $views_dir = 'dev/';
 
-	/**
-	 * The home page of the controller
-	 */
-	public function indexAction()
-	{
-		$ctt = '';
+    /**
+     * The home page of the controller
+     */
+    public function indexAction()
+    {
+        $ctt = '';
 
-		
-		$this->render(array(
-			'output'=> $ctt
-		));
-	}
 
-	/**
-	 * Special page to clear user data (such as session)
-	 */
-	public function clearAction()
-	{
-		$this->getContainer()->get('session')->clear();
-		$this->getContainer()->get('router')->redirect( $this->getContainer()->get('router')->buildUrl() );
-	}
+        $this->render(array(
+            'output'=> $ctt
+        ));
+    }
+
+    /**
+     * Special page to clear user data (such as session)
+     */
+    public function clearAction()
+    {
+        $this->getContainer()->get('session')->clear();
+        $this->getContainer()->get('router')->redirect( $this->getContainer()->get('router')->buildUrl() );
+    }
 
 // -------------------
 // Special method for application full map
 // -------------------
 
-	/**
-	 * Page of application map
-	 *
-	 * @return string The view content
-	 */
-	public function app_mapAction()
-	{
-	    $root_path = CarteBlanche::getPath('root_path');
-		$base_path = $root_path;
-		$bundles_base_path = $root_path
-		    .CarteBlanche::getPath('bundles_dir');
-		$controller_dirname = 'Controller';
-		
-		$app_controllers = $bundles_controllers = array();
+    /**
+     * Page of application map
+     *
+     * @return string The view content
+     */
+    public function app_mapAction()
+    {
+        $root_path = CarteBlanche::getPath('root_path');
+        $base_path = $root_path;
+        $bundles_base_path = $root_path
+            .CarteBlanche::getPath('bundles_dir');
+        $controller_dirname = 'Controller';
+
+        $app_controllers = $bundles_controllers = array();
 /*
         $classMap = require __DIR__ . '/autoload_classmap.php';
         if ($classMap) {
             $loader->addClassMap($classMap);
         }
 */
-		// the global app dir
-		$_dir = new \CarteBlanche\Model\DirectoryModel;
-		$_dir->setPath(CarteBlanche::getPath('carte_blanche_core'));
-		$_dir->setDirname( $controller_dirname );
-		$_app_ctrls = $_dir->scanDir();
-		if ($_app_ctrls) {
-			foreach ($_app_ctrls as $_ctrl) {
-				$controller = new \stdClass;
-				$controller->short_name = str_replace('.php', '', $_ctrl);
-				$controller->name = \CarteBlanche\App\Locator::locateController($controller->short_name);
-				$controller->path = $base_path.$controller_dirname.'/'.$_ctrl;
-				$controller->methods = array();
-				if (\CarteBlanche\App\Loader::classExists($controller->name)) {
-					$_cls = new \ReflectionClass( $controller->name );
-					foreach ($_cls->getMethods(\ReflectionMethod::IS_PUBLIC) as $_meth) {
-						if (strstr($_meth->name, 'Action')) {
-							$method = new \stdClass;
-							$method->name = $_meth->name;
-							$method->short_name = str_replace('Action', '', $_meth->name);
-							$method->expect_arguments = false;
-							foreach ($_meth->getParameters() as $_param) {
-								if (!$_param->isOptional()) {
-									$method->expect_arguments = true;
-									continue;
-								}
-							}
-							$controller->methods[] = $method;
-						}
-					}
-				}
-				$app_controllers[] = $controller;
-			}
-		}
+        // the global app dir
+        $_dir = new \CarteBlanche\Model\DirectoryModel;
+        $_dir->setPath(CarteBlanche::getPath('carte_blanche_core'));
+        $_dir->setDirname( $controller_dirname );
+        $_app_ctrls = $_dir->scanDir();
+        if ($_app_ctrls) {
+            foreach ($_app_ctrls as $_ctrl) {
+                $controller = new \stdClass;
+                $controller->short_name = str_replace('.php', '', $_ctrl);
+                $controller->name = \CarteBlanche\App\Locator::locateController($controller->short_name);
+                $controller->path = $base_path.$controller_dirname.'/'.$_ctrl;
+                $controller->methods = array();
+                if (\CarteBlanche\App\Loader::classExists($controller->name)) {
+                    $_cls = new \ReflectionClass( $controller->name );
+                    foreach ($_cls->getMethods(\ReflectionMethod::IS_PUBLIC) as $_meth) {
+                        if (strstr($_meth->name, 'Action')) {
+                            $method = new \stdClass;
+                            $method->name = $_meth->name;
+                            $method->short_name = str_replace('Action', '', $_meth->name);
+                            $method->expect_arguments = false;
+                            foreach ($_meth->getParameters() as $_param) {
+                                if (!$_param->isOptional()) {
+                                    $method->expect_arguments = true;
+                                    continue;
+                                }
+                            }
+                            $controller->methods[] = $method;
+                        }
+                    }
+                }
+                $app_controllers[] = $controller;
+            }
+        }
 
-		// the bundles dirs
+        // the bundles dirs
         $known_bundles = $this->getContainer()->get('bundles');
         if (is_null($known_bundles)) $known_bundles = array();
         $known_bundles_lower = $known_bundles;
         foreach ($known_bundles_lower as $key=>$k) {
             $known_bundles_lower[strtolower($key)] = $k;
         }
-		$_dir->setPath(dirname($bundles_base_path));
-		$_dir->setDirname(basename($bundles_base_path));
-		$_bundles = $_dir->scanDir();
-		if ($_bundles) {
-			$_bundle_dir = new \CarteBlanche\Model\DirectoryModel;
-			$_bundle_dir->setPath( $bundles_base_path );
-			foreach ($_bundles as $_bundle) {
-			    if (!array_key_exists($_bundle, $known_bundles) && !array_key_exists($_bundle, $known_bundles_lower)) {
-			        foreach ($known_bundles as $nm=>$bdl) {
-			            if ($bdl->getShortname()==$_bundle) {
-			                $_bundle = $nm;
-			            }
-			        }
-    			    if (!array_key_exists($_bundle, $known_bundles) && !array_key_exists($_bundle, $known_bundles_lower)) {
-	    		        continue;
-	    		    }
-			    }
-			    if (array_key_exists($_bundle, $known_bundles)) {
-			        $this_bundle_path = $known_bundles[$_bundle]->getDirectory()
-			            .'/'.$known_bundles[$_bundle]->getNamespace();
-			    }
-			    if (array_key_exists($_bundle, $known_bundles_lower)) {
-			        $this_bundle_path = $known_bundles_lower[$_bundle]->getDirectory()
-			            .'/'.$known_bundles_lower[$_bundle]->getNamespace();
-			    }
-				$bundles_controllers[$_bundle] = array();
-				$_bundle_dir->setDirname( str_replace($_bundle_dir->getPath(), '', $this_bundle_path.'/'.$controller_dirname) );
-				$_bundles_ctrls = $_bundle_dir->scanDir();
+        $_dir->setPath(dirname($bundles_base_path));
+        $_dir->setDirname(basename($bundles_base_path));
+        $_bundles = $_dir->scanDir();
+        if ($_bundles) {
+            $_bundle_dir = new \CarteBlanche\Model\DirectoryModel;
+            $_bundle_dir->setPath( $bundles_base_path );
+            foreach ($_bundles as $_bundle) {
+                if (!array_key_exists($_bundle, $known_bundles) && !array_key_exists($_bundle, $known_bundles_lower)) {
+                    foreach ($known_bundles as $nm=>$bdl) {
+                        if ($bdl->getShortname()==$_bundle) {
+                            $_bundle = $nm;
+                        }
+                    }
+                    if (!array_key_exists($_bundle, $known_bundles) && !array_key_exists($_bundle, $known_bundles_lower)) {
+                        continue;
+                    }
+                }
+                if (array_key_exists($_bundle, $known_bundles)) {
+                    $this_bundle_path = $known_bundles[$_bundle]->getDirectory()
+                        .'/'.$known_bundles[$_bundle]->getNamespace();
+                }
+                if (array_key_exists($_bundle, $known_bundles_lower)) {
+                    $this_bundle_path = $known_bundles_lower[$_bundle]->getDirectory()
+                        .'/'.$known_bundles_lower[$_bundle]->getNamespace();
+                }
+                $bundles_controllers[$_bundle] = array();
+                $_bundle_dir->setDirname( str_replace($_bundle_dir->getPath(), '', $this_bundle_path.'/'.$controller_dirname) );
+                $_bundles_ctrls = $_bundle_dir->scanDir();
 
-				if ($_bundles_ctrls)
-				foreach ($_bundles_ctrls as $_ctrl) {
-					$controller = new \stdClass;
-					$controller->short_name = str_replace('.php', '', $_ctrl);
-					$controller->name = '\\'.$_bundle.'\\Controller\\'.$controller->short_name;
-					$controller->path = $bundles_base_path.$_bundle.'/'.$controller_dirname.'/'.$_ctrl;
-					$controller->methods = array();
-					if (\CarteBlanche\App\Loader::classExists($controller->name)) {
-						$_cls = new \ReflectionClass( $controller->name );
-						if ($_cls->isAbstract()) {
-						    continue;
-						}
-						foreach ($_cls->getMethods(\ReflectionMethod::IS_PUBLIC) as $_meth) {
-							if (strstr($_meth->name, 'Action')) {
-								$method = new \stdClass;
-								$method->name = $_meth->name;
-								$method->short_name = str_replace('Action', '', $_meth->name);
-								$method->expect_arguments = false;
-								foreach ($_meth->getParameters() as $_param) {
-									if (!$_param->isOptional()) {
-										$method->expect_arguments = true;
-										break;
-									}
-								}
-								$controller->methods[] = $method;
-							}
-						}
-					}
-					$bundles_controllers[$_bundle][] = $controller;
-				}
-			}
-		}
+                if ($_bundles_ctrls)
+                foreach ($_bundles_ctrls as $_ctrl) {
+                    $controller = new \stdClass;
+                    $controller->short_name = str_replace('.php', '', $_ctrl);
+                    $controller->name = '\\'.$_bundle.'\\Controller\\'.$controller->short_name;
+                    $controller->path = $bundles_base_path.$_bundle.'/'.$controller_dirname.'/'.$_ctrl;
+                    $controller->methods = array();
+                    if (\CarteBlanche\App\Loader::classExists($controller->name)) {
+                        $_cls = new \ReflectionClass( $controller->name );
+                        if ($_cls->isAbstract()) {
+                            continue;
+                        }
+                        foreach ($_cls->getMethods(\ReflectionMethod::IS_PUBLIC) as $_meth) {
+                            if (strstr($_meth->name, 'Action')) {
+                                $method = new \stdClass;
+                                $method->name = $_meth->name;
+                                $method->short_name = str_replace('Action', '', $_meth->name);
+                                $method->expect_arguments = false;
+                                foreach ($_meth->getParameters() as $_param) {
+                                    if (!$_param->isOptional()) {
+                                        $method->expect_arguments = true;
+                                        break;
+                                    }
+                                }
+                                $controller->methods[] = $method;
+                            }
+                        }
+                    }
+                    $bundles_controllers[$_bundle][] = $controller;
+                }
+            }
+        }
 
         $mode_data = \CarteBlanche\CarteBlanche::getKernelMode(true);
-		return array(self::$views_dir.'app_map', array(
+        return array(self::$views_dir.'app_map', array(
             'title' => $this->trans('Application full map'),
             'debug' => isset($mode_data['debug']) ? $mode_data['debug'] : false,
             'app_controllers'=>$app_controllers,
             'bundles_controllers' => $bundles_controllers,
-		));
-	}
+        ));
+    }
 
-	/**
-	 * Page of application configuration
-	 *
-	 * @return string The view content
-	 */
-	public function cb_configAction()
-	{
-	    $config = $this->getContainer()->get('config')->dump();
-	    $reflection_cb = new \ReflectionClass('\CarteBlanche\App\Kernel');
-	    $constants = $reflection_cb->getConstants();
+    /**
+     * Page of application configuration
+     *
+     * @return string The view content
+     */
+    public function cb_configAction()
+    {
+        $config = $this->getContainer()->get('config')->dump();
+        $reflection_cb = new \ReflectionClass('\CarteBlanche\App\Kernel');
+        $constants = $reflection_cb->getConstants();
 
         $mode_data = \CarteBlanche\CarteBlanche::getKernelMode(true);
-		return array(self::$views_dir.'app_config', array(
+        return array(self::$views_dir.'app_config', array(
             'title' => $this->trans('Application full config'),
             'debug' => isset($mode_data['debug']) ? $mode_data['debug'] : false,
             'constants'=>$constants,
             'config' => $config,
-		));
-	}
+        ));
+    }
 
-	/**
-	 * Page of application administration (test)
-	 *
-	 * @return string The view content
-	 */
-	public function adminAction()
-	{
-	    $fields = $values = array();
+    /**
+     * Page of application administration (test)
+     *
+     * @return string The view content
+     */
+    public function adminAction()
+    {
+        $fields = $values = array();
 
 /*
 TODO
@@ -238,62 +238,62 @@ TODO
 */
 
 
-		$fields[] = new Field('clear_web_cache', array(
-		    'type'=>'submit',
+        $fields[] = new Field('clear_web_cache', array(
+            'type'=>'submit',
             'action'=>'test',
             'value'=>'ok',
             'label'=>'Clear web cache',
-		));
-	    
+        ));
+
         $form = new \Tool\Form(array(
             'form_id'=>'app_admin',
             'fields'=>$fields, 
             'values'=>$values
         ));
 
-		if ($this->getContainer()->get('request')->isPost()) {
-		    $_posted = $this->getContainer()->get('request')->getData();
-		    
-		    if (isset($_posted['clear_web_cache']) && $_posted['clear_web_cache']==='ok') {
-		        $path = \Library\Helper\Directory::slashDirname(CarteBlanche::getPath('cache_path'));
+        if ($this->getContainer()->get('request')->isPost()) {
+            $_posted = $this->getContainer()->get('request')->getData();
+
+            if (isset($_posted['clear_web_cache']) && $_posted['clear_web_cache']==='ok') {
+                $path = \Library\Helper\Directory::slashDirname(CarteBlanche::getPath('cache_path'));
                 $ok = \Library\Helper\Directory::purge($_path);
-		    }
-		    
-		    var_export($_posted);
-		    exit('yo');
-		}
-		
-		return array(self::$views_dir.'app_admin', array(
+            }
+
+            var_export($_posted);
+            exit('yo');
+        }
+
+        return array(self::$views_dir.'app_admin', array(
             'title' => 'App admin',
-			'form'=>$form,
-		));
-	}
+            'form'=>$form,
+        ));
+    }
 
 // -------------------
 // Special method for tests
 // -------------------
 
-	/**
-	 * Page of test
-	 *
-	 * @param misc $arg1 Test arg 1
-	 * @param misc $arg2 Test arg 2
-	 * @return string The view content
-	 */
-	public function testAction($arg1 = null, $arg2 = 'value')
-	{
+    /**
+     * Page of test
+     *
+     * @param misc $arg1 Test arg 1
+     * @param misc $arg2 Test arg 2
+     * @return string The view content
+     */
+    public function testAction($arg1 = null, $arg2 = 'value')
+    {
 //				throw new InternalServerErrorException("Capture l'exception par défaut", 12);
-				throw new NotFoundException("Capture l'exception par défaut", 12);
+                throw new NotFoundException("Capture l'exception par défaut", 12);
 
         $lang_sel = new \Tool\LanguageSelector(array(
             'home'=>$this->getContainer()->get('router')->buildUrl(array('controller'=>'cms', 'altdb'=>$_altdb)),
             'current'=>$title,
         ));
 
-		return array('test', array(
+        return array('test', array(
             'title' => 'Test page',
             'language_selector' => $lang_sel,
-		));
+       ));
 /*
 echo '<pre>';
 
@@ -321,10 +321,10 @@ exit('yo');
 */
         CarteBlanche::log('test');
 
-		$ctt='';
-		$ctt .= '<br />Premier argument reçu: '.var_export($arg1,1);
-		$ctt .= '<br />Second argument reçu: '.var_export($arg2,1);
-		$ctt .= '<br />Tous les arguments reçus: '.var_export(func_get_args(),1);
+        $ctt='';
+        $ctt .= '<br />Premier argument reçu: '.var_export($arg1,1);
+        $ctt .= '<br />Second argument reçu: '.var_export($arg2,1);
+        $ctt .= '<br />Tous les arguments reçus: '.var_export(func_get_args(),1);
 
 /*
      $to      = 'piwi@ateliers-pierrot.fr';
@@ -338,18 +338,18 @@ exit('yo');
 
 exit('yo');
 
-		// test envoi de mail
-		$txt_message_iso = "Hello dude !\n\nMy line 1 with special chars : é à\nLine 2\nLine 3";
-		$html_message_iso = "Hello dude !\n\n<br /><table><tr><td><b>My line 1 with special chars : é à</b></td><td>Line 2</td><td>Line 3</tr></table>";
+        // test envoi de mail
+        $txt_message_iso = "Hello dude !\n\nMy line 1 with special chars : é à\nLine 2\nLine 3";
+        $html_message_iso = "Hello dude !\n\n<br /><table><tr><td><b>My line 1 with special chars : é à</b></td><td>Line 2</td><td>Line 3</tr></table>";
 
 $html_lorem_ipsum = <<<EOT
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<style type="text/css">
-		.posted { color: #cccccc; }
-	</style>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style type="text/css">
+        .posted { color: #cccccc; }
+    </style>
 </head>
 <body>
 <h3>Lorem Ipsum "Dummy Text" Gets Spam Filtered</h3>
@@ -804,18 +804,18 @@ trigger_error('qmlskdjfmqlksj2', E_USER_WARNING);
 		));
 	}
 
-	/**
-	 * Page of test for ajax requests
-	 * @return string The view content
-	 */
-	public function testajaxAction()
-	{
-	    self::$template = 'empty.txt';
-		return array('lorem_ipsum', array(
+    /**
+     * Page of test for ajax requests
+     * @return string The view content
+     */
+    public function testajaxAction()
+    {
+        self::$template = 'empty.txt';
+        return array('lorem_ipsum', array(
             'title' => 'Test page',
-		));
-	}
-	
+        ));
+    }
+
 }
 
 // Endfile

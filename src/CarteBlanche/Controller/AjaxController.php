@@ -18,38 +18,38 @@ use \CarteBlanche\Controller\DefaultController;
 /**
  * The default application controller for AJAX requests
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class AjaxController
     extends DefaultController
 {
 
-	/**
-	 * The default console template file
-	 */
-	static $template = 'empty.txt';
+    /**
+     * The default console template file
+     */
+    static $template = 'empty.txt';
 
-	/**
-	 * The directory where to search the views files
-	 */
-	static $views_dir = '';
+    /**
+     * The directory where to search the views files
+     */
+    static $views_dir = '';
 
-	/**
-	 * The home page of the controller
-	 *
-	 * @param numeric $offset   The offset used for the tables dump
-	 * @param numeric $limit    The limit used for the tables dump
-	 * @param string $table     The name of a table to isolate it
-	 * @param misc $show        ??
-	 * @return string The home page view content
-	 */
-	public function indexAction($offset = 0, $limit = 5, $table = null, $show = null)
-	{
-		return array(self::$views_dir.'hello', array(
+    /**
+     * The home page of the controller
+     *
+     * @param int $offset   The offset used for the tables dump
+     * @param int $limit    The limit used for the tables dump
+     * @param string $table     The name of a table to isolate it
+     * @param mixed $show        ??
+     * @return string The home page view content
+     */
+    public function indexAction($offset = 0, $limit = 5, $table = null, $show = null)
+    {
+        return array(self::$views_dir.'hello', array(
             'altdb'=>$this->getContainer()->get('request')->getUrlArg('altdb'),
             'title' => $this->trans("Hello")
-		));
-	}
+        ));
+    }
 
 }
 

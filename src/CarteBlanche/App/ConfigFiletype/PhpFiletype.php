@@ -15,7 +15,7 @@ namespace CarteBlanche\App\ConfigFiletype;
 use \CarteBlanche\Interfaces\ConfigFiletypeInterface;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class PhpFiletype implements ConfigFiletypeInterface
 {
@@ -23,9 +23,8 @@ class PhpFiletype implements ConfigFiletypeInterface
     /**
      * Parse a file content
      *
-     * @param object SplFileInfo for the file to parse
-     *
-     * @return array
+     * @param   \SplFileInfo $file  The file to parse
+     * @return  array
      */
     function parse(\SplFileInfo $file)
     {

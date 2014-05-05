@@ -14,20 +14,21 @@ namespace CarteBlanche\App;
 
 use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\App\Locator;
+use \CarteBlanche\Exception\ErrorException;
 
 /**
  * This is the global file loader
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class Loader
 {
 
     /**
      * System file loader : will load a class file and its helper if so
-	 *
-     * @param string $filename The file path to load
-     * @return bool TRUE if the classfile had been found
+     *
+     * @param   string  $filename   The file path to load
+     * @return  bool    TRUE if the classfile had been found
      */
     public static function load($filename) 
     {
@@ -41,21 +42,22 @@ class Loader
         return false;
     }
     
-	/**
-	 * Class autoloader to scan bundles directory
-	 *
-	 * @param string $classname The name of the class to load
-	 * @param string $type The namespace type (Controller for example)
-	 * @param bool $silent Exit silently if not found (default is false)
-	 * @return bool TRUE if the classfile had been found
-	 */
-	public static function loadClass($classname, $type = null, $silent = false)
-	{
-	    // search in bundles
-		$bundles = CarteBlanche::getContainer()->get('bundles');
-		$full_classname = $type.$classname;
-		$classfile = ucfirst($classname).'.php';
-		if (!empty($bundles)) {
+    /**
+     * Class autoloader to scan bundles directory
+     *
+     * @param   string  $classname  The name of the class to load
+     * @param   string  $type       The namespace type (Controller for example)
+     * @param   bool    $silent     Exit silently if not found (default is false)
+     * @return  bool    TRUE if the classfile had been found
+     * @throws  \CarteBlanche\Exception\ErrorException if the class was not found and `$silent = false`
+     */
+    public static function loadClass($classname, $type = null, $silent = false)
+    {
+        // search in bundles
+        $bundles = CarteBlanche::getContainer()->get('bundles');
+        $full_classname = $type.$classname;
+        $classfile = ucfirst($classname).'.php';
+        if (!empty($bundles)) {
             foreach($bundles as $_n=>$_bundle) {
                 $_namespace = $_bundle->getNamespace();
                 if (!empty($type)) {
@@ -90,19 +92,20 @@ class Loader
             }
         }
 
-		// silently return if the class has not been found
-		if (0!==error_reporting() && true!==$silent) {
-			throw new ErrorException("Class '$classname' not found!");
-		}
-	}
+        // silently return if the class has not been found
+        if (0!==error_reporting() && true!==$silent) {
+            throw new ErrorException("Class '$classname' not found!");
+        }
+    }
 
     /**
      * Application specific "class_exists()" function with silent SPL autoload
-	 *
+     *
      * This will not throw exception or error if the class doesn't exist but return false
-	 *
-     * @param string $classname The class name to test
-     * @return bool TRUE if the class exists
+     *
+     * @param   string  $classname  The class name to test
+     * @param   bool    $autoload
+     * @return  bool    TRUE if the class exists
      */
     public static function classExists($classname, $autoload = true)
     {
@@ -117,9 +120,10 @@ class Loader
     
     /**
      * System autoloader : will load a class file
-	 *
-     * @param string $classname The name of the class to load
-     * @return bool TRUE if the classfile had been found
+     *
+     * @param   string  $classname  The name of the class to load
+     * @return  bool TRUE if the classfile had been found
+     * @throws  \CarteBlanche\Exception\ErrorException if the class was not found
      */
     public static function autoload($classname) 
     {
@@ -132,7 +136,7 @@ class Loader
         } catch (\Exception $e) {}
 
         // exists in internal application
-		$cls = Kernel::CARTE_BLANCHE_NAMESPACE.$classname;
+        $cls = Kernel::CARTE_BLANCHE_NAMESPACE.$classname;
         if (true===@class_exists($cls, false)) return $cls;
 
         // from dependencies

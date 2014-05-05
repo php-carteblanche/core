@@ -17,32 +17,33 @@ namespace CarteBlanche\Interfaces;
  *
  * Any storage engine must implement this interface and follow its constructor's rules
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 interface StorageEngineInterface
 {
 
-	/**
-	 * Construction : 1 single argument
-	 * @param array $options A table of options for the manager
-	 */
-	public function __construct(array $options);
+    /**
+     * Construction : 1 single argument
+     *
+     * @param array $options A table of options for the manager
+     */
+    public function __construct(array $options);
 
-	/**
-	 * Escape a string using the internal PHP adapter function
-	 *
-	 * @param string $str The string to escape
-	 * @param bool $double_quotes If true, the double-quotes will be doubled for escaping
-	 * @return string The escaped string
-	 */
-	public function escape($str = null, $double_quotes = false);
+    /**
+     * Escape a string using the internal PHP adapter function
+     *
+     * @param string $str The string to escape
+     * @param bool $double_quotes If true, the double-quotes will be doubled for escaping
+     * @return string The escaped string
+     */
+    public function escape($str = null, $double_quotes = false);
 
-	/**
-	 * Get the current storage engine adapter
-	 *
-	 * @return object
-	 */
-	public function getAdapter();
+    /**
+     * Get the current storage engine adapter
+     *
+     * @return object
+     */
+    public function getAdapter();
 
 }
 

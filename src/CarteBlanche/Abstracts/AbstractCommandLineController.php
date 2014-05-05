@@ -13,15 +13,12 @@
 namespace CarteBlanche\Abstracts;
 
 use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\App\Container;
 use \CarteBlanche\App\FrontController;
-use \CarteBlanche\Abstracts\AbstractController;
 use \Library\CommandLine\AbstractCommandLineController as Original;
 use \Library\CommandLine\CommandLineControllerInterface;
-use \Library\CommandLine\Helper;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 abstract class AbstractCommandLineController
     extends Original
@@ -29,104 +26,109 @@ abstract class AbstractCommandLineController
 {
 
 // ------------------------------------------
-// Abstract methods & user definables
+// Abstract methods & user definable
 // ------------------------------------------
 
     /**
-     * The script name
-     * @var string
+     * @var string  The script name
      */
     public static $_name = '';
 
     /**
-     * The script version
-     * @var string
+     * @var string  The script version
      */
     public static $_version = '';
 
-	/**
-	 * The default action of the controller, considered as 'home'
-	 */
-	abstract function indexAction();
+    /**
+     * The default action of the controller, considered as 'home'
+     */
+    abstract function indexAction();
 
-	/**
-	 * Initialization: to be overwritten (if needed, this method is called at the end of constructor)
-	 */
-	protected function init(){}
+    /**
+     * Initialization: to be overwritten (if needed, this method is called at the end of constructor)
+     */
+    protected function init(){}
 
 // ------------------------------------------
 // Object
 // ------------------------------------------
 
-	/**
-	 * The directory where to search the views files
-	 */
-	static $views_dir = null;
-	
-	/**
-	 * The default console template file
-	 */
-	static $template = 'empty.txt';
+    /**
+     * @var string  The directory where to search the views files
+     */
+    static $views_dir = null;
 
-	/**
-	 * Class constructor : it checks if the application is installed
-	 *
-	 * @see self::init()
-	 */
-	public function __construct(array $options = array())
-	{
-	    parent::__construct($options);
-		
-    	$_app = CarteBlanche::getConfig('app');
-    	$_cls = get_called_class();
-		if (empty($_cls::$_name)) self::$_name = $_app['name'];
-		if (empty($_cls::$_version)) self::$_version = $_app['version'];
-		
-		// the initializer if so
-		$this->init();
-	}
+    /**
+     * @var string  The default console template file
+     */
+    static $template = 'empty.txt';
 
-	/**
-	 * Get the global app container
-	 *
-	 * @see App\Container
-	 */
-	public function getContainer()
-	{
-		return CarteBlanche::getContainer();
-	}
+    /**
+     * Class constructor : it checks if the application is installed
+     *
+     * @see self::init()
+     */
+    public function __construct(array $options = array())
+    {
+        parent::__construct($options);
 
-	/**
-	 * Get the global kernel from any controller
-	 *
-	 * @see App\Kernel
-	 */
-	public function getKernel()
-	{
-		return CarteBlanche::getKernel();
-	}
+        $_app = CarteBlanche::getConfig('app');
+        $_cls = get_called_class();
+        if (empty($_cls::$_name)) self::$_name = $_app['name'];
+        if (empty($_cls::$_version)) self::$_version = $_app['version'];
 
-	/**
-	 * Alias of App\FrontController->render()
-	 *
-	 * @see App\FrontController::render()
-	 */
-	public function render($params = null, $debug = null, $exception = null)
-	{
-		return FrontController::getInstance()
-		    ->render( $params, $debug, $exception );
-	}
+        // the initializer if so
+        $this->init();
+    }
 
-	/**
-	 * Alias of App\FrontController->view()
-	 *
-	 * @see App\FrontController::view()
-	 */
-	public function view($view = null, $params = null, $display = false, $exit = false) 
-	{
-		return FrontController::getInstance()
-		    ->view( $view, $params, $display, $exit );
-	}
+    /**
+     * Get the global app container
+     *
+     * @return  \CarteBlanche\Interfaces\ContainerInterface
+     */
+    public function getContainer()
+    {
+        return CarteBlanche::getContainer();
+    }
+
+    /**
+     * Get the global kernel from any controller
+     *
+     * @return  \CarteBlanche\App\Kernel
+     */
+    public function getKernel()
+    {
+        return CarteBlanche::getKernel();
+    }
+
+    /**
+     * Alias of FrontController->render()
+     *
+     * @param   null/array  $params
+     * @param   bool        $debug
+     * @param   null/string $exception
+     * @return  \CarteBlanche\Interfaces\FrontControllerInterface::render()
+     */
+    public function render($params = null, $debug = null, $exception = null)
+    {
+        return FrontController::getInstance()
+            ->render( $params, $debug, $exception );
+    }
+
+    /**
+     * Alias of FrontController->view()
+     *
+     * @param   string      $view
+     * @param   null/array  $params
+     * @param   bool        $display
+     * @param   bool        $exit
+     * @return  \CarteBlanche\Interfaces\FrontControllerInterface::view()
+     */
+    public function view($view = null, $params = null, $display = false, $exit = false)
+    {
+        return FrontController::getInstance()
+            ->view( $view, $params, $display, $exit );
+    }
 
 }
 

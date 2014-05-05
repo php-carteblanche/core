@@ -27,44 +27,26 @@ abstract class AbstractControllerCarteBlancheDefault
     implements ControllerInterface
 {
 
-	/**
-	 * The default action of the controller, considered as 'home'
-	 *
-	 * @return misc
-	abstract function indexAction();
-	 */
+    /**
+     * System booting errors page
+     *
+     * @params  null/array  $errors    Table of errors (strings)
+     */
+    abstract function bootErrorAction(array $errors = null);
 
-	/**
-	 * System booting errors page
-	 *
-	 * @params array $errors    Table of errors (strings)
-	 * @return misc
-	abstract function errorAction(array $errors = null);
-	 */
+    /**
+     * Generated content page
+     *
+     * @param   string  $type  A special type for the generated content
+     */
+    abstract function loremIpsumAction($type = 'html');
 
-	/**
-	 * System booting errors page
-	 *
-	 * @params array $errors    Table of errors (strings)
-	 * @return misc
-	 */
-	abstract function bootErrorAction(array $errors = null);
-
-	/**
-	 * Generated content page
-	 *
-	 * @param string $type  A special type for the generated content
-	 * @return misc
-	 */
-	abstract function loremIpsumAction($type = 'html');
-
-	/**
-	 * Uninstalled application page
-	 *
-	 * @param string $altdb An alternative database
-	 * @return misc
-	 */
-	abstract function emptyAction($altdb = 'default');
+    /**
+     * Uninstalled application page
+     *
+     * @param   string  $altdb  An alternative database
+     */
+    abstract function emptyAction($altdb = 'default');
 
 }
 

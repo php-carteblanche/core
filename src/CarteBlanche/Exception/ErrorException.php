@@ -13,7 +13,6 @@
 namespace CarteBlanche\Exception;
 
 use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\App\FrontController;
 use \CarteBlanche\Interfaces\CarteBlancheExceptionInterface;
 use \DevDebug\ErrorException as BaseErrorException;
 
@@ -27,95 +26,98 @@ use \DevDebug\ErrorException as BaseErrorException;
  * All error exceptions are written in the logs (by default in the "error.log" file)
  * except if `app.modes._APP_MODE.log_errors=false`
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author      Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class ErrorException
     extends BaseErrorException
     implements CarteBlancheExceptionInterface
 {
 
-	/**
-	 * Construction of the exception - a message is needed (1st argument)
-	 *
-	 * @param string $message The exception message
-	 * @param numeric $code The exception code
-	 * @param misc $previous The previous exception if so
-	 */
-	public function __construct($message, $code = 0, $severity = 1, $filename = __FILE__, $lineno = __LINE__, $previous = null) 
-	{
-		// kernel configuration data
+    /**
+     * Construction of the exception - a message is needed (1st argument)
+     *
+     * @param   string  $message    The exception message
+     * @param   int     $code       The exception code
+     * @param   int     $severity   The severity level
+     * @param   string  $filename   The filename which throws the exception
+     * @param   int     $lineno     The number of the line which throws the exception
+     * @param   mixed   $previous   The previous exception
+     */
+    public function __construct($message, $code = 0, $severity = 1, $filename = __FILE__, $lineno = __LINE__, $previous = null)
+    {
+        // kernel configuration data
         $mode_data = CarteBlanche::getKernelMode(true);
 
-		// parent constructor
-		if (!is_array($mode_data)
-		    || !isset($mode_data['debug'])
-		    || false==$mode_data['debug']) {
-        		parent::__construct($message, $code, $severity, $filename, $lineno, $previous, true);
-		} else {
-    		parent::__construct($message, $code, $severity, $filename, $lineno, $previous, false);
-		}
-
-		// log?
-		if (is_array($mode_data)
-		    && isset($mode_data['log_errors'])
-		    && true==$mode_data['log_errors']) {
-    		    $this->log();
+        // parent constructor
+        if (!is_array($mode_data)
+            || !isset($mode_data['debug'])
+            || false==$mode_data['debug']) {
+                parent::__construct($message, $code, $severity, $filename, $lineno, $previous, true);
+        } else {
+            parent::__construct($message, $code, $severity, $filename, $lineno, $previous, false);
         }
-	}
 
-	/**
-	 * Render the Exception as string
-	 *
-	 * @return string
-	 */
+        // log?
+        if (is_array($mode_data)
+            && isset($mode_data['log_errors'])
+            && true==$mode_data['log_errors']) {
+                $this->log();
+        }
+    }
+
+    /**
+     * Render the Exception as string
+     *
+     * @return string
+     */
     public function __toString()
     {
         $mode_data = CarteBlanche::getKernelMode(true);
-		if (!is_array($mode_data)
-		    || !isset($mode_data['debug'])
-		    || false==$mode_data['debug']) {
-		        return $this->productionRendering();
-		} else {
-        	return $this->debugRendering();
-		}
+        if (!is_array($mode_data)
+            || !isset($mode_data['debug'])
+            || false==$mode_data['debug']) {
+                return $this->productionRendering();
+        } else {
+            return $this->debugRendering();
+        }
     }
 
-	/**
-	 * Render of a production error
-	 *
-	 * @return void
-	 */
-	public function productionRendering() 
-	{
+    /**
+     * Render of a production error
+     *
+     * @return void
+     */
+    public function productionRendering()
+    {
         $args = array('message'=>$this->getAppMessage());
-        return FrontController::getInstance()
+        return CarteBlanche::getContainer()->get('front_controller')
             ->renderProductionError($args, 500);
-	}
+    }
 
-	/**
-	 * Render of a debug error
-	 *
-	 * @return void
-	 */
-	public function debugRendering() 
-	{
+    /**
+     * Render of a debug error
+     *
+     * @return void
+     */
+    public function debugRendering()
+    {
         $args = array('message'=>$this->getAppMessage());
-        return FrontController::getInstance()
+        return CarteBlanche::getContainer()->get('front_controller')
             ->renderError($args, $this);
-	}
+    }
 
-	/**
-	 * Log the exception in `history.log`
-	 *
-	 * @return void
-	 */
-	public function log() 
-	{
+    /**
+     * Log the exception in `history.log`
+     *
+     * @return void
+     */
+    public function log()
+    {
         CarteBlanche::log(
-	        $this->getAppMessage()."\n".$this->getTraceAsString(),
+            $this->getAppMessage()."\n".$this->getTraceAsString(),
             \Library\Logger::ERROR
         );
-	}
+    }
 
     /**
      * Get the CarteBlanche information string about an Exception

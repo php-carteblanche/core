@@ -21,48 +21,46 @@ use \Library\Helper\Directory as DirectoryHelper;
  *
  * For compliance, this class implements the [PSR Logger Interface](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md).
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class Logger extends BaseLogger
 {
 
-	/**
-	 * Load the configuration infos
-	 *
-	 * @param array $user_options
-	 * @param string $logname
-	 *
-	 * @return void
-	 */
-	protected function init(array $user_options = array(), $logname = null)
-	{
-		$app_config = CarteBlanche::getConfig('log', array(), true);
-		$app_config['directory'] = CarteBlanche::getFullPath('log_dir');
-		$user_config = CarteBlanche::getConfig('log', array());
-		if (!empty($user_config)) {
-    		$config = array_merge($app_config, $user_config, $user_options);
-    	} else {
-    		$config = array_merge($app_config, $user_options);
-    	}
-		parent::init($config, $logname);
-	}
+    /**
+     * Load the configuration infos
+     *
+     * @param   array   $user_options
+     * @param   string  $logname
+     * @return  void
+     */
+    protected function init(array $user_options = array(), $logname = null)
+    {
+        $app_config = CarteBlanche::getConfig('log', array(), true);
+        $app_config['directory'] = CarteBlanche::getFullPath('log_dir');
+        $user_config = CarteBlanche::getConfig('log', array());
+        if (!empty($user_config)) {
+            $config = array_merge($app_config, $user_config, $user_options);
+        } else {
+            $config = array_merge($app_config, $user_options);
+        }
+        parent::init($config, $logname);
+    }
 
 
-	/**
-	 * Get the log file path
-	 *
-	 * @param int $level The level of the current log info (default is 100)
-	 *
-	 * @return string The absolute path of the logfile to write in
-	 */
-	protected function getFilePath($level = 100)
-	{
-	    $mode = CarteBlanche::getKernel()->getMode();
-		return DirectoryHelper::slashDirname($this->directory)
-		    .$this->getFileName($level)
-			.($mode!='prod' ? '_'.$mode : '' )
-			.'.'.trim($this->logfile_extension, '.');
-	}
+    /**
+     * Get the log file path
+     *
+     * @param   int     $level  The level of the current log info (default is 100)
+     * @return  string  The absolute path of the logfile to write in
+     */
+    protected function getFilePath($level = 100)
+    {
+        $mode = CarteBlanche::getKernel()->getMode();
+        return DirectoryHelper::slashDirname($this->directory)
+            .$this->getFileName($level)
+            .($mode!='prod' ? '_'.$mode : '' )
+            .'.'.trim($this->logfile_extension, '.');
+    }
 
 }
 

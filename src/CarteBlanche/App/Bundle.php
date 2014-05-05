@@ -25,35 +25,49 @@ use \CarteBlanche\Exception\ErrorException;
 class Bundle
 {
 
-	protected $shortname;
-	protected $namespace;
-	protected $directory;
-	protected $instance;
-	
-	/**
-	 * Construction of a bundle
-	 *
-	 * @param string $namespace The bundle's namespace
-	 * @param string $directory The bundle's directory in `$bundles_dir`
-	 *
-	 * @throws ErrorException if the `$bundles_dir` doesn't exist
-	 * @throws ErrorException if the current loaded bundle directory doesn't exist
-	 */
-	public function __construct($namespace, $directory)
-	{
-	    $bundles_dir = CarteBlanche::getFullPath('bundles_dir');
-		if (!Locator::locate($bundles_dir)) {
-			throw new ErrorException("Bundles directory does not exist!");
-		}
-		if ($d = Locator::locate($bundles_dir.$directory)) {
-			$this->directory = $d;
-		} else {
-			throw new ErrorException(sprintf("Bundle directory '%s' does not exist!", $directory));
-		}
-		$this->namespace = $namespace;
-		$this->shortname = substr($directory, 0, strpos($directory, '/'));
-		$this->init();
-	}
+    /**
+     * @var string
+     */
+    protected $shortname;
+
+    /**
+     * @var string
+     */
+    protected $namespace;
+
+    /**
+     * @var bool|string
+     */
+    protected $directory;
+
+    /**
+     * @var
+     */
+    protected $instance;
+
+    /**
+     * Construction of a bundle
+     *
+     * @param   string  $namespace  The bundle's namespace
+     * @param   string  $directory  The bundle's directory in `$bundles_dir`
+     * @throws  \CarteBlanche\Exception\ErrorException if the `$bundles_dir` doesn't exist
+     * @throws  \CarteBlanche\Exception\ErrorException if the current loaded bundle directory doesn't exist
+     */
+    public function __construct($namespace, $directory)
+    {
+        $bundles_dir = CarteBlanche::getFullPath('bundles_dir');
+        if (!Locator::locate($bundles_dir)) {
+            throw new ErrorException("Bundles directory does not exist!");
+        }
+        if ($d = Locator::locate($bundles_dir.$directory)) {
+            $this->directory = $d;
+        } else {
+            throw new ErrorException(sprintf("Bundle directory '%s' does not exist!", $directory));
+        }
+        $this->namespace = $namespace;
+        $this->shortname = substr($directory, 0, strpos($directory, '/'));
+        $this->init();
+    }
 
     /**
      * Initialize a bundle : register its namespace and load its global `[bundle name]Bundle` file
@@ -77,37 +91,45 @@ class Bundle
         }
     }
 
-	/**
-	 * Get bundle's directory
-	 */
-	public function getDirectory()
-	{
-		return $this->directory;
-	}
+    /**
+     * Get bundle's directory
+     *
+     * @return  string
+     */
+    public function getDirectory()
+    {
+        return $this->directory;
+    }
 
-	/**
-	 * Get bundle's namespace
-	 */
-	public function getNamespace()
-	{
-		return $this->namespace;
-	}
+    /**
+     * Get bundle's namespace
+     *
+     * @return  string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
 
-	/**
-	 * Get bundle's short name
-	 */
-	public function getShortname()
-	{
-		return $this->shortname;
-	}
+    /**
+     * Get bundle's short name
+     *
+     * @return  string
+     */
+    public function getShortname()
+    {
+        return $this->shortname;
+    }
 
-	/**
-	 * Get bundle's loader instance
-	 */
-	public function getInstance()
-	{
-		return $this->instance;
-	}
+    /**
+     * Get bundle's loader instance
+     *
+     * @return  object
+     */
+    public function getInstance()
+    {
+        return $this->instance;
+    }
 
 }
 

@@ -78,7 +78,7 @@ class Helper
 			'php_uname'         => php_uname(),
 			'php_version'       => phpversion(),
 			'php_sapi_name'     => php_sapi_name(),
-            'sqlite_version'    => sqlite_libversion(),
+            'sqlite_version'    => function_exists('sqlite_libversion') ? sqlite_libversion() : (class_exists('SQLite3') ? \SQLite3::version() : null),
 			'server_version'    => 
 			    function_exists('apache_get_version') ? apache_get_version() : null,
 			'user_agent'        => $_SERVER['HTTP_USER_AGENT'],

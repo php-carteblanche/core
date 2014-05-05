@@ -13,7 +13,7 @@
 namespace CarteBlanche\Interfaces;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 interface ConfigFiletypeInterface
 {
@@ -21,9 +21,8 @@ interface ConfigFiletypeInterface
     /**
      * Parse a file content
      *
-     * @param object SplFileInfo for the file to parse
-     *
-     * @return array
+     * @param   \SplFileInfo $file  The file to parse
+     * @return  array
      */
     function parse(\SplFileInfo $file);
 

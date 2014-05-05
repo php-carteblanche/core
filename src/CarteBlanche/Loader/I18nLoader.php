@@ -17,7 +17,7 @@ use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 use \I18n\Loader as OriginalI18nLoader;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
  */
 class I18nLoader
     extends OriginalI18nLoader
@@ -26,8 +26,6 @@ class I18nLoader
 
     /**
      * Creation of a Loader with an optional user defined set of options
-     *
-     * @param array $user_options An array of options values to over-write defaults
      */
     public function __construct()
     {
@@ -58,14 +56,14 @@ class I18nLoader
         parent::__construct($options);
     }
 
-	/**
-	 * Instance loader
-	 *
-	 * @param array $config
-	 *
-	 * @return object
-	 */
-    public function load(array $config = null, \CarteBlanche\App\Container $container)
+    /**
+     * Instance loader
+     *
+     * @param   array   $config
+     * @param   \CarteBlanche\Interfaces\ContainerInterface $container
+     * @return  object
+     */
+    public function load(array $config = null, \CarteBlanche\Interfaces\ContainerInterface $container)
     {
         try {
             $i18n = \I18n\I18n::getInstance($this); 

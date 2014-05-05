@@ -12,10 +12,8 @@
 
 namespace CarteBlanche\Abstracts;
 
-use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\Interfaces\ControllerInterface;
 use \CarteBlanche\Abstracts\AbstractController;
-use \CarteBlanche\App\FrontController;
 use \Library\Helper\Text as TextHelper;
 
 /**
@@ -37,11 +35,9 @@ abstract class AbstractControllerConfigurable
 {
 
     /**
-     * The string used to identify the configuration entries
+     * @var string  The string used to identify the configuration entries
      *
      * This defaults to the class name in lower case.
-     *
-     * @var string
      */
     protected $_config_reference;
 
@@ -53,9 +49,8 @@ abstract class AbstractControllerConfigurable
     /**
      * Set the object configuration entries
      *
-     * @param array $config
-     *
-     * @return self
+     * @param   null/array  $config
+     * @return  self
      */
     public function setConfig(array $config = null)
     {
@@ -66,9 +61,8 @@ abstract class AbstractControllerConfigurable
     /**
      * Get the object configuration entries or a single entry
      *
-     * @param string $index
-     *
-     * @return misc
+     * @param   string  $index
+     * @return  mixed
      */
     public function getConfig($index = null)
     {
@@ -82,20 +76,20 @@ abstract class AbstractControllerConfigurable
 // Constructor
 // ------------------------------------------
 
-	/**
-	 * Class constructor : load the configuration entries if so
-	 */
-	public function __construct()
-	{
-	    if (empty($this->_config_reference)) {
-	        $parts = explode('\\', get_class($this));
-	        $this->_config_reference = TextHelper::fromCamelCase(end($parts));
-	    }
+    /**
+     * Class constructor : load the configuration entries if so
+     */
+    public function __construct()
+    {
+        if (empty($this->_config_reference)) {
+            $parts = explode('\\', get_class($this));
+            $this->_config_reference = TextHelper::fromCamelCase(end($parts));
+        }
         $this->setConfig(
             $this->getContainer()->get('config')->get($this->_config_reference)
-        );	    
-		parent::__construct();
-	}
+        );
+        parent::__construct();
+    }
 
 }
 
