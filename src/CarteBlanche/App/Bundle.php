@@ -26,33 +26,19 @@ use \Library\Helper\Directory as DirectoryHelper;
 class Bundle
 {
 
-    /**
-     * @var string
-     */
     protected $shortname;
-
-    /**
-     * @var string
-     */
     protected $namespace;
-
-    /**
-     * @var bool|string
-     */
     protected $directory;
-
-    /**
-     * @var
-     */
     protected $instance;
 
     /**
      * Construction of a bundle
      *
-     * @param   string  $namespace  The bundle's namespace
-     * @param   string  $directory  The bundle's directory in `$bundles_dir`
-     * @throws  \CarteBlanche\Exception\ErrorException if the `$bundles_dir` doesn't exist
-     * @throws  \CarteBlanche\Exception\ErrorException if the current loaded bundle directory doesn't exist
+     * @param string $namespace The bundle's namespace
+     * @param string $directory The bundle's directory in `$bundles_dir`
+     *
+     * @throws ErrorException if the `$bundles_dir` doesn't exist
+     * @throws ErrorException if the current loaded bundle directory doesn't exist
      */
     public function __construct($namespace, $directory)
     {
@@ -94,8 +80,6 @@ class Bundle
 
     /**
      * Get bundle's directory
-     *
-     * @return  string
      */
     public function getDirectory()
     {
@@ -104,8 +88,6 @@ class Bundle
 
     /**
      * Get bundle's namespace
-     *
-     * @return  string
      */
     public function getNamespace()
     {
@@ -114,8 +96,6 @@ class Bundle
 
     /**
      * Get bundle's short name
-     *
-     * @return  string
      */
     public function getShortname()
     {
@@ -124,8 +104,6 @@ class Bundle
 
     /**
      * Get bundle's loader instance
-     *
-     * @return  object
      */
     public function getInstance()
     {

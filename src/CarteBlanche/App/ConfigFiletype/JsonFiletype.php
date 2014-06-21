@@ -23,8 +23,9 @@ class JsonFiletype implements ConfigFiletypeInterface
     /**
      * Parse a file content
      *
-     * @param   \SplFileInfo $file  The file to parse
+     * @param   \SplFileInfo    $file   The file to parse
      * @return  array
+     * @throws  \RuntimeException for any JSON error
      */
     function parse(\SplFileInfo $file)
     {

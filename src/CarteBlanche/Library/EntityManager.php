@@ -18,23 +18,23 @@ use \CarteBlanche\Interfaces\EntityManagerInterface;
 use \Library\Helper\Text as TextHelper;
 
 /**
- * @author 		Piero Wbmstr <me@e-piwi.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class EntityManager implements EntityManagerInterface
 {
 
-	/**
-	 * Construction : 1 single argument
-	 * @param array $options A table of options for the manager
-	 */
-	public function __construct(array $options = null)
-	{
-	}
+    /**
+     * Construction : 1 single argument
+     * @param array $options A table of options for the manager
+     */
+    public function __construct(array $options = null)
+    {
+    }
 
 // -------------------------
 // Repositories management
 // -------------------------
-	
+
     const REPOSITORIES_CONTAINER_NAME = 'repositories';
 
     public function getRepository($entity_name)
@@ -51,20 +51,20 @@ class EntityManager implements EntityManagerInterface
             ->set(self::REPOSITORIES_CONTAINER_NAME.'.'.$_name, $repo);
         return $repo;
     }
-	
+
     protected function _buildRepository($name)
     {
-		$em_cfg = CarteBlanche::getConfig($name);
+        $em_cfg = CarteBlanche::getConfig($name);
 
-		if (isset($em_cfg['class'])) {
-    		$repo_class = $em_cfg['class'];
-		} else {
-			throw new \RuntimeException(
-				sprintf('A repository configuration must define a class name ("%s")!', $name)
-			);
-		}
+        if (isset($em_cfg['class'])) {
+            $repo_class = $em_cfg['class'];
+        } else {
+            throw new \RuntimeException(
+                sprintf('A repository configuration must define a class name ("%s")!', $name)
+            );
+        }
 
-    	$repo_options = isset($em_cfg['options']) ? $em_cfg['options'] : array();
+        $repo_options = isset($em_cfg['options']) ? $em_cfg['options'] : array();
 
         if (!empty($repo_class)) {
             $factory = \Library\Factory::create()
@@ -79,7 +79,7 @@ class EntityManager implements EntityManagerInterface
 // -------------------------
 // Storage Engines management
 // -------------------------
-	
+
     const STORAGE_ENGINES_CONTAINER_NAME = 'storage_engines';
 
     public function getStorageEngine($name = 'default')
@@ -100,23 +100,23 @@ class EntityManager implements EntityManagerInterface
 
     protected function _buildStorageEngine($name)
     {
-		$em_cfg = CarteBlanche::getConfig($name);
+        $em_cfg = CarteBlanche::getConfig($name);
 
-		if (isset($em_cfg['class'])) {
-    		$em_class = $em_cfg['class'];
-		} else {
-			throw new \RuntimeException(
-				sprintf('A storage engine configuration must define a class name (for "%s")!', $name)
-			);
-		}
+        if (isset($em_cfg['class'])) {
+            $em_class = $em_cfg['class'];
+        } else {
+            throw new \RuntimeException(
+                sprintf('A storage engine configuration must define a class name (for "%s")!', $name)
+            );
+        }
 
-		if (isset($em_cfg['options'])) {
-    		$em_options = $em_cfg['options'];
-		} else {
-			throw new \RuntimeException(
-				sprintf('A storage engine configuration must define an options array (for "%s")!', $name)
-			);
-		}
+        if (isset($em_cfg['options'])) {
+            $em_options = $em_cfg['options'];
+        } else {
+            throw new \RuntimeException(
+                sprintf('A storage engine configuration must define an options array (for "%s")!', $name)
+            );
+        }
 
         if (!empty($em_class) && !empty($em_options)) {
             $factory = \Library\Factory::create()
@@ -131,7 +131,7 @@ class EntityManager implements EntityManagerInterface
 // -------------------------
 // Commons
 // -------------------------
-	
+
     public function buildIndex($name)
     {
         return str_replace('-', '_', TextHelper::slugify($name));

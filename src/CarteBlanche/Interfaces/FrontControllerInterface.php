@@ -27,7 +27,7 @@ interface FrontControllerInterface
     /**
      * Get the current controller
      *
-     * @return \CarteBlanche\Interfaces\ControllerInterface
+     * @return object \App\Interfaces\ControllerInterface
      */
     public function getController();
 

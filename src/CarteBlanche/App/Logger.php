@@ -32,9 +32,10 @@ class Logger
     /**
      * Load the configuration infos
      *
-     * @param   array   $user_options
-     * @param   string  $logname
-     * @return  void
+     * @param array $user_options
+     * @param string $logname
+     *
+     * @return void
      */
     protected function init(array $user_options = array(), $logname = null)
     {
@@ -53,8 +54,9 @@ class Logger
     /**
      * Get the log file path
      *
-     * @param   int     $level  The level of the current log info (default is 100)
-     * @return  string  The absolute path of the logfile to write in
+     * @param int $level The level of the current log info (default is 100)
+     *
+     * @return string The absolute path of the logfile to write in
      */
     protected function getFilePath($level = 100)
     {

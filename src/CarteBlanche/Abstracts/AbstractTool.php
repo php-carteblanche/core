@@ -25,33 +25,32 @@ abstract class AbstractTool
 {
 
     /**
-     * @var string  The views directory
+     * The views directory
      *
      * This must be a sub-directory of the tool directory
      */
     var $views_dir;
 
     /**
-     * @var string  The view file
+     * The view file
      */
     var $view;
 
     /**
-     * @var mixed   The direct output (if no view is set or parse)
+     * The direct output (if no view is set or parse)
      */
     var $output;
 
     /**
-     * @var array   The views arguments
+     * The views arguments
      */
-    var $_args = array();
+    var $_args=array();
 
     /**
      * The constructor : overrides the tool options
-     *
-     * @param   array   $opts   An array of the tool options
+     * @param array $opts An array of the tool options
      */
-    public function __construct($opts = array())
+    public function __construct( $opts=array() )
     {
         if (!empty($opts))
         foreach ($opts as $_opt_var=>$_opt_val) {
@@ -75,15 +74,13 @@ abstract class AbstractTool
     {
         try {
             return $this->render();
-        } catch(\Exception $e) {
-            trigger_error($e->getMessage(), E_USER_WARNING);
+        } catch( \Exception $e) {
+            trigger_error( $e->getMessage(), E_USER_WARNING );
         }
     }
 
     /**
      * The final rendering of the tool
-     *
-     * @throws  \CarteBlanche\Exception\RuntimeException if no output
      */
     public function render()
     {

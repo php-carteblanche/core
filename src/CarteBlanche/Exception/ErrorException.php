@@ -38,10 +38,10 @@ class ErrorException
      *
      * @param   string  $message    The exception message
      * @param   int     $code       The exception code
-     * @param   int     $severity   The severity level
-     * @param   string  $filename   The filename which throws the exception
-     * @param   int     $lineno     The number of the line which throws the exception
-     * @param   mixed   $previous   The previous exception
+     * @param   mixed   $previous   The previous exception if so
+     * @param   string  $filename
+     * @param   int     $lineno
+     * @param   null/\Exception  $previous
      */
     public function __construct($message, $code = 0, $severity = 1, $filename = __FILE__, $lineno = __LINE__, $previous = null)
     {

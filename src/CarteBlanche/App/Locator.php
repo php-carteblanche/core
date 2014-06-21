@@ -60,9 +60,9 @@ class Locator
     /**
      * Locate a file in "data/" directory
      *
-     * @param   string  $filename
+     * @param   string $filename
      * @return  null/string
-     */
+     */    
     public static function locateData($filename)
     {
         $etc_dir = CarteBlanche::getPath('config_dir');
@@ -80,7 +80,7 @@ class Locator
      * @param   string  $filename
      * @param   bool    $fallback
      * @return  null/string
-     */    
+     */
     public static function locateConfig($filename, $fallback = true)
     {
         $etc_dir = CarteBlanche::getPath('config_dir');
@@ -99,7 +99,7 @@ class Locator
      * @param   string  $filename
      * @param   bool    $fallback
      * @return  null/string
-     */    
+     */
     public static function locateLanguage($filename, $fallback = true)
     {
         $etc_dir = CarteBlanche::getPath('i18n_dir');
@@ -115,9 +115,9 @@ class Locator
     /**
      * Search a view file in the views directory and sub-directories
      *
-     * @param   string  $view   The view filename
-     * @param   bool    $remap
-     * @return  mixed   FALSE if nothing had been find, the filename otherwise
+     * @param string $view The view filename
+     * @param bool $remap
+     * @return mixed FALSE if nothing had been find, the filename otherwise
      */    
     public static function locateView($view = null, $remap = true)
     {
@@ -179,6 +179,10 @@ class Locator
             $view_file = $view;
         }
 
+        if (!self::locate($view_file)) {
+            $view_file = $view;
+        }
+
         if (self::locate($view_file)) {
             return self::fallback($view_file);
         }
@@ -198,7 +202,7 @@ class Locator
 
         return false;
     }
-
+    
     /**
      * Search a controller : from the app or a bundle
      *
@@ -212,7 +216,7 @@ class Locator
             return $ctrl;
         }
 
-        // from the application
+       // from the application
         $controller = Kernel::CONTROLLER_DEFAULT_NAMESPACE.$ctrl;
         if (false!==($_found = Loader::autoload($controller))) {
             return $_found;

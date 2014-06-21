@@ -43,7 +43,8 @@ class CommandLineController
     /**
      * Page of system errors
      *
-     * @return string The view content
+     * @param   null/array  $errors
+     * @return  void
      */
     public function bootErrorAction(array $errors = null)
     {

@@ -22,9 +22,9 @@ use \DevDebug\Exception as BaseException;
  * To use it, write something like :
  *
  *     try {
- *          something wrong ...
+ *         something wrong ...
  *     } catch (\CarteBlanche\Exception\Exception $e) {
- *          echo $e;
+ *         echo $e;
  *     }
  *
  * All exceptions are written in the logs (by default in the "error.log" file)
@@ -40,9 +40,9 @@ class Exception
     /**
      * Construction of the exception - a message is needed (1st argument)
      *
-     * @param   string  $message    The exception message
-     * @param   int     $code       The exception code
-     * @param   mixed   $previous   The previous exception if so
+     * @param string $message The exception message
+     * @param int $code The exception code
+     * @param mixed $previous The previous exception if so
      */
     public function __construct($message, $code = 0, $previous = null)
     {
@@ -147,19 +147,19 @@ use \CarteBlanche\Exception\NotFoundException,
 //*/
 /*/
 
-        try{
-            fopen(); // error
-            if (2 != 4) // false
-                throw new NotFoundException("Capture l'exception par défaut", 12);
-                throw new InternalServerErrorException("Capture l'exception par défaut", 12);
-                throw new AccessForbiddenException("Capture l'exception par défaut", 12);
+		try{
+//			fopen(); // error
+			if (2 != 4) // false
+//				throw new NotFoundException("Capture l'exception par défaut", 12);
+//				throw new InternalServerErrorException("Capture l'exception par défaut", 12);
+//				throw new AccessForbiddenException("Capture l'exception par défaut", 12);
 
-                throw new Exception("Capture l'exception par défaut", 12);
-                throw new ErrorException("Capture l'exception par défaut", 12);
-                throw new DomainException("Capture l'exception par défaut", 12);
-                throw new RuntimeException("Capture l'exception par défaut", 12);
-                throw new InvalidArgumentException("Capture l'exception par défaut", 12);
-                throw new UnexpectedValueException("Capture l'exception par défaut", 12);
+//				throw new Exception("Capture l'exception par défaut", 12);
+//				throw new ErrorException("Capture l'exception par défaut", 12);
+//				throw new DomainException("Capture l'exception par défaut", 12);
+//				throw new RuntimeException("Capture l'exception par défaut", 12);
+//				throw new InvalidArgumentException("Capture l'exception par défaut", 12);
+//				throw new UnexpectedValueException("Capture l'exception par défaut", 12);
 
         } catch(\CarteBlanche\Exception\UnexpectedValueException $e) {
             echo $e;
@@ -172,8 +172,7 @@ use \CarteBlanche\Exception\NotFoundException,
         } catch(\CarteBlanche\Exception\Exception $e) {
             echo $e;
         }
-
-        exit('-- end --');
+exit('yo');
 //*/
 
 

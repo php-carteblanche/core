@@ -25,12 +25,11 @@ class FrontControllerLoader implements DependencyLoaderInterface
     /**
      * Instance loader
      *
-     * @param   array   $config
-     * @param   \CarteBlanche\Interfaces\ContainerInterface $container
-     * @return  object
-     * @throws  \RuntimeException if the FrontController class is empty or not found
+     * @param   array                       $config
+     * @param   \CarteBlanche\App\Container $container
+     * @return  null/object
      */
-    public function load(array $config = null, \CarteBlanche\Interfaces\ContainerInterface $container)
+    public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
         $em_cfg = CarteBlanche::getConfig('default_front_controller');
         if (isset($em_cfg['class'])) {

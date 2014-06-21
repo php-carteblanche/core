@@ -234,10 +234,10 @@ final class Kernel
     /**
      * Constructor : defines the current URL and gets the routes
      *
-     * @param   null/string/array   $config_files
-     * @param   null/array          $user_config
-     * @param   null/string         $mode
-     * @return  self
+     * @param   string/array    $config_file
+     * @param   array           $user_config
+     * @param   string          $mode
+     * @return  \CarteBlanche\App\Kernel
      */
     public static function create($config_files = null, array $user_config = null, $mode = null)
     {
@@ -394,8 +394,8 @@ final class Kernel
     /**
      * Boot: execute the app bootstrap and creates necessary dirs
      *
-     * @return  self
-     * @throws  \CarteBlanche\Exception\ErrorException if the bootstrap file can not be found
+     * @return self
+     * @throws  \CarteBlanche\Exception\ErrorException if the Bootstrap file can't be found
      */
     private function boot()
     {
@@ -481,8 +481,8 @@ final class Kernel
      *
      * If no request is defined yet, this will handle current HTTP request if so.
      *
-     * @return  string/void
-     * @see     \CarteBlanche\Interfaces\FrontControllerInterface::distribute()
+     * @return string|void
+     * @see \CarteBlanche\App\FrontController::distribute()
      */
     public function distribute()
     {
@@ -517,8 +517,8 @@ final class Kernel
     /**
      * Get the current kernel mode or mode configuration settings
      *
-     * @param   bool    $data    Get the configuration data (`true`) or just the mode name (default)
-     * @return  string
+     * @param bool $data    Get the configuration data (`true`) or just the mode name (default)
+     * @return string
      */
     public function getMode($data = false)
     {
@@ -528,8 +528,8 @@ final class Kernel
     /**
      * Define the current kernel debug mode
      *
-     * @param   bool/string $debug
-     * @return  self
+     * @param bool|string $debug
+     * @return self
      */
     public function setDebug($debug)
     {
@@ -540,7 +540,7 @@ final class Kernel
     /**
      * Get the current kernel debug mode
      *
-     * @return  bool
+     * @return bool
      */
     public function getDebug()
     {
@@ -550,8 +550,8 @@ final class Kernel
     /**
      * Add a booting error
      *
-     * @param   string  $string
-     * @return  self
+     * @param string $string
+     * @return self
      */
     public function addBootError($string)
     {
@@ -567,7 +567,7 @@ final class Kernel
     /**
      * Test if current kernel has booting errors
      *
-     * @return  bool
+     * @return bool
      */
     public function hasBootErrors()
     {
@@ -577,7 +577,7 @@ final class Kernel
     /**
      * Get the booting errors stack
      *
-     * @return  array
+     * @return array
      */
     public function getBootErrors()
     {
@@ -585,9 +585,9 @@ final class Kernel
     }
 
     /**
-     * Get the global Container object
+     * Get the global \CarteBlanche\App\Container object
      *
-     * @return  \CarteBlanche\Interfaces\ContainerInterface
+     * @return \CarteBlanche\App\Container
      */
     public function getContainer()
     {
@@ -597,12 +597,13 @@ final class Kernel
     /**
      * Initialize a path from a constant
      *
-     * @param   string  $cst                A constant name
-     * @param   string  $path_ref           The path reference
-     * @param   bool    $must_exists        Check if concerned path exists
-     * @param   bool    $must_be_writable   Check if concerned path is writable
-     * @return  self
-     * @throws  \CarteBlanche\Exception\ErrorException if the constant is not defined
+     * @param string $cst               A constant name
+     * @param string $path_ref          The path reference
+     * @param bool $must_exists         Check if concerned path exists
+     * @param bool $must_be_writable    Check if concerned path is writable
+     * @return self
+     *
+     * @throws ErrorException if the constant is not defined
      */
     public function initConstantPath($cst, $path_ref, $must_exists = false, $must_be_writable = false)
     {
@@ -619,11 +620,14 @@ final class Kernel
     /**
      * References a path value
      *
-     * @param   string  $name              The path reference
-     * @param   string  $value             The path value
-     * @param   bool    $must_exists       Check if concerned path exists
-     * @param   bool    $must_be_writable  Check if concerned path is writable
-     * @return  self
+     * @param string $name              The path reference
+     * @param string $value             The path value
+     * @param bool $must_exists         Check if concerned path exists
+     * @param bool $must_be_writable    Check if concerned path is writable
+     * @return self
+     *
+     * @throws RuntimeException if the path does not exists and `$must_exists` is true
+     * @throws ErrorException if the concerned path is not writable while it was required
      */
     public function addPath($name, $value, $must_exists = false, $must_be_writable = false)
     {
@@ -647,7 +651,7 @@ final class Kernel
             }
         }
         if ($must_be_writable && !is_writable($value)) {
-            $this->addBootError(
+           $this->addBootError(
                 sprintf('Directory "%s" must be writable! (%s)', $value, $name)
             );
 /*
@@ -751,8 +755,8 @@ final class Kernel
      *
      * Launch settings according to the MODE config entry
      *
-     * @param   string  $mode
-     * @return  void
+     * @param string $mode
+     * @return self
      */
     private function __setMode($mode = 'dev')
     {

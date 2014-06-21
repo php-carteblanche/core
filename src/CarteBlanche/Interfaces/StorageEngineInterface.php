@@ -24,7 +24,6 @@ interface StorageEngineInterface
 
     /**
      * Construction : 1 single argument
-     *
      * @param array $options A table of options for the manager
      */
     public function __construct(array $options);

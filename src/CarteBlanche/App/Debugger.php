@@ -22,9 +22,6 @@ class Debugger
     extends BaseDebugger
 {
 
-    /**
-     * @var bool
-     */
     protected static $shutdown=false;
 
     /**
@@ -63,8 +60,8 @@ class Debugger
                     $_this->setMailto(null);
                     return self::shutdown( $exit, $callback );
                 } else {
-                    if (class_exists('\CarteBlanche\App\Response')) {
-                        $_res = new \CarteBlanche\App\Response;
+                    if (class_exists('\App\Response')) {
+                        $_res = new \App\Response;
                         if (php_sapi_name() == 'cli') $_res->setContentType('text');
                         $_res->addContent(null, $dbg_str);
                         return $_res->send();

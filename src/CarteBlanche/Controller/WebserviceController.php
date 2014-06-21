@@ -32,10 +32,10 @@ class WebserviceController
     /**
      * The home page of the controller
      *
-     * @param numeric $offset   The offset used for the tables dump
-     * @param numeric $limit    The limit used for the tables dump
+     * @param int $offset   The offset used for the tables dump
+     * @param int $limit    The limit used for the tables dump
      * @param string $table     The name of a table to isolate it
-     * @param misc $show        ??
+     * @param mixed $show        ??
      *
      * @return string           The home page view content
      */

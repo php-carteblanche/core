@@ -23,8 +23,8 @@ class PhpFiletype implements ConfigFiletypeInterface
     /**
      * Parse a file content
      *
-     * @param   \SplFileInfo $file  The file to parse
-     * @return  array
+     * @param   \SplFileInfo    $file   The file to parse
+     * @return array
      */
     function parse(\SplFileInfo $file)
     {

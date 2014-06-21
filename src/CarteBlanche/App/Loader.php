@@ -45,11 +45,11 @@ class Loader
     /**
      * Class autoloader to scan bundles directory
      *
-     * @param   string  $classname  The name of the class to load
-     * @param   string  $type       The namespace type (Controller for example)
-     * @param   bool    $silent     Exit silently if not found (default is false)
-     * @return  bool    TRUE if the classfile had been found
-     * @throws  \CarteBlanche\Exception\ErrorException if the class was not found and `$silent = false`
+     * @param   string          $classname  The name of the class to load
+     * @param   null/string     $type       The namespace type (Controller for example)
+     * @param   bool            $silent     Exit silently if not found (default is false)
+     * @return  bool/string     TRUE if the classfile had been found
+     * @throws  \CarteBlanche\Exception\ErrorException if the class can't be found & $silent is false
      */
     public static function loadClass($classname, $type = null, $silent = false)
     {
@@ -96,6 +96,7 @@ class Loader
         if (0!==error_reporting() && true!==$silent) {
             throw new ErrorException("Class '$classname' not found!");
         }
+        return false;
     }
 
     /**

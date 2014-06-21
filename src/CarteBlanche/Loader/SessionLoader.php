@@ -24,11 +24,11 @@ class SessionLoader implements DependencyLoaderInterface
     /**
      * Instance loader
      *
-     * @param   array   $config
-     * @param   \CarteBlanche\Interfaces\ContainerInterface $container
-     * @return  object
+     * @param   array                       $config
+     * @param   \CarteBlanche\App\Container $container
+     * @return object
      */
-    public function load(array $config = null, \CarteBlanche\Interfaces\ContainerInterface $container)
+    public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
         $session = new \CarteBlanche\Library\Session;
         $session->start();

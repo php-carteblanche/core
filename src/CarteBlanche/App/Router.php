@@ -49,7 +49,7 @@ class Router
     /**
      * Store the referer URL in session
      *
-     * @param   string  $uri    The referer URI to store
+     * @param   string $uri The referer URI to store
      * @return  bool
      */
     public static function setReferer($uri = null)
@@ -62,7 +62,7 @@ class Router
     /**
      * Get the referer URL in session
      *
-     * @return  string  The referer value in session
+     * @return string The referer value in session
      */
     public static function getReferer()
     {
@@ -76,10 +76,10 @@ class Router
      * The class will pass arguments values to any `$this->toUrlParam($value)` method for the
      * parameter named `param`.
      *
-     * @param   string/array    $param      The parameter name if it's single, an array of parameters and their values otherwise
-     * @param   string          $value      The value for the parameter if it's single
-     * @param   string          $separator  The argument/value separator (default is escaped ampersand : '&amp;')
-     * @return  string          The URL built
+     * @param string/array $param The parameter name if it's single, an array of parameters and their values otherwise
+     * @param string $value The value for the parameter if it's single
+     * @param string $separator The argument/value separator (default is escaped ampersand : '&amp;')
+     * @return string The URL built
      */
     public function buildUrl($param = null, $value = null, $separator = '&amp;')
     {
@@ -113,10 +113,9 @@ class Router
     /**
      * Make a redirection to a new route (HTTP redirect)
      *
-     * @param   mixed   $pathinfo   The path information to redirect to
-     * @param   string  $hash       A hash tag to add to the generated URL
+     * @param   mixed   $pathinfo           The path information to redirect to
+     * @param   string  $hash               A hash tag to add to the generated URL
      * @param   bool    $force_not_referer  By default, this function will redirect to the referer, otherwise this is TRUE
-     * @return  void
      */
     public function redirect($pathinfo = '', $hash = null, $force_not_referer = false)
     {

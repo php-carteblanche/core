@@ -61,8 +61,9 @@ abstract class AbstractControllerConfigurable
     /**
      * Get the object configuration entries or a single entry
      *
-     * @param   string  $index
-     * @return  mixed
+     * @param string $index
+     *
+     * @return mixed
      */
     public function getConfig($index = null)
     {

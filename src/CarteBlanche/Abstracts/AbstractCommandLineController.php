@@ -54,12 +54,12 @@ abstract class AbstractCommandLineController
 // ------------------------------------------
 
     /**
-     * @var string  The directory where to search the views files
+     * The directory where to search the views files
      */
     static $views_dir = null;
 
     /**
-     * @var string  The default console template file
+     * The default console template file
      */
     static $template = 'empty.txt';
 
@@ -84,7 +84,7 @@ abstract class AbstractCommandLineController
     /**
      * Get the global app container
      *
-     * @return  \CarteBlanche\Interfaces\ContainerInterface
+     * @see App\Container
      */
     public function getContainer()
     {
@@ -94,7 +94,7 @@ abstract class AbstractCommandLineController
     /**
      * Get the global kernel from any controller
      *
-     * @return  \CarteBlanche\App\Kernel
+     * @see App\Kernel
      */
     public function getKernel()
     {
@@ -102,12 +102,9 @@ abstract class AbstractCommandLineController
     }
 
     /**
-     * Alias of FrontController->render()
+     * Alias of App\FrontController->render()
      *
-     * @param   null/array  $params
-     * @param   bool        $debug
-     * @param   null/string $exception
-     * @return  \CarteBlanche\Interfaces\FrontControllerInterface::render()
+     * @see App\FrontController::render()
      */
     public function render($params = null, $debug = null, $exception = null)
     {
@@ -116,13 +113,9 @@ abstract class AbstractCommandLineController
     }
 
     /**
-     * Alias of FrontController->view()
+     * Alias of App\FrontController->view()
      *
-     * @param   string      $view
-     * @param   null/array  $params
-     * @param   bool        $display
-     * @param   bool        $exit
-     * @return  \CarteBlanche\Interfaces\FrontControllerInterface::view()
+     * @see App\FrontController::view()
      */
     public function view($view = null, $params = null, $display = false, $exit = false)
     {

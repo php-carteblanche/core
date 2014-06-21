@@ -72,7 +72,7 @@ class FrontController
     /**
      * Get the current controller
      *
-     * @return      \CarteBlanche\Interfaces\ControllerInterface
+     * @return  \CarteBlanche\Interfaces\ControllerInterface
      */
     public function getController()
     {
@@ -146,7 +146,7 @@ class FrontController
     /**
      * Distribute the current request route
      *
-     * @return mixed
+     * @return void
      */
     public function distribute()
     {
@@ -213,7 +213,9 @@ class FrontController
      * @param   string      $controller_classname
      * @param   string      $action
      * @param   array|null  $arguments
+     *
      * @return  void
+     *
      * @throws  \CarteBlanche\Exception\NotFoundException if the controller or the action is not found
      * @throws  \CarteBlanche\Exception\RuntimeException if the controller's action doesn't return required objects
      */
@@ -227,7 +229,7 @@ class FrontController
                 ->setControllerName($_ctrl)
                 ->setController(new $_ctrl(CarteBlanche::getContainer()));
         } else {
-            throw new NotFoundException(
+            throw new \CarteBlanche\Exception\NotFoundException(
                 sprintf("Controller '%s' can't be found!", $controller_classname)
             );
         }
@@ -267,28 +269,28 @@ class FrontController
                         }
                         $this->render($tpl_params);
                     } else {
-                        throw new RuntimeException(
+                        throw new \CarteBlanche\Exception\RuntimeException(
                             sprintf("A controller action must return an array like (view file, params) in [%s -> %s]!",
                                 get_class($this->getController()), $this->getActionName())
                         );
                     }
                 }
 
-            // response object
-            } elseif (is_object($result) && ($result instanceof \CarteBlanche\App\Response)) {
+                // response object
+            } elseif (is_object($result) && ($result instanceof \App\Response)) {
                 CarteBlanche::getContainer()->set('response', $return, true);
                 $this->render();
 
                 // error
             } else {
-                throw new RuntimeException(
+                throw new \CarteBlanche\Exception\RuntimeException(
                     sprintf("A controller action must return a string, an array or a response object in [%s -> %s]!",
                         get_class($this->getController()), $this->getActionName())
                 );
             }
 
         } else {
-            throw new NotFoundException(
+            throw new \CarteBlanche\Exception\NotFoundException(
                 sprintf("Action '%s' can't be found in controller '%s'!", $this->getActionName(), get_class($this->getController()))
             );
         }
@@ -299,16 +301,16 @@ class FrontController
      *
      * @param   array       $params     An array of the parameters passed for the view parsing
      * @param   bool/str    $debug      Object to debug if so
-     * @param   \Exception  $exception
+     * @param   null/\Exception  $exception
      * @return  string
      * @see     self::view()
      */
     public function render($params = null, $debug = null, $exception = null)
     {
-        $_router    = CarteBlanche::getContainer()->get('router');
-        $_db        = CarteBlanche::getContainer()->get('database');
-        $request    = CarteBlanche::getContainer()->get('request');
-        $session    = CarteBlanche::getContainer()->get('session');
+        $_router 	= CarteBlanche::getContainer()->get('router');
+        $_db 		= CarteBlanche::getContainer()->get('database');
+        $request 	= CarteBlanche::getContainer()->get('request');
+        $session 	= CarteBlanche::getContainer()->get('session');
 
         $_dbg = $request->getGet('debug');
         if (empty($debug) && isset($_GET['debug']))

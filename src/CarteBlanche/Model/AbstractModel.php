@@ -200,7 +200,7 @@ abstract class AbstractModel
      * Get a clone of an object
      *
      * @return object A clone of the current object
-     * @throws \RuntimeException if the object doesn't exist
+     * @throw Throws a RuntimeExcpetion if the object doesn't exist
      */
     public function getClone()
     {

@@ -25,14 +25,14 @@ class EntityManagerLoader implements DependencyLoaderInterface
     /**
      * Instance loader
      *
-     * @param   array   $config
-     * @param   \CarteBlanche\Interfaces\ContainerInterface $container
+     * @param   array                       $config
+     * @param   \CarteBlanche\App\Container $container
      * @return  object
      */
-    public function load(array $config = null, \CarteBlanche\Interfaces\ContainerInterface $container)
+    public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
         $em_name = isset($config['name']) ? $config['name'] : 'default';
-        $em_fullname = $em_name.'_entity_manager';
+       $em_fullname = $em_name.'_entity_manager';
 
         $existing = $container->get($em_fullname);
         if (!empty($existing)) {
@@ -43,9 +43,8 @@ class EntityManagerLoader implements DependencyLoaderInterface
 
     /**
      * Build a specific entity manager
-     *
-     * @param   string  $em_fullname    The name of the entity manager to build
-     * @return  null/object Returns an object to manage the entity
+     * @param string $emname The name of the entity manager to build
+     * @return object Returns an object to manage the entity
      */
     protected function _buildEntityManager($em_fullname)
     {

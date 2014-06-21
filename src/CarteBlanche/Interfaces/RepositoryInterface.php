@@ -21,6 +21,8 @@ use \CarteBlanche\Interfaces\StorageEngineInterface;
 interface RepositoryInterface
 {
 
+    /**
+     */
     public function __construct(array $options = null, ModelInterface $model, StorageEngineInterface $storage_engine);
 
     public function find($field_value, $field_name = 'id');

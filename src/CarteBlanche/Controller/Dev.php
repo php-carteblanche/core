@@ -80,12 +80,12 @@ class Dev extends AbstractController
         $controller_dirname = 'Controller';
 
         $app_controllers = $bundles_controllers = array();
-/*
+    /*
         $classMap = require __DIR__ . '/autoload_classmap.php';
         if ($classMap) {
             $loader->addClassMap($classMap);
         }
-*/
+    */
         // the global app dir
         $_dir = new \CarteBlanche\Model\DirectoryModel;
         $_dir->setPath(CarteBlanche::getPath('carte_blanche_core'));
@@ -247,7 +247,7 @@ TODO
 
         $form = new \Tool\Form(array(
             'form_id'=>'app_admin',
-            'fields'=>$fields, 
+            'fields'=>$fields,
             'values'=>$values
         ));
 
@@ -276,13 +276,13 @@ TODO
     /**
      * Page of test
      *
-     * @param misc $arg1 Test arg 1
-     * @param misc $arg2 Test arg 2
+     * @param mixed $arg1 Test arg 1
+     * @param mixed $arg2 Test arg 2
      * @return string The view content
      */
     public function testAction($arg1 = null, $arg2 = 'value')
     {
-//				throw new InternalServerErrorException("Capture l'exception par défaut", 12);
+//                throw new InternalServerErrorException("Capture l'exception par défaut", 12);
                 throw new NotFoundException("Capture l'exception par défaut", 12);
 
         $lang_sel = new \Tool\LanguageSelector(array(
@@ -293,7 +293,7 @@ TODO
         return array('test', array(
             'title' => 'Test page',
             'language_selector' => $lang_sel,
-       ));
+        ));
 /*
 echo '<pre>';
 
@@ -797,12 +797,12 @@ trigger_error('qmlskdjfmqlksj2', E_USER_WARNING);
 		$my_article->getRelations( false );
 		$ctt .= "<p>Contenu de l'article $artid avec relations :</p><pre>".var_export($my_article,1).'</pre>';
 */		
-		
-		$this->render(array(
-			'output'=> $ctt,
-			'title' => 'Test page'
-		));
-	}
+
+        $this->render(array(
+            'output'=> $ctt,
+            'title' => 'Test page'
+        ));
+    }
 
     /**
      * Page of test for ajax requests

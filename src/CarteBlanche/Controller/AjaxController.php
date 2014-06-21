@@ -37,11 +37,11 @@ class AjaxController
     /**
      * The home page of the controller
      *
-     * @param int $offset   The offset used for the tables dump
-     * @param int $limit    The limit used for the tables dump
-     * @param string $table     The name of a table to isolate it
-     * @param mixed $show        ??
-     * @return string The home page view content
+     * @param   int     $offset   The offset used for the tables dump
+     * @param   int     $limit    The limit used for the tables dump
+     * @param   string  $table    The name of a table to isolate it
+     * @param   mixed   $show     ??
+     * @return  string  The home page view content
      */
     public function indexAction($offset = 0, $limit = 5, $table = null, $show = null)
     {

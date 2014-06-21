@@ -21,7 +21,7 @@ interface ConfigFiletypeInterface
     /**
      * Parse a file content
      *
-     * @param   \SplFileInfo $file  The file to parse
+     * @param   \SplFileInfo    $file   The file to parse
      * @return  array
      */
     function parse(\SplFileInfo $file);

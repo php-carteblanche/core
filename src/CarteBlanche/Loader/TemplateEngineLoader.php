@@ -25,11 +25,11 @@ class TemplateEngineLoader implements DependencyLoaderInterface
     /**
      * Instance loader
      *
-     * @param   array   $config
-     * @param   \CarteBlanche\Interfaces\ContainerInterface $container
-     * @return  object
+     * @param   array                       $config
+     * @param   \CarteBlanche\App\Container $container
+     * @return object
      */
-    public function load(array $config = null, \CarteBlanche\Interfaces\ContainerInterface $container)
+    public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
         $root_path = $container->get('kernel')->getPath('root_path');
         $web_dir = $container->get('kernel')->getPath('web_dir');

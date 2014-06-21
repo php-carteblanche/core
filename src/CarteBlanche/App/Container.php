@@ -74,12 +74,12 @@ final class Container
     public function set($name, $object, $force_overload = false)
     {
         if (!is_object($object)) {
-            throw new DomainException(
+            throw new \CarteBlanche\Exception\DomainException(
                 sprintf('A container entry must be an object (got "%s" for "%s")!', gettype($object), $name)
             );
         }
         if (true===$this->instances->isEntry($name) && true!==$force_overload) {
-            throw new InvalidArgumentException(
+            throw new \CarteBlanche\Exception\InvalidArgumentException(
                 sprintf('You can not over-write a container entry (for "%s")!', $name)
             );
         }
@@ -180,7 +180,9 @@ final class Container
      * @param   string  $name           The bundle name to set
      * @param   mixed   $val            The bundle value to set
      * @param   bool    $force_overload Over-write a pre-existant value ?
+     *
      * @return  \Patterns\Commons\Registry::setEntry()
+     *
      * @throws  \CarteBlanche\Exception\DomainException if `$val` is not an object
      * @throws  \CarteBlanche\Exception\DomainException if `$val` is not a `\CarteBlanche\App\Kernel::BUNDLE_CLASS` instance
      * @throws  \CarteBlanche\Exception\InvalidArgumentException if the entry is already defined and `$force_overload = false`
@@ -188,17 +190,17 @@ final class Container
     public function setBundle($name = null, $val = null, $force_overload = false)
     {
         if (!is_object($val)) {
-            throw new DomainException(
+            throw new \CarteBlanche\Exception\DomainException(
                 sprintf('A bundle entry must be an object (got "%s" for bundle "%s")!', gettype($val), $name)
             );
         }
         if (!CodeHelper::isClassInstance($val, Kernel::BUNDLE_CLASS)) {
-            throw new DomainException(
+            throw new \CarteBlanche\Exception\DomainException(
                 sprintf('A bundle entry must be a "%s" instance (for "%s")!', Kernel::BUNDLE_CLASS, $name)
             );
         }
         if (true===$this->instances->isEntry($name, 'bundles') && true!==$force_overload) {
-            throw new InvalidArgumentException(
+            throw new \CarteBlanche\Exception\InvalidArgumentException(
                 sprintf('You can not over-write a container bundle (for "%s")!', $name)
             );
         }

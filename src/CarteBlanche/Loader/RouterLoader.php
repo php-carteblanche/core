@@ -24,11 +24,11 @@ class RouterLoader implements DependencyLoaderInterface
     /**
      * Instance loader
      *
-     * @param   array   $config
-     * @param   \CarteBlanche\Interfaces\ContainerInterface $container
-     * @return  object
+     * @param   array                       $config
+     * @param   \CarteBlanche\App\Container $container
+     * @return object
      */
-    public function load(array $config = null, \CarteBlanche\Interfaces\ContainerInterface $container)
+    public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
 //        $route = null, array $routes_table = array(), array $arguments_table = array(), array $matchers_table = array()
         return new \CarteBlanche\App\Router(

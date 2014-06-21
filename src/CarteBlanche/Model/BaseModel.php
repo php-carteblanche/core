@@ -149,7 +149,7 @@ class BaseModel
     /**
      * Set the storage engine
      *
-     * @param \CarteBlanche\Interfaces\StorageEngineInterface $storage_engine
+     * @param object $storage_engine \CarteBlanche\Interfaces\StorageEngineInterface
      */
     public function setStorageEngine(StorageEngineInterface $storage_engine)
     {
@@ -160,7 +160,7 @@ class BaseModel
     /**
      * Get the storage engine
      *
-     * @return \CarteBlanche\Interfaces\StorageEngineInterface
+     * @return object \CarteBlanche\Interfaces\StorageEngineInterface
      */
     public function getStorageEngine()
     {
@@ -175,7 +175,7 @@ class BaseModel
      * Count the table entries
      *
      * @param string $search_str A string to limit counting
-     * @return int The result of the count
+     * @return numeric The result of the count
      */
     public function count($search_str = null)
     {
@@ -284,11 +284,11 @@ class BaseModel
     {
         $this->init();
         $db = $this->getStorageEngine();
-        if (true===$this->_advanced_search && class_exists('\Tool\AdvancedSearch')) {
+        if (true===$this->_advanced_search) {
             $search_str = $db->escape($search_str);
             $tool = new \Tool\AdvancedSearch(array(
-                'search_str'    => $search_str,
-                'field'         => $search_fields
+                'search_str' 	=> $search_str,
+                'field'			=> $search_fields
             ));
             $tool->setStorageEngine($this->getStorageEngine());
     //echo $s_str = $tool->getQuerySearchString();exit('yo');
@@ -413,7 +413,7 @@ class BaseModel
      *
      * @param string $search_str A string to search
      * @param bool $standalone Clear the BDD query constructors (default is FALSE)
-     * @return int The result of the search with a 'points' value for each row
+     * @return numeric The result of the search with a 'points' value for each row
      */
     public function weightedSearch($search_str = null, $standalone = false)
     {
@@ -462,7 +462,7 @@ class BaseModel
             $objects = $db->get();
 
             if ($get_relations===true) {
-//				$results_table = array();
+    //				$results_table = array();
                 $results_table = new \Patterns\Commons\Collection();
                 $fields_list = self::getFieldsList();
                 $objects_table = array();
@@ -474,7 +474,7 @@ class BaseModel
                     $_obj->getRelations();
                     $_objdat = $_obj->getData();
                     $_objdat['id'] = $_obj->getId();
-//					$results_table[] = $_objdat;
+    //					$results_table[] = $_objdat;
                     $results_table->push( $_objdat );
                 }
                 return $results_table;

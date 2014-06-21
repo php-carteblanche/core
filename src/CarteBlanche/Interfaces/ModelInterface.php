@@ -24,7 +24,6 @@ interface ModelInterface
 
     /**
      * Construction : defines the table name and structure and the object relations
-     *
      * @param string $_table_name The table name
      * @param array $_table_fields The table fields array
      * @param array $_table_structure The table structure array

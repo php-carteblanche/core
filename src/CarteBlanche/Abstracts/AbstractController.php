@@ -56,16 +56,16 @@ abstract class AbstractController
 {
 
     /**
-     * @var string  The default global template file
+     * The default global template file
      */
     static $template = 'template';
 
     /**
-     * @var string  The controller views directory
-     * @see \CarteBlanche\App\Locator::locateView()
+     * The controller views directory
      *
-     * It must be a sub-directory of `_VIEWSDIR` or have to be found by `\CarteBlanche\App\Locator::locateView()`
+     * It must be a sub-directory of `_VIEWSDIR` or have to be found by `CarteBlanche\App\Locator::locateView()`
      *
+     * @see CarteBlanche\App\Locator::locateView()
      */
     static $views_dir = '';
 
@@ -104,7 +104,7 @@ abstract class AbstractController
     /**
      * Get the global app container
      *
-     * @return  \CarteBlanche\Interfaces\ContainerInterface
+     * @see CarteBlanche\App\Container
      */
     public function getContainer()
     {
@@ -114,7 +114,7 @@ abstract class AbstractController
     /**
      * Get the global kernel from any controller
      *
-     * @return  \CarteBlanche\App\Kernel
+     * @see CarteBlanche\App\Kernel
      */
     public function getKernel()
     {
@@ -122,38 +122,29 @@ abstract class AbstractController
     }
 
     /**
-     * Alias of FrontController->render()
+     * Alias of CarteBlanche\App\FrontController->render()
      *
-     * @param   null/array  $params
-     * @param   bool        $debug
-     * @param   null/string $exception
-     * @return  \CarteBlanche\Interfaces\FrontControllerInterface::render()
+     * @see CarteBlanche\App\FrontController::render()
      */
     public function render($params = null, $debug = null, $exception = null)
     {
-        return $this->getContainer()->get('front_controller')
-            ->render($params, $debug, $exception);
+        return FrontController::getInstance()->render($params, $debug, $exception);
     }
 
     /**
-     * Alias of FrontController->view()
+     * Alias of CarteBlanche\App\FrontController->view()
      *
-     * @param   string      $view
-     * @param   null/array  $params
-     * @param   bool        $display
-     * @param   bool        $exit
-     * @return  \CarteBlanche\Interfaces\FrontControllerInterface::view()
+     * @see CarteBlanche\App\FrontController::view()
      */
     public function view($view = null, $params = null, $display = false, $exit = false)
     {
-        return $this->getContainer()->get('front_controller')
-            ->view($view, $params, $display, $exit);
+        return FrontController::getInstance()->view($view, $params, $display, $exit);
     }
 
     /**
-     * Alias of \CarteBlanche\CarteBlanche::trans()
+     * Alias of CarteBlanche\CarteBlanche::trans()
      *
-     * @see \CarteBlanche\CarteBlanche::trans()
+     * @see CarteBlanche\CarteBlanche::view()
      */
     public function trans()
     {
