@@ -500,9 +500,9 @@ final class Kernel
     /**
      * Load a new bundle namespace and map it to its path
      *
-     * @param string $space
-     * @param string $dir
-     * @return bool
+     * @param   string  $space
+     * @param   string  $dir
+     * @return  bool
      */
     public function initBundle($space, $dir)
     {
@@ -727,7 +727,7 @@ final class Kernel
     /**
      * Get current user name running the app
      *
-     * @return string
+     * @return  string
      */
     public function whoAmI()
     {
@@ -739,7 +739,7 @@ final class Kernel
     /**
      * Check if app is in 'CLI' call mode
      *
-     * @return bool
+     * @return  bool
      */
     public function isCli()
     {

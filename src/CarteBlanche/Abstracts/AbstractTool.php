@@ -16,6 +16,7 @@ use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\App\Kernel;
 use \CarteBlanche\App\FrontController;
 use \Library\Helper\Directory as DirectoryHelper;
+use \CarteBlanche\Exception\RuntimeException;
 
 /**
  * Any tool class must extend this abstract one

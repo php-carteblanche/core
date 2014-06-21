@@ -13,8 +13,11 @@
 namespace CarteBlanche\App;
 
 use \CarteBlanche\App\Kernel;
+use \CarteBlanche\Interfaces\ConfigInterface;
 use \Patterns\Commons\Registry;
 use \Library\Helper\Code as CodeHelper;
+use \CarteBlanche\Exception\ErrorException;
+use \CarteBlanche\Exception\InvalidArgumentException;
 
 /**
  * This is the configuration manager of CarteBlanche
@@ -22,6 +25,7 @@ use \Library\Helper\Code as CodeHelper;
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class Config
+    implements ConfigInterface
 {
 
     /**
@@ -46,8 +50,7 @@ class Config
     protected $files_loaded;
 
     /**
-     * The current global configuration stack ID
-     * @var mtime
+     * @var int The current global configuration stack ID
      */
     private static $global_config_id = null;
 
@@ -71,9 +74,9 @@ class Config
      *
      * @return  self
      *
-     * @throws  \ErrorException if the file is not found
-     * @throws  \RuntimeException if the file type parser does not exist
-     * @throws  \DomainException if the file type parser does not implement `self::FILETYPE_INTERFACE`
+     * @throws  \CarteBlanche\Exception\\ErrorException if the file is not found
+     * @throws  \CarteBlanche\Exception\\RuntimeException if the file type parser does not exist
+     * @throws  \CarteBlanche\Exception\\DomainException if the file type parser does not implement `self::FILETYPE_INTERFACE`
      */
     public function load($filename, $merge_globals = true, $stack_name = null, $handler = null)
     {
@@ -97,7 +100,7 @@ class Config
                 $this->_registerConfigFile($filename, 'empty content');
             }
         } else {
-            throw new \ErrorException(
+            throw new ErrorException(
                 sprintf('Configuration file "%s" not found!', $filename)
             );
         }
@@ -152,8 +155,8 @@ class Config
      *
      * @return mixed
      *
-     * @throws  \InvalidArgumentException if the index doesn't exist and `$flag` is NOT_FOUND_ERROR
-     * @throws  \InvalidArgumentException if the stack doesn't exist and `$flag` is NOT_FOUND_ERROR
+     * @throws  \CarteBlanche\Exception\\InvalidArgumentException if the index doesn't exist and `$flag` is NOT_FOUND_ERROR
+     * @throws  \CarteBlanche\Exception\\InvalidArgumentException if the stack doesn't exist and `$flag` is NOT_FOUND_ERROR
      */
     public function get($index, $flag = self::NOT_FOUND_GRACEFULLY, $default = null, $stack_name = 'global')
     {
@@ -165,7 +168,7 @@ class Config
                 $config = $this->getRegistry()->dumpStack($stack_name);
             } else {
                 if ($flag & self::NOT_FOUND_ERROR) {
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         sprintf('Unknonwn configuration stack "%s"!', $stack_name)
                     );
                 } else {
@@ -204,7 +207,7 @@ class Config
             if ($flag & self::NOT_FOUND_GRACEFULLY) {
                 return $default;
             } else {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf('Unknonwn configuration entry "%s"!', $index)
                 );
             }
@@ -242,7 +245,7 @@ class Config
     /**
      * Get the configuration object registry
      *
-     * @return \Patterns\Commons\Registry
+     * @return  \Patterns\Commons\Registry
      */
     public function getRegistry()
     {
@@ -277,14 +280,12 @@ class Config
 // ---------------------------------
 
     /**
-     * Indexes depth separator
-     * @var string
+     * @var string  Indexes depth separator
      */
     public static $depth_separator_char = '.';
 
     /**
-     * Characters list to replace in a configuration index (dot is not included as it is the separator)
-     * @var array
+     * @var array   Characters list to replace in a configuration index (dot is not included as it is the separator)
      */
     public static $slugify_stripped_chars = array(
         ' ', '-', '/', '\\', ',', '?', ';', ':', '=', '+', '%', '§', '<', '>', '|',
@@ -292,8 +293,7 @@ class Config
     );
 
     /**
-     * Replacement character in a configuration index
-     * @var string
+     * @var string  Replacement character in a configuration index
      */
     public static $slugify_replacement_char = '_';
     
@@ -302,9 +302,8 @@ class Config
      *
      * This will slugify all indexes and dispatch values following the dotted indexes.
      *
-     * @param array $config_array
-     *
-     * @return array
+     * @param   array   $config_array
+     * @return  array
      */
     protected function _buildConfigStack(array $config_array)
     {
@@ -343,9 +342,8 @@ class Config
     /**
      * Rebuild an index as a slug: lower case with no punctuation
      *
-     * @param string $index
-     *
-     * @return string
+     * @param   string  $index
+     * @return  string
      */
     protected function _slugify($index)
     {

@@ -269,9 +269,9 @@ class Locator
      * For user overridings
      * This will search a version of `$file` in `user/` and return it in replacement if so.
      *
-     * @param string $file The relative file path to search
-     * @param string $path The default file path
-     * @return string
+     * @param   string  $file   The relative file path to search
+     * @param   string  $path   The default file path
+     * @return  string
      */
     public static function fallback($file = null, $path = null)
     {

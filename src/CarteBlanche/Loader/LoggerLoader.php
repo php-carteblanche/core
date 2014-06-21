@@ -18,7 +18,8 @@ use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 /**
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
-class LoggerLoader implements DependencyLoaderInterface
+class LoggerLoader
+    implements DependencyLoaderInterface
 {
 
     /**

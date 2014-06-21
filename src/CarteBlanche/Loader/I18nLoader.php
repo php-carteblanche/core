@@ -26,8 +26,6 @@ class I18nLoader
 
     /**
      * Creation of a Loader with an optional user defined set of options
-     *
-     * @param array $user_options An array of options values to over-write defaults
      */
     public function __construct()
     {

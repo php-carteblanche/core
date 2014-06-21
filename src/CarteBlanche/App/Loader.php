@@ -14,6 +14,7 @@ namespace CarteBlanche\App;
 
 use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\App\Locator;
+use \CarteBlanche\Exception\ErrorException;
 
 /**
  * This is the global file loader

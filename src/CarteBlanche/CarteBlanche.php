@@ -19,7 +19,7 @@ class CarteBlanche
 {
 
     /**
-     * @return \CarteBlanche\App\Container singleton instance
+     * @return  \CarteBlanche\App\Container singleton instance
      */
     public static function getContainer()
     {
@@ -27,45 +27,47 @@ class CarteBlanche
     }
 
     /**
-     * @return \CarteBlanche\App\Kernel instance
+     * @return  \CarteBlanche\App\Kernel instance
      */
     public static function getKernel()
     {
-        return \CarteBlanche\App\Container::getInstance()->get('kernel');
+        return self::getContainer()->get('kernel');
     }
 
     /**
-     * @alias \CarteBlanche\App\Config::getConfig()
+     * @alias   \CarteBlanche\App\Config::getConfig()
      */
     public static function getConfig($var, $default = null, $app_only = false)
     {
-        return \CarteBlanche\App\Container::getInstance()->get('config')
+        return self::getContainer()->get('config')
            ->get($var, \CarteBlanche\App\Config::NOT_FOUND_GRACEFULLY, $default);
     }
 
     /**
-     * @alias \CarteBlanche\App\Config::addPath()
+     * @alias \CarteBlanche\App\Kernel::addPath(xxx, val, bool, bool)
      */
     public static function addPath($name, $value, $must_exists = false, $must_be_writable = false)
     {
-        return \CarteBlanche\App\Container::getInstance()->get('kernel')
+        return self::getContainer()->get('kernel')
            ->addPath($name, $value, $must_exists, $must_be_writable);
     }
 
     /**
-     * @alias \CarteBlanche\App\Config::getPath()
+     * @alias \CarteBlanche\App\Kernel::getPath(xxx)
      */
     public function getPath($name)
     {
-        return \CarteBlanche\App\Container::getInstance()->get('kernel')->getPath($name);
+        return self::getContainer()->get('kernel')
+            ->getPath($name);
     }
 
     /**
-     * @alias \CarteBlanche\App\Config::getPath(xxx, true)
+     * @alias   \CarteBlanche\App\Config::getPath(xxx, true)
      */
     public function getFullPath($name)
     {
-        return \CarteBlanche\App\Container::getInstance()->get('kernel')->getPath($name, true);
+        return self::getContainer()->get('kernel')
+            ->getPath($name, true);
     }
 
     /**
@@ -73,7 +75,7 @@ class CarteBlanche
      */
     public static function log($message, $level = \Library\Logger::DEBUG, array $context = array(), $logname = null)
     {
-        $logger = \CarteBlanche\App\Container::getInstance()->get('logger');
+        $logger = self::getContainer()->get('logger');
         if (!empty($logger)) {
             return $logger->log($level, $message, $context, $logname);
         }
@@ -81,7 +83,8 @@ class CarteBlanche
     }
 
     /**
-     * @alias \Locale::getDefault()
+     * @return  string
+     * @alias   \Locale::getDefault()
      */
     public static function getlocale()
     {
@@ -89,11 +92,13 @@ class CarteBlanche
     }
 
     /**
-     * @alias \CarteBlanche\App\Kernel::getMode($config)
+     * @param   string  $config
+     * @alias   \CarteBlanche\App\Kernel::getMode($config)
      */
     public static function getKernelMode($config = 'dev')
     {
-        return \CarteBlanche\App\Container::getInstance()->get('kernel')->getMode($config);
+        return self::getContainer()->get('kernel')
+            ->getMode($config);
     }
 
     /**
@@ -110,28 +115,108 @@ class CarteBlanche
      * - will `translate` if `$arg1` is a string and not 'number' or 'price':
      *      `\I18n\I18n::translate( index: $arg1 = string, [params: $arg2 = array] , [lang: $arg3 = null] )`
      *
-     * @alias \I18n\I18n::translate($index, $args, $lang)
-     * @alias \I18n\I18n::pluralize($indexes, $number, $args, $lang)
-     * @alias \I18n\I18n::getLocalizedDateString($date, $mask, $charset, $lang)
-     * @alias \I18n\I18n::getLocalizedNumberString($number, $lang)
-     * @alias \I18n\I18n::getLocalizedPriceString($number, $lang)
+     * @param   string/DateTime     $arg1
+     * @param   string/int          $arg2
+     * @param   array/string        $arg3
+     * @param   string              $arg4
+     * @param   string              $arg5
+     * @return  mixed
+     * @alias   \I18n\I18n::translate($index, $args, $lang)
+     * @alias   \I18n\I18n::pluralize($indexes, $number, $args, $lang)
+     * @alias   \I18n\I18n::getLocalizedDateString($date, $mask, $charset, $lang)
+     * @alias   \I18n\I18n::getLocalizedNumberString($number, $lang)
+     * @alias   \I18n\I18n::getLocalizedPriceString($number, $lang)
      */
     public static function trans($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
+        $i18n = self::getContainer()->get('i18n');
         if (is_object($arg1) && ($arg1 instanceof \DateTime)) {
+            if (empty($i18n)) {
+                return $arg1->format( !empty($arg2) ? $arg2 : 'Y-m-d H:i:s');
+            }
             return \I18n\I18n::getLocalizedDateString($arg1, $arg2, $arg3, $arg4);
         } elseif (is_array($arg1)) {
+            if (empty($i18n)) {
+                return isset($arg1[$arg2]) ? $arg1[$arg2] : array_shift($arg1);
+            }
             return \I18n\I18n::pluralize($arg1, $arg2, $arg3, $arg4);
         } elseif (is_string($arg1)) {
             if ($arg1==='number') {
+                if (empty($i18n)) {
+                    return $arg2;
+                }
                 return \I18n\I18n::getLocalizedNumberString($arg2, $arg3);
             } elseif($arg1==='price') {
+                if (empty($i18n)) {
+                    return $arg2;
+                }
                 return \I18n\I18n::getLocalizedPriceString($arg2, $arg3);
             } else {
+                if (empty($i18n)) {
+                    return $arg1;
+                }
                 return \I18n\I18n::translate($arg1, $arg2, $arg3);
             }
         } else {
             return null;
+        }
+    }
+
+    /**
+     * @alias \CarteBlanche\App\FrontController::view($view, $params, $display, $exit)
+     */
+    public static function view($view = null, $params = null, $display = false, $exit = false)
+    {
+        return self::getContainer()->get('front_controller')
+            ->view($view, $params, $display, $exit);
+    }
+
+    /**
+     * @alias \CarteBlanche\App\Router::buildUrl($param, $value, $separator)
+     */
+    public static function buildUrl($param = null, $value = null, $separator = '&amp;')
+    {
+        return self::getContainer()->get('router')
+            ->buildUrl($param, $value, $separator);
+    }
+
+    /**
+     * @alias \Library\Helper\Url::getRequestUrl($entities, $base, $no_file)
+     */
+    public static function currentUrl($entities = false, $base = false, $no_file = false)
+    {
+        return \Library\Helper\Url::getRequestUrl($entities, $base, $no_file);
+    }
+
+    /**
+     * Full `\CarteBlanche\App\Locator` handler
+     *
+     * @param   string          $filename
+     * @param   null|string     $type   'data', 'config', 'language' or 'i18n', 'view', 'controller'
+     * @alias   \CarteBlanche\App\Locator::locate($filename)
+     */
+    public static function locate($filename, $type = null)
+    {
+        $locator = self::getContainer()->get('locator');
+        switch ($type) {
+            case 'data':
+                return $locator->locateData($filename);
+                break;
+            case 'config':
+                return $locator->locateConfig($filename, true);
+                break;
+            case 'language': case 'i18n':
+                return $locator->locateLanguage($filename, true);
+                break;
+            case 'view':
+                return $locator->locateView($filename, true);
+                break;
+            case 'controller':
+                return $locator->locateController($filename);
+                break;
+            default:
+                return $locator->locate($filename);
+                break;
         }
     }
 

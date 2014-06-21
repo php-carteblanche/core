@@ -13,7 +13,6 @@
 namespace CarteBlanche\Exception;
 
 use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\App\FrontController;
 use \CarteBlanche\Interfaces\CarteBlancheExceptionInterface;
 use \InvalidArgumentException as BaseException;
 
@@ -85,7 +84,7 @@ class InvalidArgumentException
     public function productionRendering()
     {
         $args = array('message'=>$this->getAppMessage());
-        return FrontController::getInstance()
+        return CarteBlanche::getContainer()->get('front_controller')
             ->renderProductionError($args, 500);
     }
 
@@ -97,7 +96,7 @@ class InvalidArgumentException
     public function debugRendering()
     {
         $args = array('message'=>$this->getAppMessage());
-        return FrontController::getInstance()
+        return CarteBlanche::getContainer()->get('front_controller')
             ->renderError($args, $this);
     }
 

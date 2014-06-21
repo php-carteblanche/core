@@ -15,6 +15,7 @@ namespace CarteBlanche\App;
 use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\App\Container;
 use \CarteBlanche\Exception\NotFoundException;
+use \CarteBlanche\Exception\RuntimeException;
 use \CarteBlanche\Interfaces\FrontControllerInterface;
 use \CarteBlanche\Library\Helper;
 use \Patterns\Abstracts\AbstractSingleton;
@@ -121,7 +122,7 @@ class FrontController
     {
         return $this->action_name;
     }
-    
+
 // -----------------------
 // Request/Response Process
 // -----------------------
@@ -594,7 +595,7 @@ class FrontController
         }
         return $this;
     }
-    
+
     /**
      * @return self
      */
@@ -607,16 +608,16 @@ class FrontController
         }
         return $this;
     }
-    
+
     /**
-     * @params array $args
-     * @return void
+     * @param  array   $args
+     * @return  void
      */
     protected function _parseUserSettings(array $args)
     {
         if (!empty($args)) {
             foreach ($args as $param=>$value) {
-                
+
                 if ($param==='lang') {
                     $langs = CarteBlanche::getContainer()->get('i18n')->getAvailableLanguages();
                     if (array_key_exists($value, $langs)) {
@@ -628,7 +629,7 @@ class FrontController
                         }
                     }
                 }
-                
+
             }
         }
     }

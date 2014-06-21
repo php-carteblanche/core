@@ -37,8 +37,8 @@ class DatabaseLoader implements DependencyLoaderInterface
             $container->get('kernel')->addPath('db_dir', $db_dir);
             $container->get('kernel')->addPath('db_path', $db_path, true, true);
         }
-//			$_altdb = $this->container->get('request')->getUrlArg('altdb');
-//			return \AutoObject\AutoObjectMapper::getEntityManager( $_altdb );
+//      $_altdb = $this->container->get('request')->getUrlArg('altdb');
+//      return \AutoObject\AutoObjectMapper::getEntityManager( $_altdb );
         return \CarteBlanche\Library\AutoObject\AutoObjectMapper::getEntityManager('default');
 /*
         $dbname = getContainer()->get('request')->getUrlArg('altdb');

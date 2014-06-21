@@ -12,9 +12,6 @@
 
 namespace CarteBlanche\Abstracts;
 
-use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\App\Kernel;
-use \CarteBlanche\App\FrontController;
 use \CarteBlanche\Abstracts\AbstractTool;
 use \CarteBlanche\Interfaces\StorageEngineInterface;
 use \CarteBlanche\Library\StorageEngine\StorageEngineAwareInterface;

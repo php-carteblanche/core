@@ -13,12 +13,13 @@
 namespace CarteBlanche\App;
 
 use \Library\Converter\Html2Text;
-use DevDebug\Debugger as BaseDebugger;
+use \DevDebug\Debugger as BaseDebugger;
 
 /**
  * The global application debugger singleton instance
  */
-class Debugger extends BaseDebugger
+class Debugger
+    extends BaseDebugger
 {
 
     protected static $shutdown=false;

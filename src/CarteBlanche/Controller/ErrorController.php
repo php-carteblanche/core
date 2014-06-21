@@ -20,7 +20,8 @@ use \CarteBlanche\Abstracts\AbstractController;
  *
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
-class ErrorController extends AbstractController
+class ErrorController
+    extends AbstractController
 {
 
     /**
@@ -121,10 +122,10 @@ class ErrorController extends AbstractController
         $params = array(
             'title'=>$this->trans('OOPS ! You can\'t access this page !!'),
             'content'=>$ctt,
-            'sitemap_url'=>build_url(array(
+            'sitemap_url'=>CarteBlanche::getContainer()->get('router')->buildUrl(array(
                 'controller'=>'cms','action'=>'sitemap'
             )),
-            'report_error'=>build_url(array(
+            'report_error'=>CarteBlanche::getContainer()->get('router')->buildUrl(array(
                 'controller'=>'error','action'=>'report','code'=>'403'
             ))
         );
@@ -170,10 +171,10 @@ class ErrorController extends AbstractController
         $params = array(
             'title'=>$this->trans('OOPS ! The page was not found !!'),
             'content'=>$ctt,
-            'sitemap_url'=>build_url(array(
+            'sitemap_url'=>CarteBlanche::getContainer()->get('router')->buildUrl(array(
                 'controller'=>'cms','action'=>'sitemap'
             )),
-            'report_error'=>build_url(array(
+            'report_error'=>CarteBlanche::getContainer()->get('router')->buildUrl(array(
                 'controller'=>'error','action'=>'report','code'=>'404'
             ))
         );
@@ -219,10 +220,10 @@ class ErrorController extends AbstractController
         $params = array(
             'title'=>$this->trans('OOPS ! An error occurred !!'),
             'content'=>$ctt,
-            'sitemap_url'=>build_url(array(
+            'sitemap_url'=>CarteBlanche::getContainer()->get('router')->buildUrl(array(
                 'controller'=>'cms','action'=>'sitemap'
             )),
-            'report_error'=>build_url(array(
+            'report_error'=>CarteBlanche::getContainer()->get('router')->buildUrl(array(
                 'controller'=>'error','action'=>'report','code'=>'500'
             ))
         );

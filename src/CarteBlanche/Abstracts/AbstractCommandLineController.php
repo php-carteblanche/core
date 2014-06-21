@@ -13,12 +13,9 @@
 namespace CarteBlanche\Abstracts;
 
 use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\App\Container;
 use \CarteBlanche\App\FrontController;
-use \CarteBlanche\Abstracts\AbstractController;
 use \Library\CommandLine\AbstractCommandLineController as Original;
 use \Library\CommandLine\CommandLineControllerInterface;
-use \Library\CommandLine\Helper;
 
 /**
  * @author  Piero Wbmstr <me@e-piwi.fr>
@@ -33,14 +30,12 @@ abstract class AbstractCommandLineController
 // ------------------------------------------
 
     /**
-     * The script name
-     * @var string
+     * @var string  The script name
      */
     public static $_name = '';
 
     /**
-     * The script version
-     * @var string
+     * @var string  The script version
      */
     public static $_version = '';
 

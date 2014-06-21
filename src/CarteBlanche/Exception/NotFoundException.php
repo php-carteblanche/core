@@ -13,7 +13,7 @@
 namespace CarteBlanche\Exception;
 
 use \CarteBlanche\CarteBlanche;
-use \CarteBlanche\App\FrontController;
+use \CarteBlanche\Interfaces\CarteBlancheExceptionInterface;
 use \CarteBlanche\Exception\Exception as BaseException;
 
 /**
@@ -26,6 +26,7 @@ use \CarteBlanche\Exception\Exception as BaseException;
  */
 class NotFoundException
     extends BaseException
+    implements CarteBlancheExceptionInterface
 {
 
     /**
@@ -49,7 +50,7 @@ class NotFoundException
     public function productionRendering()
     {
         $args = array('message'=>$this->getAppMessage());
-        return FrontController::getInstance()
+        return CarteBlanche::getContainer()->get('front_controller')
             ->renderProductionError($args, 404);
     }
 

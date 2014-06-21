@@ -14,6 +14,7 @@ namespace CarteBlanche\App;
 
 use \CarteBlanche\CarteBlanche;
 use \Library\Logger as BaseLogger;
+use \Psr\Log\LoggerInterface;
 use \Library\Helper\Directory as DirectoryHelper;
 
 /**
@@ -23,7 +24,9 @@ use \Library\Helper\Directory as DirectoryHelper;
  *
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
-class Logger extends BaseLogger
+class Logger
+    extends BaseLogger
+    implements LoggerInterface
 {
 
     /**

@@ -24,16 +24,18 @@ use \Patterns\Commons\Collection;
 /**
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
-class Router extends BaseRouter implements RouterInterface
+class Router
+    extends BaseRouter
+    implements RouterInterface
 {
 
     /**
      * Construction
      *
-     * @param string $route
-     * @param array|object $routes_table
-     * @param array|object $arguments_table
-     * @param array|object $matchers_table
+     * @param   string          $route
+     * @param   array/object    $routes_table
+     * @param   array/object    $arguments_table
+     * @param   array/object    $matchers_table
      */
     public function __construct(
         $route = null, array $routes_table = array(), array $arguments_table = array(), array $matchers_table = array()
