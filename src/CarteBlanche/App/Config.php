@@ -19,9 +19,7 @@ use \Library\Helper\Code as CodeHelper;
 /**
  * This is the configuration manager of CarteBlanche
  *
- *
- *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class Config
 {
@@ -36,16 +34,16 @@ class Config
      */
     const NOT_FOUND_ERROR = 2;
 
-	/**
-	 * The singleton instance of the registry (MAIN REGISTRY OBJECT)
-	 * @var \Patterns\Commons\Registry
-	 */
-	protected $registry;
+    /**
+     * The singleton instance of the registry (MAIN REGISTRY OBJECT)
+     * @var \Patterns\Commons\Registry
+     */
+    protected $registry;
 
     /**
      * @var array
      */
-	protected $files_loaded;
+    protected $files_loaded;
 
     /**
      * The current global configuration stack ID
@@ -53,29 +51,29 @@ class Config
      */
     private static $global_config_id = null;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		$this->setRegistry(new Registry);
-	    self::$global_config_id = time();
-		$this->getRegistry()->saveStack(self::$global_config_id);
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->setRegistry(new Registry);
+        self::$global_config_id = time();
+        $this->getRegistry()->saveStack(self::$global_config_id);
+    }
 
     /**
      * Load and parse a configuration file
      *
-     * @param string $filename
-     * @param bool $merge_globals
-     * @param null|string $stack_name
-     * @param null|string $handler A classname to parse concerned config content
+     * @param   string      $filename
+     * @param   bool        $merge_globals
+     * @param   null/string $stack_name
+     * @param   null/string $handler    A classname to parse concerned config content
      *
-     * @return self
+     * @return  self
      *
-     * @throws ErrorException if the file is not found
-     * @throws RuntimeException if the file type parser does not exist
-     * @throws DomainException if the file type parser does not implement `self::FILETYPE_INTERFACE`
+     * @throws  \ErrorException if the file is not found
+     * @throws  \RuntimeException if the file type parser does not exist
+     * @throws  \DomainException if the file type parser does not implement `self::FILETYPE_INTERFACE`
      */
     public function load($filename, $merge_globals = true, $stack_name = null, $handler = null)
     {
@@ -109,16 +107,15 @@ class Config
     /**
      * Parse and set a configuration array
      *
-     * @param array $config
-     * @param bool $merge_globals
-     * @param null|string $stack_name
-     *
-     * @return self|array Returns the parsed array if `$merge_globals` is false, the config object otherwise
+     * @param   array       $config
+     * @param   bool        $merge_globals
+     * @param   null/string $stack_name
+     * @return  self/array  Returns the parsed array if `$merge_globals` is false, the config object otherwise
      */
     public function set(array $config, $merge_globals = true, $stack_name = null)
     {
         if (!empty($config)) {
-            $config = $this->buildConfigStack($config);
+            $config = $this->_buildConfigStack($config);
             if (!empty($stack_name)) {
                 $this->getRegistry()->loadStack($stack_name);
             }
@@ -145,28 +142,28 @@ class Config
         }
     }
 
-	/**
-	 * Get a configuration stack or entry
-	 *
-	 * @param string $index
-	 * @param int $flag
-	 * @param null|misc $default
-	 * @param string $stack_name
-	 *
-	 * @return misc
-	 *
-	 * @throws InvalidArgumentException if the index doesn't exist and `$flag` is NOT_FOUND_ERROR
-	 * @throws InvalidArgumentException if the stack doesn't exist and `$flag` is NOT_FOUND_ERROR
-	 */
-	public function get($index, $flag = self::NOT_FOUND_GRACEFULLY, $default = null, $stack_name = 'global')
-	{
-	    $value = null;
-	    if ($stack_name==='global') {
-    	    $config = $this->getRegistry()->dumpStack(self::$global_config_id);
-    	} else {
-    	    if ($this->getRegistry()->isStack($stack_name)) {
-    	        $config = $this->getRegistry()->dumpStack($stack_name);
-    	    } else {
+    /**
+     * Get a configuration stack or entry
+     *
+     * @param   string      $index
+     * @param   int         $flag
+     * @param   null/mixed   $default
+     * @param   string      $stack_name
+     *
+     * @return mixed
+     *
+     * @throws  \InvalidArgumentException if the index doesn't exist and `$flag` is NOT_FOUND_ERROR
+     * @throws  \InvalidArgumentException if the stack doesn't exist and `$flag` is NOT_FOUND_ERROR
+     */
+    public function get($index, $flag = self::NOT_FOUND_GRACEFULLY, $default = null, $stack_name = 'global')
+    {
+        $value = null;
+        if ($stack_name==='global') {
+            $config = $this->getRegistry()->dumpStack(self::$global_config_id);
+        } else {
+            if ($this->getRegistry()->isStack($stack_name)) {
+                $config = $this->getRegistry()->dumpStack($stack_name);
+            } else {
                 if ($flag & self::NOT_FOUND_ERROR) {
                     throw new \InvalidArgumentException(
                         sprintf('Unknonwn configuration stack "%s"!', $stack_name)
@@ -174,8 +171,8 @@ class Config
                 } else {
                     return $default;
                 }
-    	    }
-    	}
+            }
+        }
 
         if (strpos($index, self::$depth_separator_char)!==false) {
             $depth_index = explode(self::$depth_separator_char, $index);
@@ -195,26 +192,26 @@ class Config
                 }
             }
             if (!empty($tmp_conf)) {
-                $value = $this->parseConfig($tmp_conf, $stack_name);
+                $value = $this->_parseConfig($tmp_conf, $stack_name);
             }
         } else {
             if (array_key_exists($index, $config)) {
-                $value = $this->parseConfig($config[$index], $stack_name);
+                $value = $this->_parseConfig($config[$index], $stack_name);
             }
         }
 
         if (!$value) {
             if ($flag & self::NOT_FOUND_GRACEFULLY) {
-    			return $default;
-    		} else {
-    		    throw new \InvalidArgumentException(
-    		        sprintf('Unknonwn configuration entry "%s"!', $index)
-    		    );
-    		}
+                return $default;
+            } else {
+                throw new \InvalidArgumentException(
+                    sprintf('Unknonwn configuration entry "%s"!', $index)
+                );
+            }
         } else {
-			return $value;
+            return $value;
         }
-	}
+    }
 
     /**
      * Get the full configuration array
@@ -233,9 +230,8 @@ class Config
     /**
      * Set the configuration object registry
      *
-     * @param object \Patterns\Commons\Registry
-     *
-     * @return self
+     * @param   \Patterns\Commons\Registry $registry
+     * @return  self
      */
     public function setRegistry(Registry $registry)
     {
@@ -256,9 +252,9 @@ class Config
     /**
      * Add a configuration file in the files registry
      *
-     * @param   string  $filename
+     * @param   string  $file_name
      * @param   int     $length
-     * @return self
+     * @return  self
      */
     protected function _registerConfigFile($file_name, $length)
     {
@@ -310,12 +306,12 @@ class Config
      *
      * @return array
      */
-    protected function buildConfigStack(array $config_array)
+    protected function _buildConfigStack(array $config_array)
     {
         $config = array();
         foreach ($config_array as $index=>$val) {
-            $index = $this->slugify($index);
-            $val = $this->treatValue($val);
+            $index = $this->_slugify($index);
+            $val = $this->_treatValue($val);
 
             if (strpos($index, self::$depth_separator_char)!==false) {
                 $depth_index = explode(self::$depth_separator_char, $index);
@@ -334,7 +330,7 @@ class Config
                 if (is_array($val)) {
                     foreach ($val as $val_index=>$val_val) {
                         if (strpos($val_index, self::$depth_separator_char)!==false) {
-                            $val = $this->buildConfigStack($val);
+                            $val = $this->_buildConfigStack($val);
                         }
                     }
                 }
@@ -351,7 +347,7 @@ class Config
      *
      * @return string
      */
-    protected function slugify($index)
+    protected function _slugify($index)
     {
         $index = utf8_encode(strtolower($index));
         $index = str_replace(self::$slugify_stripped_chars, self::$slugify_replacement_char, $index);
@@ -365,16 +361,16 @@ class Config
     /**
      * Process special treatment on configuration values such as BIT values
      *
-     * @param misc $value
+     * @param mixed $value
      *
-     * @return misc
+     * @return mixed
      */
-    protected function treatValue($value)
+    protected function _treatValue($value)
     {
         if (is_array($value)) {
             $values = array();
             foreach ($value as $j=>$v) {
-                $values[$j] = $this->treatValue($v);
+                $values[$j] = $this->_treatValue($v);
             }
         }
         if (is_string($value) && (
@@ -393,76 +389,74 @@ class Config
         return $value;
     }
 
-	/**
-	 * Parse a configuration stack or entry
-	 *
-	 * This function will complete a configuration entry replacing references to other entries written like :
-	 *    'name' => '%entry%'
-	 * where "entry" is the name of another defined configuration entry.
-	 *
-	 * @param misc $conf
-	 *
-	 * @return misc
-	 */
-	protected function parseConfig($conf, $stack_name = 'global')
-	{
-		if (is_string($conf)) {
-			$this->parseConfigRecursive($conf, null, $stack_name);
-		} elseif (is_array($conf)) {
-			array_walk_recursive($conf, array($this, 'parseConfigRecursive'), $stack_name);
-			$conf = array_filter($conf);
-		}
-		return $conf;
-	}
+    /**
+     * Parse a configuration stack or entry
+     *
+     * This function will complete a configuration entry replacing references to other entries written like :
+     *    'name' => '%entry%'
+     * where "entry" is the name of another defined configuration entry.
+     *
+     * @param   mixed   $conf
+     * @param   string  $stack_name
+     * @return  mixed
+     */
+    protected function _parseConfig($conf, $stack_name = 'global')
+    {
+        if (is_string($conf)) {
+            $this->_parseConfigRecursive($conf, null, $stack_name);
+        } elseif (is_array($conf)) {
+            array_walk_recursive($conf, array($this, '_parseConfigRecursive'), $stack_name);
+            $conf = array_filter($conf);
+        }
+        return $conf;
+    }
 
-	/**
-	 * Parse a configuration stack array recursively
-	 *
-	 * @param misc $value
-	 *
-	 * @return void As the value is set by reference, nothing is returned but the original array is modified
-	 *
-	 * @throws RuntimeException if the referenced value can not be found
-	 * @throws RuntimeException if the value has not the expected type
-	 */
-	protected function parseConfigRecursive(&$value, $key = null, $stack_name = 'global')
-	{
-	    if (!is_string($value)) return;
-	    
-	    // escape any '\%'
-	    $hash = 'XH'.uniqid();
-	    $value = str_replace('\%', $hash, $value);
-	    
-		// configuration value notation : %name%
-		while (is_string($value) && 0!=preg_match('/^(.*)\%(.*)\%(.*)$/i', $value, $matches) && count($matches)>1) {
-			$_cf = $matches[2];
-			if ($_cfg_val = $this->get($_cf, self::NOT_FOUND_GRACEFULLY, null, $stack_name)) {
-			    if (is_array($_cfg_val)) {
-        			$value = $_cfg_val;
-			    } else {
-        			$value = $matches[1].$_cfg_val.$matches[3];
-			    }
-    		}
-    		$matches = array();
-		}
+    /**
+     * Parse a configuration stack array recursively
+     *
+     * @param   mixed       $value
+     * @param   null/string $key
+     * @param   string      $stack_name
+     * @return  void        As the value is set by reference, nothing is returned but the original array is modified
+     */
+    protected function _parseConfigRecursive(&$value, $key = null, $stack_name = 'global')
+    {
+        if (!is_string($value)) return;
 
-	    // un-escape any '\%'
-	    if (is_string($value)) {
-    	    $value = str_replace($hash, '%', $value);
-    	}
+        // escape any '\%'
+        $hash = 'XH'.uniqid();
+        $value = str_replace('\%', $hash, $value);
 
-		// configuration stack notation : {name}
-		if (is_string($value) && 0!=preg_match('/^\{(.*)\}$/i', $value, $matches)) {
-			$_cf = $matches[1];
-			if (substr(trim($_cf), 0, strlen('function'))!=='function') {
-			    $_cf = 'function(){ '.$_cf.'; }';
-			}
-			@eval("\$_cfg_closure = $_cf;");
-			if ($_cfg_closure && is_callable($_cfg_closure)) {
-    			$value = call_user_func($_cfg_closure);
-			}
-		}
-	}
+        // configuration value notation : %name%
+        while (is_string($value) && 0!=preg_match('/^(.*)\%(.*)\%(.*)$/i', $value, $matches) && count($matches)>1) {
+            $_cf = $matches[2];
+            if ($_cfg_val = $this->get($_cf, self::NOT_FOUND_GRACEFULLY, null, $stack_name)) {
+                if (is_array($_cfg_val)) {
+                    $value = $_cfg_val;
+                } else {
+                    $value = $matches[1].$_cfg_val.$matches[3];
+                }
+            }
+            $matches = array();
+        }
+
+        // un-escape any '\%'
+        if (is_string($value)) {
+            $value = str_replace($hash, '%', $value);
+        }
+
+        // configuration stack notation : {name}
+        if (is_string($value) && 0!=preg_match('/^\{(.*)\}$/i', $value, $matches)) {
+            $_cf = $matches[1];
+            if (substr(trim($_cf), 0, strlen('function'))!=='function') {
+                $_cf = 'function(){ '.$_cf.'; }';
+            }
+            @eval("\$_cfg_closure = $_cf;");
+            if ($_cfg_closure && is_callable($_cfg_closure)) {
+                $value = call_user_func($_cfg_closure);
+            }
+        }
+    }
 
 }
 

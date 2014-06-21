@@ -17,22 +17,22 @@ use \CarteBlanche\App\Kernel;
 /**
  * Any database driver must extend this abstract class
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 abstract class AbstractDatabaseAdapter
 {
 
-	/**
-	 * Construction of the database driver
-	 *
-	 * @param array $params
-	 *
-	 * @return object \CarteBlanche\Library\StorageEngine\DatabaseDriver\DatabaseDriverInterface
-	 */
-	public function getDriver(array $params = null)
-	{
-	    return $this->driver;
-	}
+    /**
+     * Construction of the database driver
+     *
+     * @param array $params
+     *
+     * @return object \CarteBlanche\Library\StorageEngine\DatabaseDriver\DatabaseDriverInterface
+     */
+    public function getDriver(array $params = null)
+    {
+        return $this->driver;
+    }
 
     protected function _buildDriver($name, array $params = null)
     {

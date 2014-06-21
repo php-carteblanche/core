@@ -82,6 +82,13 @@ In CarteBlanche, controller's methods MUST return one of the followings:
 -   **a Response object** which will replace the global response prepared by the Kernel.
 
 
+## Error pages
+
+CarteBlanche is designed to handle some default error behavior for HTML errors with 403, 404 and
+500 status. In `dev` mode, errors are rendered as a development information page with back traces
+and various environment objects and infos. In `prod` mode, each error message and back traces
+is logged and a "user friendly" page is rendered and quickly overloadable in your controllers.
+
 
 ----
 **(c) 2013-2014 [Les Ateliers Pierrot](http://www.ateliers-pierrot.fr/)** - Paris, France - Some rights reserved.

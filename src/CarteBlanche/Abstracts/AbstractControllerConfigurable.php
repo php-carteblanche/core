@@ -29,7 +29,7 @@ use \Library\Helper\Text as TextHelper;
  * -   `indexAction()` : the "home" view of the controller,
  * -   `emptyAction()` : a special method for an empty application (not yet installed)
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 abstract class AbstractControllerConfigurable
     extends AbstractController
@@ -68,7 +68,7 @@ abstract class AbstractControllerConfigurable
      *
      * @param string $index
      *
-     * @return misc
+     * @return mixed
      */
     public function getConfig($index = null)
     {
@@ -82,20 +82,20 @@ abstract class AbstractControllerConfigurable
 // Constructor
 // ------------------------------------------
 
-	/**
-	 * Class constructor : load the configuration entries if so
-	 */
-	public function __construct()
-	{
-	    if (empty($this->_config_reference)) {
-	        $parts = explode('\\', get_class($this));
-	        $this->_config_reference = TextHelper::fromCamelCase(end($parts));
-	    }
+    /**
+     * Class constructor : load the configuration entries if so
+     */
+    public function __construct()
+    {
+        if (empty($this->_config_reference)) {
+            $parts = explode('\\', get_class($this));
+            $this->_config_reference = TextHelper::fromCamelCase(end($parts));
+        }
         $this->setConfig(
             $this->getContainer()->get('config')->get($this->_config_reference)
-        );	    
-		parent::__construct();
-	}
+        );
+        parent::__construct();
+    }
 
 }
 

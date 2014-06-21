@@ -17,42 +17,42 @@ namespace CarteBlanche\Interfaces;
 interface FrontControllerInterface
 {
 
-	/**
-	 * Set the current controller
-	 *
-	 * @param object $ctrl \CarteBlanche\Interfaces\ControllerInterface
-	 */
+    /**
+     * Set the current controller
+     *
+     * @param \CarteBlanche\Interfaces\ControllerInterface $ctrl
+     */
     public function setController(\CarteBlanche\Interfaces\ControllerInterface $ctrl);
 
-	/**
-	 * Get the current controller
-	 *
-	 * @return object \App\Interfaces\ControllerInterface
-	 */
+    /**
+     * Get the current controller
+     *
+     * @return object \App\Interfaces\ControllerInterface
+     */
     public function getController();
 
-	/**
-	 * Set the current controller name
-	 *
-	 * @param string $name
-	 */
+    /**
+     * Set the current controller name
+     *
+     * @param string $name
+     */
     public function setControllerName($name);
 
-	/**
-	 * Get the current controller name
-	 */
+    /**
+     * Get the current controller name
+     */
     public function getControllerName();
 
-	/**
-	 * Set the current action requested by the router
-	 *
-	 * @param string $type
-	 */
+    /**
+     * Set the current action requested by the router
+     *
+     * @param string $type
+     */
     public function setActionName($type);
 
-	/**
-	 * Get the current action requested by the router
-	 */
+    /**
+     * Get the current action requested by the router
+     */
     public function getActionName();
 
     public function distribute();

@@ -17,28 +17,28 @@ use \CarteBlanche\App\Kernel;
 use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class FrontControllerLoader implements DependencyLoaderInterface
 {
 
-	/**
-	 * Instance loader
-	 *
-	 * @param array $config
-	 *
-	 * @return object
-	 */
+    /**
+     * Instance loader
+     *
+     * @param   array                       $config
+     * @param   \CarteBlanche\App\Container $container
+     * @return  null/object
+     */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
-		$em_cfg = CarteBlanche::getConfig('default_front_controller');
-		if (isset($em_cfg['class'])) {
-    		$em_class = $em_cfg['class'];
-		} else {
-			throw new \RuntimeException(
-				sprintf('Front controller configuration must define a class name ("%s")!', 'default_front_controller')
-			);
-		}
+        $em_cfg = CarteBlanche::getConfig('default_front_controller');
+        if (isset($em_cfg['class'])) {
+            $em_class = $em_cfg['class'];
+        } else {
+            throw new \RuntimeException(
+                sprintf('Front controller configuration must define a class name ("%s")!', 'default_front_controller')
+            );
+        }
         if (!empty($em_class)) {
             $factory = \Library\Factory::create()
                 ->factoryName('FrontController')
@@ -48,7 +48,7 @@ class FrontControllerLoader implements DependencyLoaderInterface
             return $factory->build($em_class);
         }
         return null;
-	}
+    }
 
 }
 

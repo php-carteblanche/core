@@ -17,18 +17,18 @@ use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 use \Library\Helper\Directory as DirectoryHelper;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class TemplateEngineLoader implements DependencyLoaderInterface
 {
 
-	/**
-	 * Instance loader
-	 *
-	 * @param array $config
-	 *
-	 * @return object
-	 */
+    /**
+     * Instance loader
+     *
+     * @param   array                       $config
+     * @param   \CarteBlanche\App\Container $container
+     * @return object
+     */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
         $root_path = $container->get('kernel')->getPath('root_path');

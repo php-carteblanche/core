@@ -17,27 +17,27 @@ namespace CarteBlanche\Library\AutoObject;
 class Database
 {
 
-	protected $name;
+    protected $name;
 
-	public function __construct( $database_name )
-	{
-		$this->name = $database_name;
-		$this->init();
-	}
+    public function __construct( $database_name )
+    {
+        $this->name = $database_name;
+        $this->init();
+    }
 
-	protected function init()
-	{
-	}
+    protected function init()
+    {
+    }
 
 // -------------------
 // Getters
 // -------------------
 
-	public function getName()
-	{
-		return $this->name;
-	}
-	
+    public function getName()
+    {
+        return $this->name;
+    }
+
 }
 
 // Endfile

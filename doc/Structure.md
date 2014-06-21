@@ -13,52 +13,50 @@ It is also possible to get a sub-directory or file from one of these components 
 `$loader->locate(FILENAME, XXX_dir)` which will search the file named `FILENAME` in an
 application sub-directory get with `CarteBlanche::getPath(XXX_dir)`.
 
-In this schema, getters are written at the end of the lines.
-
     [root directory]
     |
     | composer.json
     |
-    | bin/                                  CarteBlanche::getPath('bin_dir') / CarteBlanche::getPath('bin_path')
+    | bin/
     |
-    | config/                               CarteBlanche::getPath('config_dir') / CarteBlanche::getPath('config_path')
+    | config/
     | ------- vendor/
     |
-    | i18n/                                 CarteBlanche::getPath('i18n_dir') / CarteBlanche::getPath('i18n_path')
+    | i18n/
     | ------- vendor/
     |
     | [doc/]
     |
     | [phpdoc/]
     |
-    | src/                                  CarteBlanche::getPath('src_dir') / CarteBlanche::getPath('src_path')
+    | src/
     | ---- App/
     | --------- (...)
-    | ---- bundles/                         CarteBlanche::getPath('bundles_dir') / CarteBlanche::getPath('bundles_path')
+    | ---- bundles/
     | ------------- (...)
-    | ---- tools/                           CarteBlanche::getPath('tools_dir') / CarteBlanche::getPath('tools_path')
+    | ---- tools/
     | ----------- (...)
     | ---- vendor/
     | ------------ (...)
-    | ---- lib/                             CarteBlanche::getPath('lib_dir') / CarteBlanche::getPath('lib_path')
+    | ---- lib/
     | --------- (...)
-    | ----- [views/]                        CarteBlanche::getPath('views_dir')
+    | ----- [views/]
     |
-    | user/                                 CarteBlanche::getPath('user_dir') / CarteBlanche::getPath('user_path')
+    | user/
     | ----- src/
     | ----- views/
     | ----- (...)
     |
-    | var/                                  CarteBlanche::getPath('var_dir') / CarteBlanche::getPath('var_path')
+    | var/
     | ---- tmp/
     | ---- logs/
     | ---- (...)
     |
-    | www/                                  CarteBlanche::getPath('web_dir') / CarteBlanche::getPath('web_path')
-    | ---- skins/                           CarteBlanche::getPath('skins_dir') / CarteBlanche::getPath('skins_path')
-    | ---- tmp/                             CarteBlanche::getPath('tmp_dir') / CarteBlanche::getPath('tmp_path')
+    | www/
+    | ---- skins/
+    | ---- tmp/
     | ---- vendor/
-    | ---- assets/                          CarteBlanche::getPath('assets_dir') / CarteBlanche::getPath('assets_path')
+    | ---- assets/
     | ---- (...)
     |
 
@@ -111,7 +109,7 @@ Must be accessible by your webserver user via HTTP protocol.
 All the code must follow the [PHP Framework Interoperability Group standards](https://github.com/php-fig/fig-standards)
 so a class must be named following its filesystem position.
 
-    [bundle root "src" directory]
+    [bundle root "src/" directory]
     | 
     | [nameBundle.php]
     |
@@ -148,8 +146,8 @@ Below is a classic [Apache](http://httpd.apache.org/) virtual host configuration
     <VirtualHost *:80>
         ServerAdmin your@email
         ServerName your.domain
-        DocumentRoot /your/carte/blanche/path/www
-        <Directory "/your/carte/blanche/path/www">
+        DocumentRoot /your/carte-blanche/path/www
+        <Directory "/your/carte-blanche/path/www">
             AllowOverride All
             Order allow,deny
             allow from all
@@ -179,6 +177,10 @@ is just a Kernel and a Container, all other stuff is loaded as dependencies or s
     filesystem architecture ;
 -   `\CarteBlanche\App\Loader` : the loader is the complementary of the locator for PHP scripts ; it is
     in charge to search a class and load it ;
+-   `\CarteBlanche\App\Logger` : the logger of CarteBlanche.
+
+### "User" core : dependencies that are overloadable by your app
+
 -   `\CarteBlanche\App\Request` : the request manager ; it is in charge to handle the request ;
 -   `\CarteBlanche\App\Response` : the response manager ; it is in charge to send final response to client ;
 -   `\CarteBlanche\App\Router` : the router of CarteBlanche ; it is in charge to map the received request
@@ -186,7 +188,6 @@ is just a Kernel and a Container, all other stuff is loaded as dependencies or s
     in the application ;
 -   `\CarteBlanche\App\FrontController` : the front controller is in charge to distribute the request to
     corresponding action(s) and to display the final response if necessary ;
--   `\CarteBlanche\App\Logger` : the logger of CarteBlanche.
 
 ### Useful classes
 

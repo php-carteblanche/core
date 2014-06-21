@@ -13,7 +13,7 @@ abstract class AbstractType
     /**
      * Field default value
      *
-     * @param misc $default The default value to set
+     * @param mixed $default The default value to set
      */
     public function setDefault($default)
     {
@@ -32,7 +32,7 @@ abstract class AbstractType
     /**
      * Field entry value
      *
-     * @param misc $value The value to set
+     * @param mixed $value The value to set
      */
     public function setValue($value)
     {

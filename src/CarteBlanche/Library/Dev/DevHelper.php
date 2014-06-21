@@ -15,11 +15,11 @@ namespace CarteBlanche\Library\Dev;
 use \CarteBlanche\CarteBlanche;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class DevHelper
 {
-	
+
     public static function getDocUrl($class_name)
     {
         return CarteBlanche::getContainer()->get('config')->get('app.documentation')

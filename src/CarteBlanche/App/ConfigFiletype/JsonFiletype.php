@@ -15,7 +15,7 @@ namespace CarteBlanche\App\ConfigFiletype;
 use \CarteBlanche\Interfaces\ConfigFiletypeInterface;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class JsonFiletype implements ConfigFiletypeInterface
 {
@@ -23,9 +23,9 @@ class JsonFiletype implements ConfigFiletypeInterface
     /**
      * Parse a file content
      *
-     * @param object SplFileInfo for the file to parse
-     *
-     * @return array
+     * @param   \SplFileInfo    $file   The file to parse
+     * @return  array
+     * @throws  \RuntimeException for any JSON error
      */
     function parse(\SplFileInfo $file)
     {

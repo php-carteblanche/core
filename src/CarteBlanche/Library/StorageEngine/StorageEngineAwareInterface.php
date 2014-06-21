@@ -19,24 +19,24 @@ use \CarteBlanche\Interfaces\StorageEngineInterface;
  *
  * Any database driver must implements this interface, and follow its constructor's rules
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 interface StorageEngineAwareInterface
 {
 
-	/**
-	 * Set the storage engine
-	 *
-	 * @param object $storage_engine \CarteBlanche\Interfaces\StorageEngineInterface
-	 */
-	public function setStorageEngine(StorageEngineInterface $storage_engine);
+    /**
+     * Set the storage engine
+     *
+     * @param object $storage_engine \CarteBlanche\Interfaces\StorageEngineInterface
+     */
+    public function setStorageEngine(StorageEngineInterface $storage_engine);
 
-	/**
-	 * Get the storage engine
-	 *
-	 * @return object \CarteBlanche\Interfaces\StorageEngineInterface
-	 */
-	public function getStorageEngine();
+    /**
+     * Get the storage engine
+     *
+     * @return object \CarteBlanche\Interfaces\StorageEngineInterface
+     */
+    public function getStorageEngine();
 
 }
 

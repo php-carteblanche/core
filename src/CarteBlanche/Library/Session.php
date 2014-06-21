@@ -20,12 +20,13 @@ use \Library\Session\FlashSession as BaseSession;
  *
  * General session handler
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class Session extends BaseSession
 {
 
-	const SESSION_FLASHESNAME = 'my-flashes';
+    const SESSION_FLASHESNAME = 'my-flashes';
+
 }
 
 /*

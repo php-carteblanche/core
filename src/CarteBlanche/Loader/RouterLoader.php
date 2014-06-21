@@ -16,18 +16,18 @@ use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class RouterLoader implements DependencyLoaderInterface
 {
 
-	/**
-	 * Instance loader
-	 *
-	 * @param array $config
-	 *
-	 * @return object
-	 */
+    /**
+     * Instance loader
+     *
+     * @param   array                       $config
+     * @param   \CarteBlanche\App\Container $container
+     * @return object
+     */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
 //        $route = null, array $routes_table = array(), array $arguments_table = array(), array $matchers_table = array()

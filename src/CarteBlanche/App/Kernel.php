@@ -32,7 +32,7 @@ use \Library\Helper\Directory as DirectoryHelper;
 /**
  * This is the global singleton instance of the CarteBlanche application
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author      Piero Wbmstr <me@e-piwi.fr>
  */
 final class Kernel
     implements StaticCreatorInterface
@@ -45,7 +45,7 @@ final class Kernel
     /**
      * The package name
      */
-    const CARTE_BLANCHE_PACKAGE = 'atelierspierrot/carte-blanche';
+    const CARTE_BLANCHE_PACKAGE = 'carte-blanche/core';
 
     /**
      * The kernel name
@@ -60,7 +60,7 @@ final class Kernel
     /**
      * The kernel homepage
      */
-    const CARTE_BLANCHE_HOMEPAGE = 'http://github.com/php-carteblanche/carteblanche';
+    const CARTE_BLANCHE_HOMEPAGE = 'http://github.com/php-carteblanche/';
 
     /**
      * The kernel online documentation
@@ -206,63 +206,67 @@ final class Kernel
 // Kernel object
 // -----------------------------------
 
-	/**
-	 * @var bool
-	 */
-	protected $is_booted = false;
+    /**
+     * @var bool
+     */
+    protected $is_booted = false;
 
-	/**
-	 * @var array
-	 */
-	protected $boot_errors = array();
+    /**
+     * @var array
+     */
+    protected $boot_errors = array();
 
-	/**
-	 * @var bool
-	 */
-	protected $is_debug = false;
+    /**
+     * @var bool
+     */
+    protected $is_debug = false;
 
-	/**
-	 * @var bool
-	 */
-	protected $is_shutdown = false;
+    /**
+     * @var bool
+     */
+    protected $is_shutdown = false;
 
-	/**
-	 * @var string
-	 */
-	protected $mode = 'dev';
+    /**
+     * @var string
+     */
+    protected $mode = 'dev';
 
-	/**
-	 * Constructor : defines the current URL and gets the routes
-	 *
-	 * @param string|array $config_file
-	 * @param array $user_config
-	 * @param string $mode
-	 * @return \CarteBlanche\App\Kernel
-	 */
-	public static function create($config_files = null, array $user_config = null, $mode = null)
-	{
+    /**
+     * Constructor : defines the current URL and gets the routes
+     *
+     * @param   string/array    $config_file
+     * @param   array           $user_config
+     * @param   string          $mode
+     * @return  \CarteBlanche\App\Kernel
+     */
+    public static function create($config_files = null, array $user_config = null, $mode = null)
+    {
         $_cls = get_called_class();
         $_obj = new $_cls;
         call_user_func_array(array($_obj, 'init'), func_get_args());
         return $_obj;
-	}
+    }
 
-	/**
-	 * Initializer : defines required paths and parse configuration
-	 *
-	 * @param string|array $config_files
-	 * @param array $user_config
-	 * @param string $mode_arg      The kernel mode, can be 'prod' or 'dev' (for now)
-	 * @return void
-	 *
-	 * @throws ErrorException if the application default configuration file is not found
-	 * @throws ErrorException if the user configuration file is defined but not found
-	 */
-	public function init($config_files = null, array $user_config = null, $mode_arg = null)
-	{
-		$this->getContainer()->set('kernel', $this);
-		$this->getContainer()->set('config', new \CarteBlanche\App\Config);
+    /**
+     * Initializer : defines required paths and parse configuration
+     *
+     * @param   null/string/array    $config_files
+     * @param   null/array           $user_config
+     * @param   null/string          $mode_arg       The kernel mode, can be 'prod' or 'dev' (for now)
+     * @return  void
+     */
+    public function init($config_files = null, array $user_config = null, $mode_arg = null)
+    {
+        $this->getContainer()->set('kernel', $this);
+        $this->getContainer()->set('config', new \CarteBlanche\App\Config);
         $config = $this->getContainer()->get('config');
+
+        if (!defined('_ROOTFILE')) {
+            die('You need to define the "_ROOTFILE" constant to run CarteBlanche!');
+        }
+        if (!defined('_ROOTPATH')) {
+            die('You need to define the "_ROOTPATH" constant to run CarteBlanche!');
+        }
 
         spl_autoload_register(array('\CarteBlanche\App\Loader', 'autoload'));
         register_shutdown_function(array($this, 'shutdown'));
@@ -275,47 +279,50 @@ final class Kernel
             ->addPath('carte_blanche_core', realpath(__DIR__.'/../'))
             ;
         if (!$this->isCli()) {
+            if (!defined('_ROOTHTTP')) {
+                self::__getHttpRoot();
+            }
             $this->initConstantPath('_ROOTHTTP', 'root_http');
         }
 
-	    // user config file
-	    $_defconf = false;
-		if (!is_array($config_files)) $config_files = array($config_files);
-		$config_files = array_filter($config_files);
-		if (!empty($config_files)) {
-			foreach($config_files as $cfgf) {
-			    if (substr_count($cfgf, self::CARTE_BLANCHE_CONFIG_FILE)) {
-            	    $_defconf = true;
-			    }
-			}
-		}
-		if (true!==$_defconf) {
-		    $this->__loadDefaultConfig();
-		}
-		if (!empty($config_files)) {
-			foreach($config_files as $cfgf) {
-			    if ( ! file_exists($cfgf)) {
-    			    $cfgf = $this->getPath('root_path').$cfgf;
-			    }
-			    $config->load($cfgf);
-			}
-		}
+        // user config file
+        $_defconf = false;
+        if (!is_array($config_files)) $config_files = array($config_files);
+        $config_files = array_filter($config_files);
+        if (!empty($config_files)) {
+            foreach($config_files as $cfgf) {
+                if (substr_count($cfgf, self::CARTE_BLANCHE_CONFIG_FILE)) {
+                    $_defconf = true;
+                }
+            }
+        }
+        if (true!==$_defconf) {
+            $this->__loadDefaultConfig();
+        }
+        if (!empty($config_files)) {
+            foreach($config_files as $cfgf) {
+                if ( ! file_exists($cfgf)) {
+                    $cfgf = $this->getPath('root_path').$cfgf;
+                }
+                $config->load($cfgf);
+            }
+        }
 
-		// server config
-		if (!empty($_SERVER)) {
-    		foreach ($_SERVER as $_name=>$_conf) {
-    		    if (substr($_name, 0, strlen(self::CARTE_BLANCHE_SERVER_SETTING_PREFIX))===self::CARTE_BLANCHE_SERVER_SETTING_PREFIX) {
-                	$config->set(array(
-                	        str_replace(self::CARTE_BLANCHE_SERVER_SETTING_PREFIX, '', $_name) => $_conf
-                	    ), true, 'server');
-    		    }
-    		}
-		}
+        // server config
+        if (!empty($_SERVER)) {
+            foreach ($_SERVER as $_name=>$_conf) {
+                if (substr($_name, 0, strlen(self::CARTE_BLANCHE_SERVER_SETTING_PREFIX))===self::CARTE_BLANCHE_SERVER_SETTING_PREFIX) {
+                    $config->set(array(
+                            str_replace(self::CARTE_BLANCHE_SERVER_SETTING_PREFIX, '', $_name) => $_conf
+                        ), true, 'server');
+                }
+            }
+        }
 
-		// user config
-		if (!empty($user_config)) {
+        // user config
+        if (!empty($user_config)) {
             $config->set($user_config, true, 'user');
-		}
+        }
 
         // error reporting
         if (!empty($mode_arg)) {
@@ -326,7 +333,7 @@ final class Kernel
         $_f = $this->getPath('root_path').'/composer.json';
         if (file_exists($_f = $this->getPath('root_path').self::CARTE_BLANCHE_MANIFEST)) {
             $manifest = @json_decode(@file_get_contents($_f), true);
-        	$config->set($manifest, false, 'manifest');
+            $config->set($manifest, false, 'manifest');
         }
 
         // application directories
@@ -372,7 +379,7 @@ final class Kernel
             $class_name = isset($base_objects[$type]) ?
                 $base_objects[$type] : '\CarteBlanche\App\\'.ucfirst($type);
             if (class_exists($class_name)) {
-        		$this->getContainer()->set($type, new $class_name);
+                $this->getContainer()->set($type, new $class_name);
             } else {
                 $this->addBootError(
                     sprintf('Required base object type "%s" not found! (searching class "%s")',
@@ -382,15 +389,16 @@ final class Kernel
                 );
             }
         }
-	}
+    }
 
-	/**
-	 * Boot: execute the app bootstrap and creates necessary dirs
-	 *
-	 * @return void
-	 */
-	private function boot()
-	{
+    /**
+     * Boot: execute the app bootstrap and creates necessary dirs
+     *
+     * @return self
+     * @throws  \CarteBlanche\Exception\ErrorException if the Bootstrap file can't be found
+     */
+    private function boot()
+    {
         $config = $this->getContainer()->get('config');
 
         // load php settings
@@ -420,20 +428,20 @@ final class Kernel
         }
 
         // load the app bootstrap
-		if (false===$this->is_booted) {
+        if (false===$this->is_booted) {
             $namespace = $config->get('carte_blanche.app_namespace', 'App');
-			if ($_f = Locator::locateData('bootstrap.php')) {
-				include_once $_f;
-				$bootstrap_class = '\\'.$namespace.'\Bootstrap\ContainerBootstrap';
-				$cont = new $bootstrap_class($this);
-			} else {
-				throw new ErrorException("Bootstrap file can't be found!");
-			}
-		}
+            if ($_f = Locator::locateData('bootstrap.php')) {
+                include_once $_f;
+                $bootstrap_class = '\\'.$namespace.'\Bootstrap\ContainerBootstrap';
+                $cont = new $bootstrap_class($this);
+            } else {
+                throw new ErrorException("Bootstrap file can't be found!");
+            }
+        }
 
-		$this->is_booted=true;
-		return $this;
-	}
+        $this->is_booted=true;
+        return $this;
+    }
 
     /**
      * Application specific shutdown handling
@@ -445,19 +453,19 @@ final class Kernel
         }
     }
 
-	/**
-	 * Defines the request to treat
-	 *
-	 * @param object $request   \CarteBlanche\App\Request
-	 * @return self
-	 */
-	public function handles(Request $request)
-	{
-	    if (!$this->is_booted) {
-    		$this->boot();
-    	}
-	    $this->getContainer()->set('request', $request);
-    	$this->getContainer()->get('router')->setUrl($request->buildUrl());
+    /**
+     * Defines the request to treat
+     *
+     * @param   \CarteBlanche\App\Request   $request
+     * @return  self
+     */
+    public function handles(Request $request)
+    {
+        if (!$this->is_booted) {
+            $this->boot();
+        }
+        $this->getContainer()->set('request', $request);
+        $this->getContainer()->get('router')->setUrl($request->buildUrl());
         $mode_data = $this->getMode(true);
         if (isset($mode_data['log_requests']) && $mode_data['log_requests']) {
             \CarteBlanche\CarteBlanche::log(
@@ -465,29 +473,29 @@ final class Kernel
                 \Library\Logger::INFO
             );
         }
-	    return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Distributes the application actions, controllers and views
-	 *
-	 * If no request is defined yet, this will handle current HTTP request if so.
-	 *
-	 * @return string|void
-	 * @see \CarteBlanche\App\FrontController::distribute()
-	 */
-	public function distribute()
-	{
-	    if (!$this->is_booted) {
-    		$this->boot();
-    	}
-    	$req = $this->getContainer()->get('request');
-    	if (empty($req)) {
-    	    $this->handles(new Request);
-    	}
-	    return $this->getContainer()->get('front_controller')
-	            ->distribute();
-	}
+    /**
+     * Distributes the application actions, controllers and views
+     *
+     * If no request is defined yet, this will handle current HTTP request if so.
+     *
+     * @return string|void
+     * @see \CarteBlanche\App\FrontController::distribute()
+     */
+    public function distribute()
+    {
+        if (!$this->is_booted) {
+            $this->boot();
+        }
+        $req = $this->getContainer()->get('request');
+        if (empty($req)) {
+            $this->handles(new Request);
+        }
+        return $this->getContainer()->get('front_controller')
+                ->distribute();
+    }
 
     /**
      * Load a new bundle namespace and map it to its path
@@ -506,45 +514,45 @@ final class Kernel
 // Setters / Getters
 // ------------------------
 
-	/**
-	 * Get the current kernel mode or mode configuration settings
-	 *
-	 * @param bool $data    Get the configuration data (`true`) or just the mode name (default)
-	 * @return string
-	 */
+    /**
+     * Get the current kernel mode or mode configuration settings
+     *
+     * @param bool $data    Get the configuration data (`true`) or just the mode name (default)
+     * @return string
+     */
     public function getMode($data = false)
     {
         return true===$data ? $this->mode_data : $this->mode;
     }
 
-	/**
-	 * Define the current kernel debug mode
-	 *
-	 * @param bool|string $debug
-	 * @return self
-	 */
+    /**
+     * Define the current kernel debug mode
+     *
+     * @param bool|string $debug
+     * @return self
+     */
     public function setDebug($debug)
     {
         $this->is_debug = (Boolean) $debug;
         return $this;
     }
 
-	/**
-	 * Get the current kernel debug mode
-	 *
-	 * @return bool
-	 */
+    /**
+     * Get the current kernel debug mode
+     *
+     * @return bool
+     */
     public function getDebug()
     {
         return (Boolean) $this->is_debug;
     }
 
-	/**
-	 * Add a booting error
-	 *
-	 * @param string $string
-	 * @return self
-	 */
+    /**
+     * Add a booting error
+     *
+     * @param string $string
+     * @return self
+     */
     public function addBootError($string)
     {
         $this->boot_errors[] = $string;
@@ -556,49 +564,49 @@ final class Kernel
         return $this;
     }
 
-	/**
-	 * Test if current kernel has booting errors
-	 *
-	 * @return bool
-	 */
+    /**
+     * Test if current kernel has booting errors
+     *
+     * @return bool
+     */
     public function hasBootErrors()
     {
         return !empty($this->boot_errors);
     }
 
-	/**
-	 * Get the booting errors stack
-	 *
-	 * @return array
-	 */
+    /**
+     * Get the booting errors stack
+     *
+     * @return array
+     */
     public function getBootErrors()
     {
         return $this->boot_errors;
     }
 
-	/**
-	 * Get the global \CarteBlanche\App\Container object
-	 *
-	 * @return \CarteBlanche\App\Container
-	 */
-	public function getContainer()
-	{
-		return Container::getInstance();
-	}
+    /**
+     * Get the global \CarteBlanche\App\Container object
+     *
+     * @return \CarteBlanche\App\Container
+     */
+    public function getContainer()
+    {
+        return Container::getInstance();
+    }
 
-	/**
-	 * Initialize a path from a constant
-	 *
-	 * @param string $cst               A constant name
-	 * @param string $path_ref          The path reference
-	 * @param bool $must_exists         Check if concerned path exists
-	 * @param bool $must_be_writable    Check if concerned path is writable
-	 * @return self
-	 *
-	 * @throws ErrorException if the constant is not defined
-	 */
-	public function initConstantPath($cst, $path_ref, $must_exists = false, $must_be_writable = false)
-	{
+    /**
+     * Initialize a path from a constant
+     *
+     * @param string $cst               A constant name
+     * @param string $path_ref          The path reference
+     * @param bool $must_exists         Check if concerned path exists
+     * @param bool $must_be_writable    Check if concerned path is writable
+     * @return self
+     *
+     * @throws ErrorException if the constant is not defined
+     */
+    public function initConstantPath($cst, $path_ref, $must_exists = false, $must_be_writable = false)
+    {
         if (defined($cst)) {
             $this->addPath($path_ref, constant($cst), $must_exists, $must_be_writable);
         } else {
@@ -607,23 +615,23 @@ final class Kernel
             );
         }
         return $this;
-	}
+    }
 
-	/**
-	 * References a path value
-	 *
-	 * @param string $name              The path reference
-	 * @param string $value             The path value
-	 * @param bool $must_exists         Check if concerned path exists
-	 * @param bool $must_be_writable    Check if concerned path is writable
-	 * @return self
-	 *
-	 * @throws RuntimeException if the path does not exists and `$must_exists` is true
-	 * @throws ErrorException if the concerned path is not writable while it was required
-	 */
+    /**
+     * References a path value
+     *
+     * @param string $name              The path reference
+     * @param string $value             The path value
+     * @param bool $must_exists         Check if concerned path exists
+     * @param bool $must_be_writable    Check if concerned path is writable
+     * @return self
+     *
+     * @throws RuntimeException if the path does not exists and `$must_exists` is true
+     * @throws ErrorException if the concerned path is not writable while it was required
+     */
     public function addPath($name, $value, $must_exists = false, $must_be_writable = false)
     {
-	    $config = $this->getContainer()->get('config');
+        $config = $this->getContainer()->get('config');
         if ($must_exists) {
             $realpath = $this->getAbsolutePath($value);
             if (!empty($realpath)) {
@@ -643,7 +651,7 @@ final class Kernel
             }
         }
         if ($must_be_writable && !is_writable($value)) {
-	        $this->addBootError(
+           $this->addBootError(
                 sprintf('Directory "%s" must be writable! (%s)', $value, $name)
             );
 /*
@@ -652,22 +660,23 @@ final class Kernel
             );
 */
         }
-        $config->getRegistry()->loadStack('paths');
-        $config->getRegistry()->setEntry($name, $value);
-        $config->getRegistry()->saveStack('paths', true);
+        $config->getRegistry()
+            ->loadStack('paths')
+            ->setEntry($name, $value)
+            ->saveStack('paths', true);
         return $this;
     }
 
-	/**
-	 * Get a path value
-	 *
-	 * @param   string    $name       The path reference
-	 * @param   bool      $full_path  Must return an absolute path or not (default)
-	 * @return  string|null
-	 */
+    /**
+     * Get a path value
+     *
+     * @param   string    $name       The path reference
+     * @param   bool      $full_path  Must return an absolute path or not (default)
+     * @return  string|null
+     */
     public function getPath($name, $full_path = false)
     {
-	    $config = $this->getContainer()->get('config');
+        $config = $this->getContainer()->get('config');
         $path = $config->getRegistry()->getStackEntry($name, null, 'paths');
         if (file_exists($path) && is_dir($path)) {
             $path = DirectoryHelper::slashDirname($path);
@@ -678,12 +687,12 @@ final class Kernel
         return $path;
     }
 
-	/**
-	 * Build an app absolute path
-	 *
-	 * @param   string    $path       The relative path to build
-	 * @return  string|null
-	 */
+    /**
+     * Build an app absolute path
+     *
+     * @param   string    $path       The relative path to build
+     * @return  string|null
+     */
     public function getAbsolutePath($path)
     {
         $root = $this->getPath('root_path');
@@ -699,18 +708,18 @@ final class Kernel
         return file_exists($path) ? DirectoryHelper::slashDirname(realpath($path)) : null;
     }
 
-	/**
-	 * Define if current kernel must launch its `shutdown` steps
-	 *
-	 * @param bool $bool
-	 * @return self
-	 */
-	public function setShutdown($bool = false)
-	{
-        $this->is_shutdown = $bool;
+    /**
+     * Define if current kernel must launch its `shutdown` steps
+     *
+     * @param   bool    $bool
+     * @return  self
+     */
+    public function setShutdown($bool = false)
+    {
+        $this->is_shutdown = (Boolean) $bool;
         return $this;
-	}
-	
+    }
+
 // ------------------------
 // Utilities
 // ------------------------
@@ -734,33 +743,33 @@ final class Kernel
      */
     public function isCli()
     {
-        return (strtolower(php_sapi_name()) == 'cli');
+        return (strpos(strtolower(php_sapi_name()),'cli')!==false);
     }
 
 // ------------------------
 // Private Setters / Getters
 // ------------------------
 
-	/**
-	 * Define the current kernel mode
-	 *
-	 * Launch settings according to the MODE config entry
-	 *
-	 * @param string $mode
-	 * @return void
-	 */
-	private function __setMode($mode = 'dev')
-	{
+    /**
+     * Define the current kernel mode
+     *
+     * Launch settings according to the MODE config entry
+     *
+     * @param string $mode
+     * @return self
+     */
+    private function __setMode($mode = 'dev')
+    {
         $config = $this->getContainer()->get('config');
-		$mode_data = $config->get('carte_blanche.modes', array(), 'app');		
+        $mode_data = $config->get('carte_blanche.modes', array(), 'app');
 
-		if (array_key_exists($mode, $mode_data)) {
-    		$this->mode = strtolower($mode);
-    	} else {
-    		$this->mode = isset($mode_data['default']) ? strtolower($mode_data['default']) : 'dev';
-    	}
+        if (array_key_exists($mode, $mode_data)) {
+            $this->mode = strtolower($mode);
+        } else {
+            $this->mode = isset($mode_data['default']) ? strtolower($mode_data['default']) : 'dev';
+        }
 
-    	if (isset($mode_data[$this->mode])) {
+        if (isset($mode_data[$this->mode])) {
             $this->mode_data = $mode_data[$this->mode];
             if (isset($this->mode_data['display_errors'])) {
                 @ini_set('display_errors',$this->mode_data['display_errors']);
@@ -773,10 +782,15 @@ final class Kernel
             } else {
                 $this->setDebug(false);
             }
-    	}
+        }
         return $this;
-	}
+    }
 
+    /**
+     * Load the default configuration file
+     *
+     * @throws \CarteBlanche\Exception\ErrorException
+     */
     private function __loadDefaultConfig()
     {
         $app_cfgfile = __DIR__.'/../../../config/'.self::CARTE_BLANCHE_CONFIG_FILE;
@@ -787,7 +801,26 @@ final class Kernel
         }
         $this->getContainer()->get('config')->load($app_cfgfile);
     }
-    
+
+    /**
+     * Retrieve the base URL to use to construct the application routes (found from the current domain and path URL)
+     */
+    private function __getHttpRoot()
+    {
+        if (!defined('_ROOTHTTP')) {
+            $_roothttp = '';
+            if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
+                $_roothttp = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS'])!='off') ? 'https://' : 'http://';
+                $_roothttp .= $_SERVER['HTTP_HOST'];
+            }
+            if (isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])) {
+                $_roothttp .= str_replace( '\\', '/', dirname($_SERVER['PHP_SELF']));
+            }
+            if (strlen($_roothttp)>0 && substr($_roothttp, -1) != '/') $_roothttp .= '/';
+            define('_ROOTHTTP', $_roothttp);
+        }
+    }
+
 }
 
 // Endfile
