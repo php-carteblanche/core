@@ -71,16 +71,6 @@ class CarteBlanche
     }
 
     /**
-     * @param   string  $config
-     * @alias   \CarteBlanche\App\Kernel::getMode($config)
-     */
-    public static function getKernelMode($config = 'dev')
-    {
-        return self::getContainer()->get('kernel')
-            ->getMode($config);
-    }
-
-    /**
      * @alias \CarteBlanche\App\Logger::log()
      */
     public static function log($message, $level = \Library\Logger::DEBUG, array $context = array(), $logname = null)
@@ -102,11 +92,13 @@ class CarteBlanche
     }
 
     /**
-     * @alias \CarteBlanche\App\Kernel::getMode($config)
+     * @param   string  $config
+     * @alias   \CarteBlanche\App\Kernel::getMode($config)
      */
     public static function getKernelMode($config = 'dev')
     {
-        return \CarteBlanche\App\Container::getInstance()->get('kernel')->getMode($config);
+        return self::getContainer()->get('kernel')
+            ->getMode($config);
     }
 
     /**
