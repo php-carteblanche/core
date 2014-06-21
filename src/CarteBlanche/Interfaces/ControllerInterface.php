@@ -15,7 +15,7 @@ namespace CarteBlanche\Interfaces;
 /**
  * Any controller must implement this interface.
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 interface ControllerInterface
 {

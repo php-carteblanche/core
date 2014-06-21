@@ -21,7 +21,7 @@ use \CarteBlanche\Library\StorageEngine\DatabaseDriver\DatabaseDriverInterface;
  *
  * SQLite DataBase driver
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author 		Piero Wbmstr <me@e-piwi.fr>
  */
 class SqliteDriver
     extends AbstractDatabaseDriver

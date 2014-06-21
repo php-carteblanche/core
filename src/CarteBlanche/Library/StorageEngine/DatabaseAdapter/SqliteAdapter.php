@@ -23,7 +23,7 @@ use \Library\Helper\Directory as DirectoryHelper;
  *
  * SQLite DataBase driver
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author 		Piero Wbmstr <me@e-piwi.fr>
  */
 class SqliteAdapter extends AbstractDatabaseAdapter implements DatabaseAdapterInterface
 {

@@ -27,7 +27,7 @@ use \Library\Helper\Text as TextHelper;
  * -   `indexAction()` : the "home" view of the controller,
  * -   `emptyAction()` : a special method for an empty application (not yet installed)
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 abstract class AbstractControllerConfigurable
     extends AbstractController

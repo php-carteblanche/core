@@ -18,7 +18,7 @@ use \CarteBlanche\Interfaces\EntityManagerInterface;
 use \Library\Helper\Text as TextHelper;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author 		Piero Wbmstr <me@e-piwi.fr>
  */
 class EntityManager implements EntityManagerInterface
 {

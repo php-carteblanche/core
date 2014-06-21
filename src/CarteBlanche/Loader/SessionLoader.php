@@ -16,7 +16,7 @@ use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class SessionLoader implements DependencyLoaderInterface
 {

@@ -16,11 +16,12 @@ use \CarteBlanche\CarteBlanche;
 use \CarteBlanche\App\Loader;
 use \CarteBlanche\App\Locator;
 use \CarteBlanche\Exception\ErrorException;
+use \Library\Helper\Directory as DirectoryHelper;
 
 /**
  * The global bundle object
  *
- * @author      Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author      Piero Wbmstr <me@e-piwi.fr>
  */
 class Bundle
 {
@@ -75,14 +76,14 @@ class Bundle
     protected function init()
     {
         $_bundle_fname = $this->getNamespace().'Bundle';
-        $_bundle_f = rtrim($this->getDirectory(), '/').'/'.$_bundle_fname;
+        $_bundle_f = DirectoryHelper::slashDirname($this->getDirectory()).$_bundle_fname;
         if (@file_exists($_bundle_f.'.php')) {
             $cls_name = '\\'.$this->getNamespace().'\\'.$_bundle_fname;
             $this->instance = new $cls_name;
         } else {
             $_bundle_fname = $this->getNamespace().'Bundle';
-            $_bundle_f = rtrim($this->getDirectory(), '/') . '/' 
-                . rtrim($this->getNamespace(), '/') . '/' 
+            $_bundle_f = DirectoryHelper::slashDirname($this->getDirectory())
+                . DirectoryHelper::slashDirname($this->getNamespace())
                 . $_bundle_fname;
             if (@file_exists($_bundle_f.'.php')) {
                 $cls_name = '\\'.$this->getNamespace().'\\'.$_bundle_fname;

@@ -12,7 +12,7 @@ The very global schema of the life cycle of CarteBlanche is basically:
 
     Request => [CarteBlanche] => Response
 
-The `Request` is most of the time an TCP/IP request (but not always, like in command line usage).
+The `Request` is most of the time a TCP/IP request (but not always, like in command line usage).
 The `Response` is most of the time an HTTP formated content (but not always, like for RSS).
 
 
@@ -30,8 +30,10 @@ it the current request arguments. This method will most of the time construct a 
 response. Finally, the response will be fetched to the client by the front controller.
 
 Anything but the `Kernel` itself and the `Container` is considered as a service and
-is handled and accessible by the `Container`. All services are configurable and can be
-overridden using any object implementing the required interface.
+is handled and accessible via the `Container`. All services are configurable and can be
+overridden using any object implementing the required interface. These interfaces are defined
+in the `Kernel` itself and you can visualize them browsing to `/dev.php?c=dev&a=cb_config` on
+an installed CarteBlanche.
 
 
 

@@ -17,7 +17,7 @@ use \CarteBlanche\App\Kernel;
 /**
  * Any database driver must extend this abstract class
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author 		Piero Wbmstr <me@e-piwi.fr>
  */
 abstract class AbstractDatabaseAdapter
 {

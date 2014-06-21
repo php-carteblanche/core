@@ -28,9 +28,9 @@ class Debugger
     protected static $shutdown=false;
 
     /**
-     * @param bool $exit
-     * @param null $callback
-     * @return bool
+     * @param   bool    $exit
+     * @param   null    $callback
+     * @return  bool
      */
     public static function shutdown( $exit=false, $callback=null )
     {

@@ -22,7 +22,7 @@ use \Library\Helper\Directory as DirectoryHelper;
  *
  * For compliance, this class implements the [PSR Logger Interface](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md).
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class Logger
     extends BaseLogger

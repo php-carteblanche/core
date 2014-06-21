@@ -22,7 +22,7 @@ use \CarteBlanche\Exception\InvalidArgumentException;
 /**
  * This is the configuration manager of CarteBlanche
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class Config
     implements ConfigInterface
@@ -105,15 +105,15 @@ class Config
     /**
      * Parse and set a configuration array
      *
-     * @param array $config
-     * @param bool $merge_globals
-     * @param null|string $stack_name
-     * @return self|array Returns the parsed array if `$merge_globals` is false, the config object otherwise
+     * @param   array       $config
+     * @param   bool        $merge_globals
+     * @param   null/string $stack_name
+     * @return  self/array  Returns the parsed array if `$merge_globals` is false, the config object otherwise
      */
     public function set(array $config, $merge_globals = true, $stack_name = null)
     {
         if (!empty($config)) {
-            $config = $this->buildConfigStack($config);
+            $config = $this->_buildConfigStack($config);
             if (!empty($stack_name)) {
                 $this->getRegistry()->loadStack($stack_name);
             }
@@ -188,11 +188,11 @@ class Config
                 }
             }
             if (!empty($tmp_conf)) {
-                $value = $this->parseConfig($tmp_conf, $stack_name);
+                $value = $this->_parseConfig($tmp_conf, $stack_name);
             }
         } else {
             if (array_key_exists($index, $config)) {
-                $value = $this->parseConfig($config[$index], $stack_name);
+                $value = $this->_parseConfig($config[$index], $stack_name);
             }
         }
 
@@ -201,7 +201,7 @@ class Config
                 return $default;
             } else {
                 throw new InvalidArgumentException(
-                    sprintf('Unknonwn configuration entry "%s"!', $index)
+                    sprintf('Unknown configuration entry "%s"!', $index)
                 );
             }
         } else {
@@ -298,12 +298,12 @@ class Config
      * @param   array   $config_array
      * @return  array
      */
-    protected function buildConfigStack(array $config_array)
+    protected function _buildConfigStack(array $config_array)
     {
         $config = array();
         foreach ($config_array as $index=>$val) {
-            $index = $this->slugify($index);
-            $val = $this->treatValue($val);
+            $index = $this->_slugify($index);
+            $val = $this->_treatValue($val);
 
             if (strpos($index, self::$depth_separator_char)!==false) {
                 $depth_index = explode(self::$depth_separator_char, $index);
@@ -322,7 +322,7 @@ class Config
                 if (is_array($val)) {
                     foreach ($val as $val_index=>$val_val) {
                         if (strpos($val_index, self::$depth_separator_char)!==false) {
-                            $val = $this->buildConfigStack($val);
+                            $val = $this->_buildConfigStack($val);
                         }
                     }
                 }
@@ -338,7 +338,7 @@ class Config
      * @param   string  $index
      * @return  string
      */
-    protected function slugify($index)
+    protected function _slugify($index)
     {
         $index = utf8_encode(strtolower($index));
         $index = str_replace(self::$slugify_stripped_chars, self::$slugify_replacement_char, $index);
@@ -355,12 +355,12 @@ class Config
      * @param   mixed   $value
      * @return  mixed
      */
-    protected function treatValue($value)
+    protected function _treatValue($value)
     {
         if (is_array($value)) {
             $values = array();
             foreach ($value as $j=>$v) {
-                $values[$j] = $this->treatValue($v);
+                $values[$j] = $this->_treatValue($v);
             }
         }
         if (is_string($value) && (
@@ -390,12 +390,12 @@ class Config
      * @param   string  $stack_name
      * @return  mixed
      */
-    protected function parseConfig($conf, $stack_name = 'global')
+    protected function _parseConfig($conf, $stack_name = 'global')
     {
         if (is_string($conf)) {
-            $this->parseConfigRecursive($conf, null, $stack_name);
+            $this->_parseConfigRecursive($conf, null, $stack_name);
         } elseif (is_array($conf)) {
-            array_walk_recursive($conf, array($this, 'parseConfigRecursive'), $stack_name);
+            array_walk_recursive($conf, array($this, '_parseConfigRecursive'), $stack_name);
             $conf = array_filter($conf);
         }
         return $conf;
@@ -409,7 +409,7 @@ class Config
      * @param   string      $stack_name
      * @return  void        As the value is set by reference, nothing is returned but the original array is modified
      */
-    protected function parseConfigRecursive(&$value, $key = null, $stack_name = 'global')
+    protected function _parseConfigRecursive(&$value, $key = null, $stack_name = 'global')
     {
         if (!is_string($value)) return;
 

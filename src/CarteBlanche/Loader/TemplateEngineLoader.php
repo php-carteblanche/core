@@ -17,7 +17,7 @@ use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 use \Library\Helper\Directory as DirectoryHelper;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class TemplateEngineLoader implements DependencyLoaderInterface
 {

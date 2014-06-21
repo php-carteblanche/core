@@ -22,7 +22,7 @@ The rendering is integrated in a ready-to-use (but very simple) global template 
 
 ### Installation
 
-The package to install is [carteblanche/carteblanche](https://github.com/php-carteblanche/carteblanche).
+The package to install is [carte-blanche/carte-blanche](https://github.com/php-carteblanche/carteblanche).
 
 Once you have downloaded or cloned the package sources, the installation is quite simple. It requires
 [Composer](http://getcomposer.org/) to install its dependencies. Please see the "Dependencies" section
@@ -55,7 +55,7 @@ Installation steps:
 ### Usage
 
 As in many other frameworks, the PHP and binary sources are separated from the assets, web
-accessible stuffs. Basically, all the web files (javascripts, css, images and other assets)
+accessible stuff. Basically, all the web files (javascripts, css, images and other assets)
 are stored in the `www/` sub-directory. All other files may NOT be web-accessible. The PHP
 sources are mostly stored in the `src/` sub-directory.
 
@@ -63,7 +63,7 @@ To access the framework's controller from a web-browser, just load the `index.ph
 file from the `www/` directory of CarteBlanche. A development version of this controller is
 predefined and accessible loading the `dev.php` file instead of `index.php`.
 
-A terminal controller is also defined, for CLI use only, that you can access running the command:
+A terminal controller is also defined, for command line usage only, you can access running:
 
     ~$ php bin/console
 

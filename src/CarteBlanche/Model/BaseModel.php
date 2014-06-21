@@ -26,7 +26,7 @@ use \CarteBlanche\Library\AutoObject\DataCallback;
  * Basic model extending the CRUD abstract class
  * This class is a sort of canva used to create a CRUD model on the fly for each table.
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class BaseModel
     extends AbstractCrud

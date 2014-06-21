@@ -18,7 +18,7 @@ use \CarteBlanche\Abstracts\AbstractControllerCarteBlancheDefault;
 /**
  * The default application controller
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author 		Piero Wbmstr <me@e-piwi.fr>
  */
 class DefaultController
     extends AbstractControllerCarteBlancheDefault

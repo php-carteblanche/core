@@ -22,7 +22,7 @@ use \RuntimeException as BaseException;
  * All exceptions are written in the logs (by default in the "error.log" file)
  * except if `app.modes._APP_MODE.log_errors=false`
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class RuntimeException
     extends BaseException

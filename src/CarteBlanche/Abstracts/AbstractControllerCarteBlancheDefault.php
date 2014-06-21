@@ -20,7 +20,7 @@ use \CarteBlanche\Interfaces\ControllerInterface;
  *
  * Any ditributed controller must extend this class.
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 abstract class AbstractControllerCarteBlancheDefault
     extends AbstractController

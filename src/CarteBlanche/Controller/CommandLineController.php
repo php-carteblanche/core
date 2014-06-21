@@ -22,7 +22,7 @@ use \Library\CommandLine\Stream;
 /**
  * Default controller for command line operations
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class CommandLineController
     extends AbstractCommandLineController

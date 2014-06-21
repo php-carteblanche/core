@@ -16,7 +16,7 @@ use \CarteBlanche\Interfaces\ConfigFiletypeInterface;
 use \Library\Converter\Xml2Array;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class XmlFiletype implements ConfigFiletypeInterface
 {

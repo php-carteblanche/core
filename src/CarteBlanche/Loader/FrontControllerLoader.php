@@ -17,7 +17,7 @@ use \CarteBlanche\App\Kernel;
 use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class FrontControllerLoader implements DependencyLoaderInterface
 {

@@ -17,7 +17,7 @@ use \CarteBlanche\CarteBlanche;
 /**
  * The global Cache class
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author 		Piero Wbmstr <me@e-piwi.fr>
  */
 class Cache 
 {

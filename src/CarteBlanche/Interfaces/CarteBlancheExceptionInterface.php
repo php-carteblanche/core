@@ -13,7 +13,7 @@
 namespace CarteBlanche\Interfaces;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 interface CarteBlancheExceptionInterface
 {

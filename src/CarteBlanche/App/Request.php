@@ -23,8 +23,9 @@ use \Library\Helper\Url as UrlHelper;
  *
  * This is the global request instance of the application
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
- * @todo Transform GET and POST to get the real user value and pass them thru XSSclean
+ * @author  Piero Wbmstr <me@e-piwi.fr>
+ *
+ * @todo    Transform GET and POST to get the real user value and pass them thru XSSclean
  */
 class Request
     extends BaseRequest

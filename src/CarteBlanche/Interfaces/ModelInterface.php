@@ -17,7 +17,7 @@ namespace CarteBlanche\Interfaces;
  *
  * Any model must implements this interface, of follow its constructor's rules
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 interface ModelInterface
 {

@@ -22,7 +22,7 @@ use \Patterns\Interfaces\RouterInterface;
 use \Patterns\Commons\Collection;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class Router
     extends BaseRouter

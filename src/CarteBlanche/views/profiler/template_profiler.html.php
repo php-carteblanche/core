@@ -290,7 +290,9 @@ echo
                 <ul id="<?php _getid('debug_tabs'); ?>" class="tabs tab-list">
 <?php foreach ($debug->getStacks() as $_i=>$_stack) : ?>
 <?php if ($_stack->getType()!='message') : ?>
-                    <li class="tab-handler"><a href="#<?php echo $_i; ?>"><?php echo $_stack->getTitle(); ?></a></li>
+                    <li class="tab-handler"><a href="#<?php echo $_i; ?>"><?php
+                            echo str_replace(array('PHP ', ' Object Dump'), '', $_stack->getTitle());
+                    ?></a></li>
 <?php endif; ?>
 <?php endforeach; ?>
                 </ul>

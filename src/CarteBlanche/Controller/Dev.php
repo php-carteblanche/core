@@ -30,7 +30,7 @@ use \CarteBlanche\Exception\UnexpectedValueException;
 /**
  * Default dvelopment controller extending abstract \CarteBlanche\Abstracts\AbstractController class
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class Dev extends AbstractController
 {
@@ -327,7 +327,7 @@ exit('yo');
         $ctt .= '<br />Tous les arguments reçus: '.var_export(func_get_args(),1);
 
 /*
-     $to      = 'piwi@ateliers-pierrot.fr';
+     $to      = 'me@e-piwi.fr';
      $subject = 'le sujet';
      $message = 'Bonjour !';
      $headers = 'From: webmaster@example.com' . "\r\n" .
@@ -391,12 +391,12 @@ $mailchimp
 	->parse();
 
 		$file = _ROOTPATH.'CHANGELOG.md';
-//		$mail = new \MimeEmail\Lib\MimeEmail('Piero', 'piwi@ateliers-pierrot.fr', 'pierre.cassat@gmail.com', 'Mail de test', $txt_message_iso);
-//		$mail = new \MimeEmail\Lib\MimeEmail('Piero', 'piwi@ateliers-pierrot.fr', null, 'Mail de test', $txt_message_iso);
+//		$mail = new \MimeEmail\Lib\MimeEmail('Piero', 'me@e-piwi.fr', 'pierre.cassat@gmail.com', 'Mail de test', $txt_message_iso);
+//		$mail = new \MimeEmail\Lib\MimeEmail('Piero', 'me@e-piwi.fr', null, 'Mail de test', $txt_message_iso);
 		$mail = new \MimeEmail\Lib\MimeEmail();
 
 		$mail
-			->setTo('piwi@ateliers-pierrot.fr', 'PieroWbmstr')
+			->setTo('me@e-piwi.fr', 'PieroWbmstr')
 			->setFrom( 'pierre.cassat@gmail.com', 'Piero' )
 //			->setCc( array( 'Piero'=>'pierre.cassat@gmail.com' ) )
 //			->setCc( array( 'Piero'=>'pierre.cassat@gmail.com', 'oim'=>'oim@gmail.com' ) )

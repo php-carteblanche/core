@@ -30,7 +30,7 @@ use \CarteBlanche\Exception\InvalidArgumentException;
  * The Container is callable from any script as long as the Kernel had been created.
  * It contains and manages every dependencies objects.
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 final class Container
     extends AbstractSingleton
@@ -38,9 +38,7 @@ final class Container
 {
 
     /**
-     * The instances registry
-     *
-     * @var \Patterns\Commons\Registry
+     * @var \Patterns\Commons\Registry  The instances registry
      */
     protected $instances;
 
@@ -55,9 +53,8 @@ final class Container
     /**
      * Global getter
      *
-     * @param string $name The variable name to get
-     *
-     * @return object The value of the registry variable
+     * @param   string  $name   The variable name to get
+     * @return  object  The value of the registry variable
      */
     public function get($name)
     {
@@ -152,8 +149,8 @@ final class Container
     /**
      * Clear a container entry
      *
-     * @param string $name The variable name to set
-     * @return bool
+     * @param   string  $name   The variable name to set
+     * @return  bool
      */
     public function clear($name)
     {
@@ -211,7 +208,7 @@ final class Container
     /**
      * Clear a container bundle entry
      *
-     * @param string $name The bundle name to unset
+     * @param   string  $name   The bundle name to unset
      */
     public function clearBundle($name)
     {
@@ -223,8 +220,8 @@ final class Container
     /**
      * Sets a logger instance on the object
      *
-     * @param LoggerInterface $logger
-     * @return null
+     * @param   LoggerInterface     $logger
+     * @return  null
      */
     public function setLogger(LoggerInterface $logger)
     {

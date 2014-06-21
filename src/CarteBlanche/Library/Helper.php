@@ -54,9 +54,6 @@ class Helper
 
     public static function getDirectorySize($path)
     {
-        $docbook = CarteBlanche::getContainer()->get('front_controller');
-        CarteBlanche::getContainer()->get('front_controller');
-
         $du_cmd = Command::getCommandPath('du');
         $grep_cmd = Command::getCommandPath('grep');
         $command = $du_cmd.' -cLak '.$path.' | '.$grep_cmd.' total';
@@ -71,19 +68,19 @@ class Helper
 
     public static function getProfiler()
     {
-        $docbook = CarteBlanche::getContainer()->get('front_controller');
         return array(
             'date'              => new DateTime(),
             'timezone'          => date_default_timezone_get(),
-			'php_uname'         => php_uname(),
-			'php_version'       => phpversion(),
-			'php_sapi_name'     => php_sapi_name(),
-            'sqlite_version'    => function_exists('sqlite_libversion') ? sqlite_libversion() : (class_exists('SQLite3') ? \SQLite3::version() : null),
-			'server_version'    => 
-			    function_exists('apache_get_version') ? apache_get_version() : null,
-			'user_agent'        => $_SERVER['HTTP_USER_AGENT'],
-			'git_clone'         => DirectoryHelper::isGitClone(CarteBlanche::getPath('root_path')),
-			'request'           => UrlHelper::getRequestUrl(),
+            'php_uname'         => php_uname(),
+            'php_version'       => phpversion(),
+            'php_sapi_name'     => php_sapi_name(),
+            'sqlite_version'    => function_exists('sqlite_libversion') ?
+                sqlite_libversion() : (class_exists('SQLite3') ? \SQLite3::version() : null),
+            'server_version'    =>
+                function_exists('apache_get_version') ? apache_get_version() : null,
+            'user_agent'        => $_SERVER['HTTP_USER_AGENT'],
+            'git_clone'         => DirectoryHelper::isGitClone(CarteBlanche::getPath('root_path')),
+            'request'           => UrlHelper::getRequestUrl(),
         );
     }
 

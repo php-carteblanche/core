@@ -49,7 +49,7 @@ use \CarteBlanche\App\FrontController;
  *
  *     throw new InternalServerErrorException("message !");
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 abstract class AbstractController
     implements ControllerInterface

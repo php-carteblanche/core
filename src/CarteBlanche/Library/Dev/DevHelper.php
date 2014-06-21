@@ -15,7 +15,7 @@ namespace CarteBlanche\Library\Dev;
 use \CarteBlanche\CarteBlanche;
 
 /**
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author 		Piero Wbmstr <me@e-piwi.fr>
  */
 class DevHelper
 {

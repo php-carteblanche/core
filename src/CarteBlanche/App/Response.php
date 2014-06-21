@@ -21,7 +21,7 @@ use \Patterns\Interfaces\ResponseInterface;
  *
  * This is the global response of the application
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class Response
     extends BaseResponse

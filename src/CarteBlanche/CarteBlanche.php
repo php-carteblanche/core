@@ -13,7 +13,7 @@
 namespace CarteBlanche;
 
 /**
- * @author      Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author      Piero Wbmstr <me@e-piwi.fr>
  */
 class CarteBlanche
 {

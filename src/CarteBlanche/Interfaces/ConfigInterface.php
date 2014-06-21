@@ -15,7 +15,7 @@ namespace CarteBlanche\Interfaces;
 /**
  * This is the classic CarteBlanche's configuration interface
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author      Piero Wbmstr <me@e-piwi.fr>
  */
 interface ConfigInterface
 {
@@ -23,36 +23,36 @@ interface ConfigInterface
     /**
      * Load and parse a configuration file
      *
-     * @param string $filename
-     * @param bool $merge_globals
-     * @param null|string $stack_name
-     * @param null|string $handler A classname to parse concerned config content
+     * @param   string          $filename
+     * @param   bool            $merge_globals
+     * @param   null/string     $stack_name
+     * @param   null/string     $handler    A classname to parse concerned config content
      */
     public function load($filename, $merge_globals = true, $stack_name = null, $handler = null);
 
     /**
      * Parse and set a configuration array
      *
-     * @param array $config
-     * @param bool $merge_globals
-     * @param null|string $stack_name
+     * @param   array           $config
+     * @param   bool            $merge_globals
+     * @param   null|string     $stack_name
      */
     public function set(array $config, $merge_globals = true, $stack_name = null);
 
-	/**
-	 * Get a configuration stack or entry
-	 *
-	 * @param string $index
-	 * @param int $flag
-	 * @param null|misc $default
-	 * @param string $stack_name
-	 */
-	public function get($index, $flag = self::NOT_FOUND_GRACEFULLY, $default = null, $stack_name = 'global');
+    /**
+     * Get a configuration stack or entry
+     *
+     * @param   string      $index
+     * @param   int         $flag
+     * @param   null/mixed  $default
+     * @param   string      $stack_name
+     */
+    public function get($index, $flag = self::NOT_FOUND_GRACEFULLY, $default = null, $stack_name = 'global');
 
     /**
      * Get the full configuration array
      *
-     * @return array
+     * @return  array
      */
     public function dump();
 

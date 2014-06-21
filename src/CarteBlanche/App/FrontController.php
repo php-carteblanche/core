@@ -24,7 +24,7 @@ use \Library\Helper\Directory as DirectoryHelper;
 use \Library\Helper\Code as CodeHelper;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class FrontController
     extends AbstractSingleton
@@ -151,8 +151,8 @@ class FrontController
     public function distribute()
     {
         $this
-            ->processSessionValues()
-            ->processQueryArguments()
+            ->_processSessionValues()
+            ->_processQueryArguments()
             ;
 
         // if kernerl has booting errors, treat them first
@@ -223,11 +223,8 @@ class FrontController
         $_ctrl = CarteBlanche::getContainer()
             ->get('locator')->locateController($controller_classname);
         if (!empty($_ctrl) && class_exists($_ctrl)) {
-            $ctrl = new $_ctrl(CarteBlanche::getContainer());
-
             $this
-                ->setControllerName($_ctrl);
-            $this
+                ->setControllerName($_ctrl)
                 ->setController(new $_ctrl(CarteBlanche::getContainer()));
         } else {
             throw new NotFoundException(
@@ -422,53 +419,58 @@ class FrontController
     /**
      * Render an application error page view
      *
-     * @param   array   $params     An array of the parameters passed for the view parsing (passed by reference)
-     * @param   int     $code       The error code
+     * @param   array       $params     An array of the parameters passed for the view parsing (passed by reference)
+     * @param   int         $code       The error code
+     * @param   null/string $exception    The exception info
      * @return  mixed
      * @see     self::render()
-     */
-    public function renderProductionError($params = null, $code = 404)
-    {
-        $action = 'error'.$code.'Action';
-        $_ctrl = CarteBlanche::getContainer()
-            ->get('locator')->locateController('Error');
-        if (!empty($_ctrl) && class_exists($_ctrl)) {
-            $_routes['controller'] = $_ctrl;
-            $this->setController(new $_ctrl(CarteBlanche::getContainer()));
-        } else {
-            trigger_error("Controller 'Error' can't be found!", E_USER_ERROR);
-        }
-
-        // don't execute `shutdown` kernel steps
-        CarteBlanche::getContainer()->get('kernel')
-            ->setShutdown(false);
-
-        $result = CodeHelper::fetchArguments(
-            $action, $params, $this->getController()
-        );
-        return $result;
-    }
-
-    /**
-     * Render an application exception page view
-     *
-     * @param   array       $params       An array of the parameters passed for the view parsing (passed by reference)
-     * @param   null/string $exception    The exception info
-     * @return  string
      * @see     self::view()
      */
-    public function renderError($params = null, $exception = null)
+    public function renderError($params = null, $code = 404, $exception = null)
     {
-        $debug = \CarteBlanche\App\Debugger::getInstance();
-        $this->renderDebug($params, null, false);
-        $params['title'] = $debug->getDebuggerTitle();
-        $tpl = 'profiler/template_profiler';
+        $mode_data = CarteBlanche::getKernelMode(true);
+        if (!is_array($mode_data)
+            || !isset($mode_data['debug'])
+            || false==$mode_data['debug']
+        ) {
+            $action = 'error'.$code.'Action';
+            $_ctrl = CarteBlanche::getContainer()
+                ->get('locator')->locateController('Error');
+            if (!empty($_ctrl) && class_exists($_ctrl)) {
+                $_routes['controller'] = $_ctrl;
+                $this->setController(new $_ctrl(CarteBlanche::getContainer()));
+            } else {
+                trigger_error("Controller 'Error' can't be found!", E_USER_ERROR);
+            }
 
-        // don't execute `shutdown` kernel steps
-        CarteBlanche::getContainer()->get('kernel')
-            ->setShutdown(true);
+            // don't execute `shutdown` kernel steps
+            CarteBlanche::getContainer()->get('kernel')
+                ->setShutdown(false);
 
-        return $this->view($tpl, $params, true, true);
+            return CodeHelper::fetchArguments(
+                $action, $params, $this->getController()
+            );
+        } else {
+            if (!empty($exception)) {
+                if (!isset($params['message'])) $params['message'] = '';
+                $params['message'] .= method_exists($exception, 'getAppMessage') ?
+                    $exception->getAppMessage() : $exception->getMessage();
+            }
+            $debug = \CarteBlanche\App\Debugger::getInstance();
+            $this->renderDebug($params, null, false);
+            $params['title'] = $debug->getDebuggerTitle();
+            $tpl = 'profiler/template_profiler';
+
+            // don't execute `shutdown` kernel steps
+//            CarteBlanche::getContainer()->get('kernel')->setShutdown(false);
+
+            return $this->view($tpl, $params, true, true);
+        }
+    }
+
+    public function renderProductionError()
+    {
+        return call_user_func_array(array($this, 'renderError'), func_get_args());
     }
 
     /**
@@ -525,7 +527,6 @@ class FrontController
      */
     public function getFlashMessages()
     {
-        $_this      = self::getInstance();
         $session    = CarteBlanche::getContainer()->get('session');
         $flash_msgs = array();
         foreach($session->allFlashes() as $msg) {
@@ -584,11 +585,11 @@ class FrontController
     /**
      * @return self
      */
-    protected function processQueryArguments()
+    protected function _processQueryArguments()
     {
         $args = CarteBlanche::getContainer()->get('request')->getArguments();
         if (!empty($args)) {
-            $this->parseUserSettings($args);
+            $this->_parseUserSettings($args);
         }
         return $this;
     }
@@ -596,12 +597,12 @@ class FrontController
     /**
      * @return self
      */
-    protected function processSessionValues()
+    protected function _processSessionValues()
     {
         $session = CarteBlanche::getContainer()->get('session');
         $session_data = $session->getSessionTable();
         if (!empty($session_data[$session::SESSION_ATTRIBUTESNAME])) {
-            $this->parseUserSettings($session_data[$session::SESSION_ATTRIBUTESNAME]);
+            $this->_parseUserSettings($session_data[$session::SESSION_ATTRIBUTESNAME]);
         }
         return $this;
     }
@@ -610,7 +611,7 @@ class FrontController
      * @param  array   $args
      * @return  void
      */
-    protected function parseUserSettings(array $args)
+    protected function _parseUserSettings(array $args)
     {
         if (!empty($args)) {
             foreach ($args as $param=>$value) {

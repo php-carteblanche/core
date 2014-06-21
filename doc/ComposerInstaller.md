@@ -11,24 +11,21 @@ It is required for each CarteBlanche installation (*and is included in the Carte
 
 ## Install tools
 
-To define a custom CarteBlanche's `Tool`, just use the following `composer.json` definitions:
+To define a custom CarteBlanche's `Tool`, just use the following `composer.json` definition:
 
     "name": "carte-blanche/tool-ToolName",
     "type": "carte-blanche-tool",
     "require": {
         ...
         "carte-blanche/installer": "dev-master"
-    },
-    "repositories": [{
-        "type": "vcs", "url": "https://github.com/php-carteblanche/installer"
-    }]
+    }
 
-A tool MUST be named as `carte-blanche/tool-NAME` and be typed as `carte-blanche-tool`.
+A tool MUST be **named** as `carte-blanche/tool-NAME` and be **typed** as `carte-blanche-tool`.
 
 
 ## Install bundles
 
-To define a custom CarteBlanche's `Bundle`, just use the following `composer.json` definitions:
+To define a custom CarteBlanche's `Bundle`, just use the following `composer.json` definition:
 
     "name": "carte-blanche/bundle-BundleName",
     "type": "carte-blanche-bundle",
@@ -39,12 +36,9 @@ To define a custom CarteBlanche's `Bundle`, just use the following `composer.jso
     "autoload": { 
         "psr-0": { "BundleName": "path/to/library" },
         "classmap": [ "path/to/library/Controller" ]
-    },
-    "repositories": [{
-        "type": "vcs", "url": "https://github.com/php-carteblanche/installer"
-    }]
+    }
 
-A bundle MUST be named as `carte-blanche/bundle-NAME` and be typed as `carte-blanche-bundle`.
+A bundle MUST be **named** as `carte-blanche/bundle-NAME` and be **typed** as `carte-blanche-bundle`.
 
 ### Automatic configuration
 

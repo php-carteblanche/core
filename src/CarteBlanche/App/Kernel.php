@@ -32,7 +32,7 @@ use \Library\Helper\Directory as DirectoryHelper;
 /**
  * This is the global singleton instance of the CarteBlanche application
  *
- * @author      Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author      Piero Wbmstr <me@e-piwi.fr>
  */
 final class Kernel
     implements StaticCreatorInterface
@@ -45,7 +45,7 @@ final class Kernel
     /**
      * The package name
      */
-    const CARTE_BLANCHE_PACKAGE = 'atelierspierrot/carte-blanche';
+    const CARTE_BLANCHE_PACKAGE = 'carte-blanche/core';
 
     /**
      * The kernel name
@@ -60,7 +60,7 @@ final class Kernel
     /**
      * The kernel homepage
      */
-    const CARTE_BLANCHE_HOMEPAGE = 'http://github.com/php-carteblanche/carteblanche';
+    const CARTE_BLANCHE_HOMEPAGE = 'http://github.com/php-carteblanche/';
 
     /**
      * The kernel online documentation
@@ -250,9 +250,9 @@ final class Kernel
     /**
      * Initializer : defines required paths and parse configuration
      *
-     * @param   string/array    $config_files
-     * @param   array           $user_config
-     * @param   string          $mode_arg       The kernel mode, can be 'prod' or 'dev' (for now)
+     * @param   null/string/array    $config_files
+     * @param   null/array           $user_config
+     * @param   null/string          $mode_arg       The kernel mode, can be 'prod' or 'dev' (for now)
      * @return  void
      */
     public function init($config_files = null, array $user_config = null, $mode_arg = null)
@@ -260,6 +260,13 @@ final class Kernel
         $this->getContainer()->set('kernel', $this);
         $this->getContainer()->set('config', new \CarteBlanche\App\Config);
         $config = $this->getContainer()->get('config');
+
+        if (!defined('_ROOTFILE')) {
+            die('You need to define the "_ROOTFILE" constant to run CarteBlanche!');
+        }
+        if (!defined('_ROOTPATH')) {
+            die('You need to define the "_ROOTPATH" constant to run CarteBlanche!');
+        }
 
         spl_autoload_register(array('\CarteBlanche\App\Loader', 'autoload'));
         register_shutdown_function(array($this, 'shutdown'));
@@ -272,6 +279,9 @@ final class Kernel
             ->addPath('carte_blanche_core', realpath(__DIR__.'/../'))
             ;
         if (!$this->isCli()) {
+            if (!defined('_ROOTHTTP')) {
+                self::__getHttpRoot();
+            }
             $this->initConstantPath('_ROOTHTTP', 'root_http');
         }
 
@@ -646,9 +656,10 @@ final class Kernel
             );
 */
         }
-        $config->getRegistry()->loadStack('paths');
-        $config->getRegistry()->setEntry($name, $value);
-        $config->getRegistry()->saveStack('paths', true);
+        $config->getRegistry()
+            ->loadStack('paths')
+            ->setEntry($name, $value)
+            ->saveStack('paths', true);
         return $this;
     }
 
@@ -701,7 +712,7 @@ final class Kernel
      */
     public function setShutdown($bool = false)
     {
-        $this->is_shutdown = $bool;
+        $this->is_shutdown = (Boolean) $bool;
         return $this;
     }
 
@@ -728,7 +739,7 @@ final class Kernel
      */
     public function isCli()
     {
-        return (strtolower(php_sapi_name()) == 'cli');
+        return (strpos(strtolower(php_sapi_name()),'cli')!==false);
     }
 
 // ------------------------
@@ -771,6 +782,11 @@ final class Kernel
         return $this;
     }
 
+    /**
+     * Load the default configuration file
+     *
+     * @throws \CarteBlanche\Exception\ErrorException
+     */
     private function __loadDefaultConfig()
     {
         $app_cfgfile = __DIR__.'/../../../config/'.self::CARTE_BLANCHE_CONFIG_FILE;
@@ -781,7 +797,26 @@ final class Kernel
         }
         $this->getContainer()->get('config')->load($app_cfgfile);
     }
-    
+
+    /**
+     * Retrieve the base URL to use to construct the application routes (found from the current domain and path URL)
+     */
+    private function __getHttpRoot()
+    {
+        if (!defined('_ROOTHTTP')) {
+            $_roothttp = '';
+            if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
+                $_roothttp = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS'])!='off') ? 'https://' : 'http://';
+                $_roothttp .= $_SERVER['HTTP_HOST'];
+            }
+            if (isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])) {
+                $_roothttp .= str_replace( '\\', '/', dirname($_SERVER['PHP_SELF']));
+            }
+            if (strlen($_roothttp)>0 && substr($_roothttp, -1) != '/') $_roothttp .= '/';
+            define('_ROOTHTTP', $_roothttp);
+        }
+    }
+
 }
 
 // Endfile

@@ -20,7 +20,7 @@ use \CarteBlanche\Interfaces\QueryBuilderInterface;
 /**
  * Database full abstraction class
  *
- * @author 		Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author 		Piero Wbmstr <me@e-piwi.fr>
  */
 class Database
     implements StorageEngineInterface, QueryBuilderInterface

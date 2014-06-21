@@ -18,7 +18,7 @@ use \CarteBlanche\Abstracts\AbstractController;
 /**
  * Errors controller extending the abstract \CarteBlanche\Abstracts\AbstractController class
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class ErrorController
     extends AbstractController

@@ -17,7 +17,7 @@ use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 use \I18n\Loader as OriginalI18nLoader;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class I18nLoader
     extends OriginalI18nLoader

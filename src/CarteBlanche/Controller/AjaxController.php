@@ -18,7 +18,7 @@ use \CarteBlanche\Controller\DefaultController;
 /**
  * The default application controller for AJAX requests
  *
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class AjaxController
     extends DefaultController

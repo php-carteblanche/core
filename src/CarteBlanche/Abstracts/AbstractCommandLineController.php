@@ -18,7 +18,7 @@ use \Library\CommandLine\AbstractCommandLineController as Original;
 use \Library\CommandLine\CommandLineControllerInterface;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 abstract class AbstractCommandLineController
     extends Original

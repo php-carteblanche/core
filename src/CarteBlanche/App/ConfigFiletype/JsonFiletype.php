@@ -15,7 +15,7 @@ namespace CarteBlanche\App\ConfigFiletype;
 use \CarteBlanche\Interfaces\ConfigFiletypeInterface;
 
 /**
- * @author  Piero Wbmstr <piwi@ateliers-pierrot.fr>
+ * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class JsonFiletype implements ConfigFiletypeInterface
 {
