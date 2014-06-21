@@ -39,7 +39,7 @@ class CarteBlanche
      */
     public static function getConfig($var, $default = null, $app_only = false)
     {
-        return \CarteBlanche\App\Container::getInstance()->get('config')
+        return self::getContainer()->get('config')
            ->get($var, \CarteBlanche\App\Config::NOT_FOUND_GRACEFULLY, $default);
     }
 
@@ -48,7 +48,7 @@ class CarteBlanche
      */
     public static function addPath($name, $value, $must_exists = false, $must_be_writable = false)
     {
-        return \CarteBlanche\App\Container::getInstance()->get('kernel')
+        return self::getContainer()->get('kernel')
            ->addPath($name, $value, $must_exists, $must_be_writable);
     }
 

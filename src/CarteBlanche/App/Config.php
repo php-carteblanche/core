@@ -74,9 +74,9 @@ class Config
      *
      * @return  self
      *
-     * @throws  \ErrorException if the file is not found
-     * @throws  \RuntimeException if the file type parser does not exist
-     * @throws  \DomainException if the file type parser does not implement `self::FILETYPE_INTERFACE`
+     * @throws  \CarteBlanche\Exception\\ErrorException if the file is not found
+     * @throws  \CarteBlanche\Exception\\RuntimeException if the file type parser does not exist
+     * @throws  \CarteBlanche\Exception\\DomainException if the file type parser does not implement `self::FILETYPE_INTERFACE`
      */
     public function load($filename, $merge_globals = true, $stack_name = null, $handler = null)
     {
@@ -155,8 +155,8 @@ class Config
      *
      * @return mixed
      *
-     * @throws  \InvalidArgumentException if the index doesn't exist and `$flag` is NOT_FOUND_ERROR
-     * @throws  \InvalidArgumentException if the stack doesn't exist and `$flag` is NOT_FOUND_ERROR
+     * @throws  \CarteBlanche\Exception\\InvalidArgumentException if the index doesn't exist and `$flag` is NOT_FOUND_ERROR
+     * @throws  \CarteBlanche\Exception\\InvalidArgumentException if the stack doesn't exist and `$flag` is NOT_FOUND_ERROR
      */
     public function get($index, $flag = self::NOT_FOUND_GRACEFULLY, $default = null, $stack_name = 'global')
     {
@@ -207,7 +207,7 @@ class Config
             if ($flag & self::NOT_FOUND_GRACEFULLY) {
                 return $default;
             } else {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf('Unknonwn configuration entry "%s"!', $index)
                 );
             }

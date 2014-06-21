@@ -26,7 +26,7 @@ abstract class AbstractCommandLineController
 {
 
 // ------------------------------------------
-// Abstract methods & user definable
+// Abstract methods & user definables
 // ------------------------------------------
 
     /**

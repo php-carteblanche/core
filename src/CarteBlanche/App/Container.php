@@ -74,12 +74,12 @@ final class Container
     public function set($name, $object, $force_overload = false)
     {
         if (!is_object($object)) {
-            throw new \CarteBlanche\Exception\DomainException(
+            throw new DomainException(
                 sprintf('A container entry must be an object (got "%s" for "%s")!', gettype($object), $name)
             );
         }
         if (true===$this->instances->isEntry($name) && true!==$force_overload) {
-            throw new \CarteBlanche\Exception\InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('You can not over-write a container entry (for "%s")!', $name)
             );
         }
@@ -190,17 +190,17 @@ final class Container
     public function setBundle($name = null, $val = null, $force_overload = false)
     {
         if (!is_object($val)) {
-            throw new \CarteBlanche\Exception\DomainException(
+            throw new DomainException(
                 sprintf('A bundle entry must be an object (got "%s" for bundle "%s")!', gettype($val), $name)
             );
         }
         if (!CodeHelper::isClassInstance($val, Kernel::BUNDLE_CLASS)) {
-            throw new \CarteBlanche\Exception\DomainException(
+            throw new DomainException(
                 sprintf('A bundle entry must be a "%s" instance (for "%s")!', Kernel::BUNDLE_CLASS, $name)
             );
         }
         if (true===$this->instances->isEntry($name, 'bundles') && true!==$force_overload) {
-            throw new \CarteBlanche\Exception\InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('You can not over-write a container bundle (for "%s")!', $name)
             );
         }
