@@ -18,7 +18,7 @@ use \CarteBlanche\Interfaces\ControllerInterface;
 /**
  * The default distribution controller class
  *
- * Any ditributed controller must extend this class.
+ * Any distributed controller must extend this class.
  *
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
@@ -31,21 +31,21 @@ abstract class AbstractControllerCarteBlancheDefault
      * The default action of the controller, considered as 'home'
      *
      * @return mixed
-    abstract function indexAction();
      */
+//    abstract function indexAction();
 
     /**
      * System booting errors page
      *
-     * @params array $errors    Table of errors (strings)
+     * @param array $errors    Table of errors (strings)
      * @return mixed
-    abstract function errorAction(array $errors = null);
      */
+//    abstract function errorAction(array $errors = null);
 
     /**
      * System booting errors page
      *
-     * @params  null/array  $errors    Table of errors (strings)
+     * @param   null|array  $errors    Table of errors (strings)
      * @return  mixed
      */
     abstract function bootErrorAction(array $errors = null);

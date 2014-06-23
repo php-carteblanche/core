@@ -32,12 +32,11 @@ class WebserviceController
     /**
      * The home page of the controller
      *
-     * @param int $offset   The offset used for the tables dump
-     * @param int $limit    The limit used for the tables dump
-     * @param string $table     The name of a table to isolate it
-     * @param mixed $show        ??
-     *
-     * @return string           The home page view content
+     * @param   int     $offset     The offset used for the tables dump
+     * @param   int     $limit      The limit used for the tables dump
+     * @param   string  $table      The name of a table to isolate it
+     * @param   mixed   $show       ??
+     * @return string               The home page view content
      */
     public function indexAction($offset = 0, $limit = 5, $table = null, $show = null)
     {
@@ -170,7 +169,8 @@ class WebserviceController
     /**
      * Page of system errors
      *
-     * @return string The view content
+     * @param   null|array $errors
+     * @return  string The view content
      */
     public function bootErrorAction(array $errors = null)
     {
@@ -189,7 +189,8 @@ class WebserviceController
     /**
      * Test content page
      *
-     * @return string A loremipsum content
+     * @param   string  $type
+     * @return  string  A "lorem ipsum" content
      */
     public function loremIpsumAction($type = 'html')
     {

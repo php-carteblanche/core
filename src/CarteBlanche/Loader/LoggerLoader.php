@@ -27,7 +27,7 @@ class LoggerLoader
      *
      * @param   array                       $config
      * @param   \CarteBlanche\App\Container $container
-     * @return object
+     * @return  \CarteBlanche\App\Logger
      */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {

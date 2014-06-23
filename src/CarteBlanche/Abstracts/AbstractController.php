@@ -33,9 +33,9 @@ use \CarteBlanche\App\FrontController;
  *
  * To use the framework error pages, you may "use":
  *
- *     use \CarteBlanche\Exception\NotFoundException,
- *         \CarteBlanche\Exception\AccessForbiddenException,
- *         \CarteBlanche\Exception\InternalServerErrorException;
+ *     use \CarteBlanche\Exception\NotFoundException;
+ *     use \CarteBlanche\Exception\AccessForbiddenException;
+ *     use \CarteBlanche\Exception\InternalServerErrorException;
  *
  * To redirect the code to a "404 not found" page, use:
  *
@@ -63,9 +63,9 @@ abstract class AbstractController
     /**
      * The controller views directory
      *
-     * It must be a sub-directory of `_VIEWSDIR` or have to be found by `CarteBlanche\App\Locator::locateView()`
+     * It must be a sub-directory of `_VIEWSDIR` or have to be found by `\CarteBlanche\App\Locator::locateView()`
      *
-     * @see CarteBlanche\App\Locator::locateView()
+     * @see \CarteBlanche\App\Locator::locateView()
      */
     static $views_dir = '';
 
@@ -104,7 +104,8 @@ abstract class AbstractController
     /**
      * Get the global app container
      *
-     * @see CarteBlanche\App\Container
+     * @return \CarteBlanche\App\Container
+     * @see \CarteBlanche\App\Container
      */
     public function getContainer()
     {
@@ -114,7 +115,8 @@ abstract class AbstractController
     /**
      * Get the global kernel from any controller
      *
-     * @see CarteBlanche\App\Kernel
+     * @return \CarteBlanche\App\Kernel
+     * @see \CarteBlanche\App\Kernel
      */
     public function getKernel()
     {
@@ -124,6 +126,7 @@ abstract class AbstractController
     /**
      * Alias of CarteBlanche\App\FrontController->render()
      *
+     * @return string
      * @see CarteBlanche\App\FrontController::render()
      */
     public function render($params = null, $debug = null, $exception = null)
@@ -134,6 +137,7 @@ abstract class AbstractController
     /**
      * Alias of CarteBlanche\App\FrontController->view()
      *
+     * @return string
      * @see CarteBlanche\App\FrontController::view()
      */
     public function view($view = null, $params = null, $display = false, $exit = false)
@@ -144,6 +148,7 @@ abstract class AbstractController
     /**
      * Alias of CarteBlanche\CarteBlanche::trans()
      *
+     * @return string
      * @see CarteBlanche\CarteBlanche::view()
      */
     public function trans()

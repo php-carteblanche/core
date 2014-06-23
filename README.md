@@ -3,7 +3,7 @@ CarteBlanche Core
 
 This package is the core of the [CarteBlanche](http://github.com/php-carteblanche/carteblanche) framework.
 
-For more informations, see the `doc/` directory.
+For more information, see the `doc/` directory.
 
     Copyright 2013-2014 Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>
 

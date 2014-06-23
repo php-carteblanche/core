@@ -39,8 +39,7 @@ class Config
     const NOT_FOUND_ERROR = 2;
 
     /**
-     * The singleton instance of the registry (MAIN REGISTRY OBJECT)
-     * @var \Patterns\Commons\Registry
+     * @var \Patterns\Commons\Registry The singleton instance of the registry (MAIN REGISTRY OBJECT)
      */
     protected $registry;
 
@@ -69,14 +68,10 @@ class Config
      *
      * @param   string      $filename
      * @param   bool        $merge_globals
-     * @param   null/string $stack_name
-     * @param   null/string $handler    A classname to parse concerned config content
-     *
+     * @param   null|string $stack_name
+     * @param   null|string $handler    A classname to parse concerned config content
      * @return  self
-     *
-     * @throws  \CarteBlanche\Exception\\ErrorException if the file is not found
-     * @throws  \CarteBlanche\Exception\\RuntimeException if the file type parser does not exist
-     * @throws  \CarteBlanche\Exception\\DomainException if the file type parser does not implement `self::FILETYPE_INTERFACE`
+     * @throws  \CarteBlanche\Exception\ErrorException if the file is not found
      */
     public function load($filename, $merge_globals = true, $stack_name = null, $handler = null)
     {
@@ -152,11 +147,8 @@ class Config
      * @param   int         $flag
      * @param   null/mixed   $default
      * @param   string      $stack_name
-     *
-     * @return mixed
-     *
-     * @throws  \CarteBlanche\Exception\\InvalidArgumentException if the index doesn't exist and `$flag` is NOT_FOUND_ERROR
-     * @throws  \CarteBlanche\Exception\\InvalidArgumentException if the stack doesn't exist and `$flag` is NOT_FOUND_ERROR
+     * @return  mixed
+     * @throws  \CarteBlanche\Exception\InvalidArgumentException if the index doesn't exist and `$flag` is NOT_FOUND_ERROR
      */
     public function get($index, $flag = self::NOT_FOUND_GRACEFULLY, $default = null, $stack_name = 'global')
     {
@@ -169,7 +161,7 @@ class Config
             } else {
                 if ($flag & self::NOT_FOUND_ERROR) {
                     throw new InvalidArgumentException(
-                        sprintf('Unknonwn configuration stack "%s"!', $stack_name)
+                        sprintf('Unknown configuration stack "%s"!', $stack_name)
                     );
                 } else {
                     return $default;
@@ -208,7 +200,7 @@ class Config
                 return $default;
             } else {
                 throw new InvalidArgumentException(
-                    sprintf('Unknonwn configuration entry "%s"!', $index)
+                    sprintf('Unknown configuration entry "%s"!', $index)
                 );
             }
         } else {
@@ -360,7 +352,6 @@ class Config
      * Process special treatment on configuration values such as BIT values
      *
      * @param mixed $value
-     *
      * @return mixed
      */
     protected function _treatValue($value)

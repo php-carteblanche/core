@@ -14,7 +14,8 @@
  */
 
 use \CarteBlanche\CarteBlanche;
-use Library\Helper, Library\Tool;
+use \Library\Helper;
+use \Library\Tool;
 
 if (!function_exists('view')) 
 {
@@ -41,7 +42,7 @@ if (!function_exists('get_now'))
 {
     function get_now()
     {
-        return \Model\AbstractModel::getNow();
+        return \CarteBlanche\Model\AbstractModel::getNow();
     }
 }
 

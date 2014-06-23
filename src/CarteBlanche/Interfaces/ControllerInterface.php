@@ -22,13 +22,13 @@ interface ControllerInterface
 
     /**
      * Extension or alias of App\FrontController->render()
-     * @see App\FrontController::render()
+     * @see \CarteBlanche\App\FrontController::render()
      */
     public function render($params = null, $debug = null, $exception = null);
 
     /**
      * Extension or alias of App\FrontController->view()
-     * @see App\FrontController::view()
+     * @see \CarteBlanche\App\FrontController::view()
      */
     public function view($view = null, $params = null, $display = false, $exit = false);
 

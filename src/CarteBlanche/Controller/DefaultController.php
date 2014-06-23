@@ -32,12 +32,11 @@ class DefaultController
     /**
      * The home page of the controller
      *
-     * @param int $offset   The offset used for the tables dump
-     * @param int $limit    The limit used for the tables dump
-     * @param string $table     The name of a table to isolate it
-     * @param mixed $show        ??
-     *
-     * @return string           The home page view content
+     * @param   int     $offset   The offset used for the tables dump
+     * @param   int     $limit    The limit used for the tables dump
+     * @param   string  $table    The name of a table to isolate it
+     * @param   mixed   $show     ??
+     * @return  string            The home page view content
      */
     public function indexAction($offset = 0, $limit = 5, $table = null, $show = null)
     {
@@ -170,7 +169,7 @@ class DefaultController
     /**
      * Page of system errors
      *
-     * @param   null/array  $errors
+     * @param   null|array  $errors
      * @return  array
      */
     public function bootErrorAction(array $errors = null)
@@ -191,7 +190,7 @@ class DefaultController
      * Test content page
      *
      * @param   string  $type
-     * @return  string  A loremipsum content
+     * @return  string  A "lorem ipsum" content
      */
     public function loremIpsumAction($type = 'html')
     {

@@ -25,8 +25,8 @@ interface ConfigInterface
      *
      * @param   string          $filename
      * @param   bool            $merge_globals
-     * @param   null/string     $stack_name
-     * @param   null/string     $handler    A classname to parse concerned config content
+     * @param   null|string     $stack_name
+     * @param   null|string     $handler    A classname to parse concerned config content
      */
     public function load($filename, $merge_globals = true, $stack_name = null, $handler = null);
 
@@ -44,7 +44,7 @@ interface ConfigInterface
      *
      * @param   string      $index
      * @param   int         $flag
-     * @param   null/mixed  $default
+     * @param   null|mixed  $default
      * @param   string      $stack_name
      */
     public function get($index, $flag = self::NOT_FOUND_GRACEFULLY, $default = null, $stack_name = 'global');

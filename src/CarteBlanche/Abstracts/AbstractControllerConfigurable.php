@@ -49,7 +49,7 @@ abstract class AbstractControllerConfigurable
     /**
      * Set the object configuration entries
      *
-     * @param   null/array  $config
+     * @param   null|array  $config
      * @return  self
      */
     public function setConfig(array $config = null)
@@ -62,7 +62,6 @@ abstract class AbstractControllerConfigurable
      * Get the object configuration entries or a single entry
      *
      * @param string $index
-     *
      * @return mixed
      */
     public function getConfig($index = null)

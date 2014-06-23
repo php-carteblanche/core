@@ -213,9 +213,7 @@ class FrontController
      * @param   string      $controller_classname
      * @param   string      $action
      * @param   array|null  $arguments
-     *
      * @return  void
-     *
      * @throws  \CarteBlanche\Exception\NotFoundException if the controller or the action is not found
      * @throws  \CarteBlanche\Exception\RuntimeException if the controller's action doesn't return required objects
      */

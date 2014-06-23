@@ -43,8 +43,10 @@ class EntityManagerLoader implements DependencyLoaderInterface
 
     /**
      * Build a specific entity manager
-     * @param string $emname The name of the entity manager to build
-     * @return object Returns an object to manage the entity
+     *
+     * @param   string  $em_fullname    The name of the entity manager to build
+     * @return  object  Returns an object to manage the entity
+     * @throws  \RuntimeException if no classname is defined in the EM config
      */
     protected function _buildEntityManager($em_fullname)
     {
