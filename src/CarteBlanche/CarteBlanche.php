@@ -55,7 +55,7 @@ class CarteBlanche
     /**
      * @alias \CarteBlanche\App\Kernel::getPath(xxx)
      */
-    public function getPath($name)
+    public static function getPath($name)
     {
         return self::getContainer()->get('kernel')
             ->getPath($name);
@@ -64,7 +64,7 @@ class CarteBlanche
     /**
      * @alias   \CarteBlanche\App\Config::getPath(xxx, true)
      */
-    public function getFullPath($name)
+    public static function getFullPath($name)
     {
         return self::getContainer()->get('kernel')
             ->getPath($name, true);
