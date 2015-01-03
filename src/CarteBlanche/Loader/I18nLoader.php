@@ -43,7 +43,7 @@ class I18nLoader
         $options = array_merge($config, array(
             'available_languages'       => $langs,
             'language_directory'        => $var_path.$config['language_directory'],
-            'language_strings_db_directory'  => $root_path,
+//            'language_strings_db_directory'  => $root_path,
             'language_strings_db_filename_closure'  => $language_strings_db_filename_locator,
             'force_rebuild' => true,
         ));
@@ -68,7 +68,7 @@ class I18nLoader
         try {
             $i18n = \I18n\I18n::getInstance($this); 
         } catch (\Exception $e) {
-            return $e;
+            throw $e;
         }
         return $i18n;
     }
