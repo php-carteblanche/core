@@ -57,6 +57,11 @@ final class Kernel
     const CARTE_BLANCHE_VERSION = '0.1.0';
 
     /**
+     * The kernel version date
+     */
+    const CARTE_BLANCHE_DATE = '2014-01-01';
+
+    /**
      * The kernel homepage
      */
     const CARTE_BLANCHE_HOMEPAGE = 'http://github.com/php-carteblanche/';
