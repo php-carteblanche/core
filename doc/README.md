@@ -113,11 +113,11 @@ re-build it, you will need to run Composer in development environment (*just as 
 
 >    https://github.com/php-carteblanche/carteblanche
 
->    Copyleft 2013, Pierre Cassat and contributors
+>    Copyright (c) 2013-2015 Pierre Cassat <me@e-piwi.fr> and contributors
 
 >    Licensed under the Apache 2.0 license.
 
->    http://www.apache.org/licenses/LICENSE-2.0.html
+>    http://github.com/php-carteblanche/carteblanche/blob/master/LICENSE
 
 >    ----
 
