@@ -28,11 +28,12 @@ class I18nLoader
      */
     public function __construct()
     {
-        $config = CarteBlanche::getConfig('i18n');
-        $root_path = CarteBlanche::getPath('root_path');
-        $var_path = CarteBlanche::getPath('var_dir');
-        $langs = isset($config['available_languages']) ?
-            $config['available_languages'] : array('en'=>'en_US_USD');
+        $config         = CarteBlanche::getConfig('i18n');
+        $root_path      = CarteBlanche::getPath('root_path');
+        $var_path       = CarteBlanche::getPath('var_dir');
+        $language_dir   = CarteBlanche::getPath('language_dir');
+        $langs          = isset($config['available_languages']) ?
+                            $config['available_languages'] : array('en'=>'en_US_USD');
 
         $language_strings_db_filename_locator = function($i) {
             return str_replace(
@@ -43,10 +44,11 @@ class I18nLoader
         $options = array_merge($config, array(
             'available_languages'       => $langs,
             'language_directory'        => $var_path.$config['language_directory'],
-//            'language_strings_db_directory'  => $root_path,
+            'language_strings_db_directory'  => $language_dir,
             'language_strings_db_filename_closure'  => $language_strings_db_filename_locator,
             'force_rebuild' => true,
         ));
+
         if (strtolower(CarteBlanche::getKernel()->getMode())==='dev') {
             $options['show_untranslated'] = true;
         }
