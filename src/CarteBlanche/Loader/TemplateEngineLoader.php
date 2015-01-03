@@ -18,7 +18,8 @@ use \Library\Helper\Directory as DirectoryHelper;
 /**
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
-class TemplateEngineLoader implements DependencyLoaderInterface
+class TemplateEngineLoader
+    implements DependencyLoaderInterface
 {
 
     /**
@@ -26,7 +27,7 @@ class TemplateEngineLoader implements DependencyLoaderInterface
      *
      * @param   array                       $config
      * @param   \CarteBlanche\App\Container $container
-     * @return object
+     * @return  \TemplateEngine\TemplateEngine
      */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {

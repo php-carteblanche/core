@@ -24,32 +24,33 @@ abstract class AbstractTool
 {
 
     /**
-     * The views directory
+     * @var string The views directory
      *
      * This must be a sub-directory of the tool directory
      */
-    var $views_dir;
+    public $views_dir;
 
     /**
-     * The view file
+     * @var string The view file
      */
-    var $view;
+    public $view;
 
     /**
-     * The direct output (if no view is set or parse)
+     * @var string The direct output (if no view is set or parse)
      */
-    var $output;
+    public $output;
 
     /**
-     * The views arguments
+     * @var array The views arguments
      */
-    var $_args=array();
+    public $_args = array();
 
     /**
      * The constructor : overrides the tool options
+     *
      * @param array $opts An array of the tool options
      */
-    public function __construct( $opts=array() )
+    public function __construct($opts = array())
     {
         if (!empty($opts))
         foreach ($opts as $_opt_var=>$_opt_val) {
@@ -68,6 +69,8 @@ abstract class AbstractTool
      * Direct rendering of the tool object
      *
      * It basically allows to directly write `echo $tool`
+     *
+     * @return string
      */
     public function __toString()
     {
@@ -80,6 +83,9 @@ abstract class AbstractTool
 
     /**
      * The final rendering of the tool
+     *
+     * @return string
+     * @throws \CarteBlanche\Exception\RuntimeException if the rendering is empty
      */
     public function render()
     {
@@ -99,6 +105,8 @@ abstract class AbstractTool
 
     /**
      * The tool logic : construction of the objects parameters passed to final view
+     *
+     * @return array
      */
     abstract function buildViewParams();
 

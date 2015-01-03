@@ -60,7 +60,8 @@ class I18nLoader
      *
      * @param   array                       $config
      * @param   \CarteBlanche\App\Container $container
-     * @return object
+     * @return  \I18n\I18n
+     * @throws  \Exception (transmit any caught exception)
      */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {

@@ -19,22 +19,22 @@ class DirectoryModel
     /**
      * The path of the directories root path
      */
-    var $path='';
+    var $path       = '';
 
     /**
      * The name of the current directory
      */
-    var $dirname=null;
+    var $dirname    = null;
 
     /**
      * The content of the current directory
      */
-    var $data=null;
+    var $data       = null;
 
     /**
      * Directories names to ignore
      */
-    var $ignore = array( '.', '..', '.DS_Store' );
+    var $ignore     = array( '.', '..', '.DS_Store' );
 
     /**
      * Returns TRUE if the directory exists
@@ -133,6 +133,7 @@ class DirectoryModel
      * Scan the current directory
      *
      * @param bool $recursive Is the scan recursive ?
+     * @return array
      */
     public function scanDir($recursive = false)
     {

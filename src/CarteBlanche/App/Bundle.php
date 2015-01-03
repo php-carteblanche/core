@@ -33,11 +33,10 @@ class Bundle
     /**
      * Construction of a bundle
      *
-     * @param string $namespace The bundle's namespace
-     * @param string $directory The bundle's directory in `$bundles_dir`
-     *
-     * @throws ErrorException if the `$bundles_dir` doesn't exist
-     * @throws ErrorException if the current loaded bundle directory doesn't exist
+     * @param   string  $namespace  The bundle's namespace
+     * @param   string  $directory  The bundle's directory in `$bundles_dir`
+     * @throws  \CarteBlanche\Exception\ErrorException if the `$bundles_dir` doesn't exist
+     * @throws  \CarteBlanche\Exception\ErrorException if the current loaded bundle directory doesn't exist
      */
     public function __construct($namespace, $directory)
     {

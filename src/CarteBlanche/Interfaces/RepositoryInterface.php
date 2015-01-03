@@ -11,9 +11,6 @@
 
 namespace CarteBlanche\Interfaces;
 
-use \CarteBlanche\Interfaces\ModelInterface;
-use \CarteBlanche\Interfaces\StorageEngineInterface;
-
 /**
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
@@ -22,7 +19,11 @@ interface RepositoryInterface
 
     /**
      */
-    public function __construct(array $options = null, ModelInterface $model, StorageEngineInterface $storage_engine);
+    public function __construct(
+        array $options = null,
+        \CarteBlanche\Interfaces\ModelInterface $model,
+        \CarteBlanche\Interfaces\StorageEngineInterface $storage_engine
+    );
 
     public function find($field_value, $field_name = 'id');
     

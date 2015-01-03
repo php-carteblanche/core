@@ -17,7 +17,8 @@ use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 /**
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
-class RouterLoader implements DependencyLoaderInterface
+class RouterLoader
+    implements DependencyLoaderInterface
 {
 
     /**
@@ -25,7 +26,7 @@ class RouterLoader implements DependencyLoaderInterface
      *
      * @param   array                       $config
      * @param   \CarteBlanche\App\Container $container
-     * @return object
+     * @return  \CarteBlanche\App\Router
      */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {

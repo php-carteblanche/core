@@ -31,9 +31,9 @@ class DomainException
     /**
      * Construction of the exception - a message is needed (1st argument)
      *
-     * @param string $message The exception message
-     * @param int $code The exception code
-     * @param mixed $previous The previous exception if so
+     * @param   string  $message    The exception message
+     * @param   int     $code       The exception code
+     * @param   mixed   $previous   The previous exception if so
      */
     public function __construct($message, $code = 0, $previous = null)
     {

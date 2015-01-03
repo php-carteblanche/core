@@ -42,7 +42,7 @@ class CommandLineController
     /**
      * Page of system errors
      *
-     * @param   null/array  $errors
+     * @param   null|array  $errors
      * @return  void
      */
     public function bootErrorAction(array $errors = null)
@@ -167,14 +167,14 @@ class CommandLineController
     }
 
     /**
-     * Get an information about current environement
+     * Get an information about current environment
      *
-     * Get an information about current environement ; optional arguments are :
+     * Get an information about current environment ; optional arguments are :
      *     - '<option>php</option>' : get PHP version (default option),
      *     - '<option>apache</option>' : get Apache version,
      *     - '<option>apache-modules</option>' : get Apache modules list,
      *     - '<option>gd</option>' : get GD library version,
-     *     - '<option>all</option>' : get all above inforamtions.
+     *     - '<option>all</option>' : get all above information.
      */
     public function runEnvironmentCommand($which = null)
     {

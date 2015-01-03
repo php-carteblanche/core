@@ -27,6 +27,7 @@ class FrontControllerLoader implements DependencyLoaderInterface
      * @param   array                       $config
      * @param   \CarteBlanche\App\Container $container
      * @return  null/object
+     * @throws  \RuntimeException if the config doesn't define a FrontController classname
      */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {

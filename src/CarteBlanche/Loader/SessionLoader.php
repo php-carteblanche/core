@@ -17,7 +17,8 @@ use \CarteBlanche\Interfaces\DependencyLoaderInterface;
 /**
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
-class SessionLoader implements DependencyLoaderInterface
+class SessionLoader
+    implements DependencyLoaderInterface
 {
 
     /**
@@ -25,7 +26,7 @@ class SessionLoader implements DependencyLoaderInterface
      *
      * @param   array                       $config
      * @param   \CarteBlanche\App\Container $container
-     * @return object
+     * @return  \CarteBlanche\Library\Session
      */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {

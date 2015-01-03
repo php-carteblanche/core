@@ -106,14 +106,16 @@ class BaseModel
     /**
      * Construction : defines the table name and structure and the object relations
      *
-     * @param string $_table_name The table name
-     * @param array $_table_fields The table fields array
-     * @param array $_table_structure The table structure array
-     * @param bool $auto_populate The value for the auto_populate class flag (default is TRUE)
-     * @param bool $advanced_search The value for the advanced_search class flag (default is FALSE)
+     * @param   string  $_table_name        The table name
+     * @param   array   $_table_fields      The table fields array
+     * @param   array   $_table_structure   The table structure array
+     * @param   bool    $auto_populate      The value for the auto_populate class flag (default is TRUE)
+     * @param   bool    $advanced_search    The value for the advanced_search class flag (default is FALSE)
+     * @throws  \InvalidArgumentException if arguments are malformed
      */
     public function __construct(
-        $_table_name = null, $_table_fields = null, $_table_structure = null, $auto_populate = true, $advanced_search = false
+        $_table_name = null, $_table_fields = null, $_table_structure = null,
+        $auto_populate = true, $advanced_search = false
     ) {
         if (!empty($_table_name) && !empty($_table_structure)) {
             $this->_table_name = $_table_name;
@@ -148,7 +150,8 @@ class BaseModel
     /**
      * Set the storage engine
      *
-     * @param object $storage_engine \CarteBlanche\Interfaces\StorageEngineInterface
+     * @param \CarteBlanche\Interfaces\StorageEngineInterface $storage_engine
+     * @return self
      */
     public function setStorageEngine(StorageEngineInterface $storage_engine)
     {
@@ -159,7 +162,7 @@ class BaseModel
     /**
      * Get the storage engine
      *
-     * @return object \CarteBlanche\Interfaces\StorageEngineInterface
+     * @return \CarteBlanche\Interfaces\StorageEngineInterface
      */
     public function getStorageEngine()
     {
@@ -174,7 +177,7 @@ class BaseModel
      * Count the table entries
      *
      * @param string $search_str A string to limit counting
-     * @return numeric The result of the count
+     * @return int The result of the count
      */
     public function count($search_str = null)
     {
@@ -195,14 +198,14 @@ class BaseModel
     /**
      * Execute a dump of the table according to parameters
      *
-     * @param int $offset An offset to use for the dump
-     * @param int $limit A limit to use for the dump
-     * @param bool $get_relations Get the dumped results relations (default is FALSE)
-     * @param string $order_by A field name to order the dump results
-     * @param string $order_way The way used for ordering (default is 'asc')
-     * @param string $search_str A string to search
-     * @param string $where_str A WHERE statement
-     * @return array The result of the dump
+     * @param   int     $offset         An offset to use for the dump
+     * @param   int     $limit          A limit to use for the dump
+     * @param   bool    $get_relations  Get the dumped results relations (default is FALSE)
+     * @param   string  $order_by       A field name to order the dump results
+     * @param   string  $order_way      The way used for ordering (default is 'asc')
+     * @param   string  $search_str     A string to search
+     * @param   string  $where_str      A WHERE statement
+     * @return  array   The result of the dump
      */
     public function dump(
         $offset = 0, $limit = null, $get_relations = false, $order_by = null, $order_way = 'asc',
@@ -227,10 +230,10 @@ class BaseModel
             $db->limit($limit);
         if (isset($offset))
             $db->offset($offset);
-    //echo $db->get_query();exit('yo');
+//echo $db->get_query();exit('yo');
         $results = $db->get();
         if ($get_relations===true) {
-    //			$results_table=array();
+//            $results_table=array();
             $results_table = new \Patterns\Commons\Collection;
             $fields_list = self::getFieldsList();
             $objects_table = array();
@@ -242,7 +245,7 @@ class BaseModel
                 $_obj->getRelations();
                 $_objdat = $_obj->getData();
                 $_objdat['id'] = $_obj->getId();
-    //				$results_table[] = $_objdat;
+//                $results_table[] = $_objdat;
                 $results_table->push( $_objdat );
             }
             return $results_table;
@@ -253,9 +256,9 @@ class BaseModel
     /**
      * Search a string or value in table entries, depending of the fields format
      *
-     * @param string $search_str A string to search
-     * @param bool $standalone Clear the BDD query constructors (default is FALSE)
-     * @return numeric The result of the search
+     * @param   string  $search_str     A string to search
+     * @param   bool    $standalone     Clear the BDD query constructors (default is FALSE)
+     * @return  int     The result of the search
      */
     public function search($search_str = null, $standalone = false)
     {
@@ -275,9 +278,9 @@ class BaseModel
     /**
      * Build a search request based on a string using logical operators
      *
-     * @param string $search_str A string to search
-     * @param string $search_fields The field name or array to search in
-     * @return void
+     * @param   string  $search_str     A string to search
+     * @param   string  $search_fields  The field name or array to search in
+     * @return  void
      */
     public function advancedSearch($search_str = null, $search_fields = null)
     {
@@ -286,15 +289,15 @@ class BaseModel
         if (true===$this->_advanced_search) {
             $search_str = $db->escape($search_str);
             $tool = new \Tool\AdvancedSearch(array(
-                'search_str' 	=> $search_str,
-                'field'			=> $search_fields
+                'search_str'    => $search_str,
+                'field'         => $search_fields
             ));
             $tool->setStorageEngine($this->getStorageEngine());
-    //echo $s_str = $tool->getQuerySearchString();exit('yo');
+//echo $s_str = $tool->getQuerySearchString();exit('yo');
             $s_str = $tool->getQuerySearchString();
             if ($s_str) {
                 $db->where_str( $s_str );
-    //echo $db->get_query();exit('yo');
+//echo $db->get_query();exit('yo');
             } else {
                 return false;
             }
@@ -307,20 +310,20 @@ class BaseModel
                 foreach($search_fields['str'] as $_f)
                     $db->or_where_like($_f, '"%'.$search_str.'%"');
             }
-    //echo $db->get_query();exit('yo');
+//echo $db->get_query();exit('yo');
         }
     }
 
     /**
      * Make a dump query with weighted fields results
      *
-     * @param array $weighted_indexes An array of the fields names and their weight
-     * @param int $offset An offset to use for the dump
-     * @param int $limit A limit to use for the dump
-     * @param bool $get_relations Get the dumped results relations (default is FALSE)
-     * @param string $search_str A string to search
-     * @param string $where_str A WHERE statement
-     * @return array The result of the dump query with a 'points' value for each row
+     * @param   array   $weighted_indexes An array of the fields names and their weight
+     * @param   int     $offset         An offset to use for the dump
+     * @param   int     $limit          A limit to use for the dump
+     * @param   bool    $get_relations  Get the dumped results relations (default is FALSE)
+     * @param   string  $search_str     A string to search
+     * @param   string  $where_str      A WHERE statement
+     * @return  array   The result of the dump query with a 'points' value for each row
      */
     public function weightedDump(
         $weighted_indexes = array(),
@@ -410,9 +413,9 @@ class BaseModel
     /**
      * Search a string or value in table entries, depending of the fields format, with weighted results
      *
-     * @param string $search_str A string to search
-     * @param bool $standalone Clear the BDD query constructors (default is FALSE)
-     * @return numeric The result of the search with a 'points' value for each row
+     * @param   string  $search_str     A string to search
+     * @param   bool    $standalone     Clear the BDD query constructors (default is FALSE)
+     * @return  int     The result of the search with a 'points' value for each row
      */
     public function weightedSearch($search_str = null, $standalone = false)
     {
@@ -437,10 +440,10 @@ class BaseModel
     /**
      * Read a set of rows from the table for an array of IDs
      *
-     * @param array $id The primary ID values to read
-     * @param bool $get_relations Load the object relations (default is FALSE)
-     * @param string $fields The string used in the select statement for the query (default is '*')
-     * @return array The collection of data of objects if they exists
+     * @param   array   $ids            The primary ID values to read
+     * @param   bool    $get_relations  Load the object relations (default is FALSE)
+     * @param   string  $fields         The string used in the select statement for the query (default is '*')
+     * @return  array The collection of data of objects if they exists
      */
     public function readCollection($ids = null, $get_relations = false, $fields = '*')
     {
@@ -461,7 +464,7 @@ class BaseModel
             $objects = $db->get();
 
             if ($get_relations===true) {
-    //				$results_table = array();
+//                $results_table = array();
                 $results_table = new \Patterns\Commons\Collection();
                 $fields_list = self::getFieldsList();
                 $objects_table = array();
@@ -473,7 +476,7 @@ class BaseModel
                     $_obj->getRelations();
                     $_objdat = $_obj->getData();
                     $_objdat['id'] = $_obj->getId();
-    //					$results_table[] = $_objdat;
+//                    $results_table[] = $_objdat;
                     $results_table->push( $_objdat );
                 }
                 return $results_table;
@@ -486,10 +489,10 @@ class BaseModel
     /**
      * Read a row from the table for a specific ID
      *
-     * @param int $id The primary ID value to read
-     * @param bool $get_relations Load the object relations (default is FALSE)
-     * @param string $fields The string used in the select statement for the query (default is '*')
-     * @return array The data of the object if it exists
+     * @param   int     $id             The primary ID value to read
+     * @param   bool    $get_relations  Load the object relations (default is FALSE)
+     * @param   string  $fields         The string used in the select statement for the query (default is '*')
+     * @return  array   The data of the object if it exists
      */
     public function read($id = null, $get_relations = false, $fields = '*')
     {
@@ -502,10 +505,10 @@ class BaseModel
             }
             $db = $this->getStorageEngine();
             $db->clear();
-    /*
+/*
             $query = "SELECT {$fields} FROM {$this->_table_name} WHERE id={$id} LIMIT 1;";
             $object = $SQLITE->arrayQuery($query);
-    */
+*/
             $db
                 ->select($fields)
                 ->from($this->_table_name)
@@ -527,8 +530,8 @@ class BaseModel
     /**
      * Add a new row in the table
      *
-     * @param array $data The new row values
-     * @return bool TRUE if the new row had been added
+     * @param   array   $data   The new row values
+     * @return  bool    TRUE if the new row had been added
      */
     public function create($data = null)
     {
@@ -564,9 +567,9 @@ class BaseModel
     /**
      * Update a row in the table
      *
-     * @param int $id The primary ID value to update
-     * @param array $data The new row values
-     * @return bool TRUE if the new row had been updated
+     * @param   int     $id     The primary ID value to update
+     * @param   array   $data   The new row values
+     * @return  bool    TRUE if the new row had been updated
      */
     public function update($id = null, $data = null)
     {
@@ -601,8 +604,8 @@ class BaseModel
     /**
      * Delete a row from the table
      *
-     * @param int $id The primary ID value to update
-     * @return bool TRUE if the new row had been deleted
+     * @param   int     $id     The primary ID value to update
+     * @return  bool    TRUE if the new row had been deleted
      */
     public function delete($id = null)
     {
@@ -641,8 +644,8 @@ class BaseModel
     /**
      * Build the relations between objects
      *
-     * @param bool $full Get the full related object (default is TRUE)
-     * @return object The whole object itself
+     * @param   bool    $full   Get the full related object (default is TRUE)
+     * @return  object  The whole object itself
      */
     public function getRelations($full = true)
     {
@@ -670,10 +673,10 @@ class BaseModel
     /**
      * Find and fetch all related object
      *
-     * @param string $relation The relation name to fetch
-     * @param bool $full Get the full related object (default is TRUE)
-     * @param string $fields The string used to get the related fields
-     * @return bool TRUE if the related object(s) had been fetched, FALSE if an error occured
+     * @param   string  $relation   The relation name to fetch
+     * @param   bool    $full       Get the full related object (default is TRUE)
+     * @param   string  $fields     The string used to get the related fields
+     * @return  bool    TRUE if the related object(s) had been fetched, FALSE if an error occured
      */
     public function fetchRelated($relation = null, $full = true, $fields = null)
     {

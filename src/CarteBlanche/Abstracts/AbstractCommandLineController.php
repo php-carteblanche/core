@@ -83,7 +83,8 @@ abstract class AbstractCommandLineController
     /**
      * Get the global app container
      *
-     * @see App\Container
+     * @return \CarteBlanche\App\Container
+     * @see \CarteBlanche\App\Container
      */
     public function getContainer()
     {
@@ -93,7 +94,8 @@ abstract class AbstractCommandLineController
     /**
      * Get the global kernel from any controller
      *
-     * @see App\Kernel
+     * @return \CarteBlanche\App\Kernel
+     * @see \CarteBlanche\App\Kernel
      */
     public function getKernel()
     {
@@ -103,7 +105,8 @@ abstract class AbstractCommandLineController
     /**
      * Alias of App\FrontController->render()
      *
-     * @see App\FrontController::render()
+     * @return string
+     * @see \CarteBlanche\App\FrontController::render()
      */
     public function render($params = null, $debug = null, $exception = null)
     {
@@ -114,7 +117,8 @@ abstract class AbstractCommandLineController
     /**
      * Alias of App\FrontController->view()
      *
-     * @see App\FrontController::view()
+     * @return string
+     * @see \CarteBlanche\App\FrontController::view()
      */
     public function view($view = null, $params = null, $display = false, $exit = false)
     {

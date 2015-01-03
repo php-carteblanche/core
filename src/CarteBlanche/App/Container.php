@@ -65,7 +65,7 @@ final class Container
      *
      * @param   string  $name           The variable name to set
      * @param   object  $object         The object to set
-     * @param   bool    $force_overload Over-write a pre-existant value ?
+     * @param   bool    $force_overload Over-write an existing value ?
      * @return  bool
      * @throws  \CarteBlanche\Exception\DomainException if `$object` is not an object
      * @throws  \CarteBlanche\Exception\InvalidArgumentException if the entry is already defined and `$force_overload = false`
@@ -91,7 +91,7 @@ final class Container
      * @param   string  $name           The variable name to set
      * @param   array   $params         An array of parameters to pass to loader
      * @param   object  $object_loader  The loader class if so
-     * @param   bool    $force_overload Over-write a pre-existant value ?
+     * @param   bool    $force_overload Over-write an existing value ?
      * @return  bool
      *
      * @todo Pass arguments (via parameter here and configuration settings)
@@ -178,10 +178,8 @@ final class Container
      *
      * @param   string  $name           The bundle name to set
      * @param   mixed   $val            The bundle value to set
-     * @param   bool    $force_overload Over-write a pre-existant value ?
-     *
+     * @param   bool    $force_overload Over-write an existing value ?
      * @return  \Patterns\Commons\Registry::setEntry()
-     *
      * @throws  \CarteBlanche\Exception\DomainException if `$val` is not an object
      * @throws  \CarteBlanche\Exception\DomainException if `$val` is not a `\CarteBlanche\App\Kernel::BUNDLE_CLASS` instance
      * @throws  \CarteBlanche\Exception\InvalidArgumentException if the entry is already defined and `$force_overload = false`

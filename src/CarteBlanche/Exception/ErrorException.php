@@ -37,13 +37,14 @@ class ErrorException
      *
      * @param   string  $message    The exception message
      * @param   int     $code       The exception code
-     * @param   mixed   $previous   The previous exception if so
+     * @param   int     $severity
      * @param   string  $filename
      * @param   int     $lineno
-     * @param   null/\Exception  $previous
+     * @param   mixed   $previous
      */
-    public function __construct($message, $code = 0, $severity = 1, $filename = __FILE__, $lineno = __LINE__, $previous = null)
-    {
+    public function __construct(
+        $message, $code = 0, $severity = 1, $filename = __FILE__, $lineno = __LINE__, $previous = null
+    ) {
         // kernel configuration data
         $mode_data = CarteBlanche::getKernelMode(true);
 

@@ -32,6 +32,7 @@ abstract class AbstractToolStorageEngineAware
      * Set the storage engine
      *
      * @param \CarteBlanche\Interfaces\StorageEngineInterface $storage_engine
+     * @return self
      */
     public function setStorageEngine(StorageEngineInterface $storage_engine)
     {
@@ -42,7 +43,7 @@ abstract class AbstractToolStorageEngineAware
     /**
      * Get the storage engine
      *
-     * @return object \CarteBlanche\Interfaces\StorageEngineInterface
+     * @return \CarteBlanche\Interfaces\StorageEngineInterface
      */
     public function getStorageEngine()
     {
