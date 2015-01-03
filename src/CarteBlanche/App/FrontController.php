@@ -488,7 +488,7 @@ class FrontController
             if ($dbg=='all' || $dbg==1) $dbg = $all_debug_infos;
             else $dbg = array( $dbg );
         }
-        $debug =& \CarteBlanche\App\Debugger::getInstance();
+        $debug = \CarteBlanche\App\Debugger::getInstance();
         foreach($dbg as $_dbg_info) {
             switch($_dbg_info) {
                 case 'router':

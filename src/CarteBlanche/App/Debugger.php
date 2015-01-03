@@ -30,7 +30,7 @@ class Debugger
      */
     public static function shutdown( $exit=false, $callback=null )
     {
-        $_this =& self::getInstance();
+        $_this = self::getInstance();
         if (self::$shutdown===true) return true;
         $_this->checkUri();
 
