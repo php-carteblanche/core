@@ -16,6 +16,7 @@ use \CarteBlanche\Interfaces\BundleInterface;
 use \CarteBlanche\Exception\ErrorException;
 use \CarteBlanche\App\Locator;
 use \Patterns\Abstracts\AbstractOptionable;
+use \Library\Helper\File as FileHelper;
 
 abstract class AbstractBundle
     extends AbstractOptionable
@@ -56,6 +57,8 @@ abstract class AbstractBundle
         // store package's data
         $this->setData($options);
 
+//echo "> init bundle ".$this->getName().PHP_EOL;
+
         // load the configuration file if so
         $config_files = $this->getData('config_files');
         if (!empty($config_files)) {
@@ -66,26 +69,33 @@ abstract class AbstractBundle
                         sprintf('Configuration file "%s" for bundle "%s" can not be found!', $cfgf, $_name)
                     );
                 }
-                CarteBlanche::getContainer()->get('config')
-                    ->load($cfgfile, true, $_shortname);
+                if (strtolower(FileHelper::getExtension($cfgfile))=='ini') {
+//echo "> loading config file $cfgfile".PHP_EOL;
+                    CarteBlanche::getContainer()->get('config')
+                        ->load($cfgfile, true, $_shortname);
+                }
             }
 
-            $this->setOptions(
-                CarteBlanche::getContainer()->get('config')->get($_shortname)
-            );
+            $cfg = CarteBlanche::getContainer()->get('config')->get($_shortname);
+            if (!empty($cfg)) {
+                $this->setOptions($cfg);
+            }
         }
 
         // load the language file if so
         $ln_files = $this->getData('language_files');
-        if (!empty(self::$bundle_language_file)) {
-            $i18nfile = Locator::locateLanguage(self::$bundle_language_file);
-            if (!file_exists($i18nfile)) {
-                throw new ErrorException(
-                    sprintf('Language file for bundle "%s" can not be found!', $_name)
-                );
+        if (!empty($ln_files)) {
+            foreach ($ln_files as $file) {
+                $i18nfile = Locator::locateLanguage($file);
+                if (!file_exists($i18nfile)) {
+                    throw new ErrorException(
+                        sprintf('Language file "%s" for bundle "%s" can not be found!', $file, $_name)
+                    );
+                }
+//echo "> loading language file $i18nfile".PHP_EOL;
+                CarteBlanche::getContainer()->get('i18n')
+                    ->loadFile($i18nfile);
             }
-            CarteBlanche::getContainer()->get('i18n')
-                ->loadFile($i18nfile);
         }
     }
 

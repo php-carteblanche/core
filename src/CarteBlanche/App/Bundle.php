@@ -83,12 +83,15 @@ class Bundle
                 $cls_name = '\\'.$this->getNamespace().'\\'.$_bundle_fname;
                 $this->instance = new $cls_name;
                 if (method_exists($this->instance, 'setName')) {
+//echo "> calling 'setName' on instance of ".get_class($this->instance).PHP_EOL;
                     call_user_func(array($this->instance, 'setName'), $this->getNamespace());
                 }
                 if (method_exists($this->instance, 'setPackageName')) {
+//echo "> calling 'setPackageName' on instance of ".get_class($this->instance).PHP_EOL;
                     call_user_func(array($this->instance, 'setPackageName'), $this->getPackageName());
                 }
                 if (method_exists($this->instance, 'init')) {
+//echo "> calling 'init' on instance of ".get_class($this->instance).PHP_EOL;
                     call_user_func(array($this->instance, 'init'), $this->getPackageData());
                 }
             }
