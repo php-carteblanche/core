@@ -101,13 +101,31 @@ class Locator
      */
     public static function locateLanguage($filename, $fallback = true)
     {
-        $etc_dir = CarteBlanche::getPath('i18n_dir');
+        $ln_dir = CarteBlanche::getPath('language_dir');
+
         if ($fallback) {
-            $f = self::locate( DirectoryHelper::slashDirname($etc_dir).$filename );
-            if ($f) return $f;
+            $f = self::locate( DirectoryHelper::slashDirname($ln_dir).$filename );
+            if ($f) {
+                return $f;
+            }
         }
-        $vf = self::locate( DirectoryHelper::slashDirname($etc_dir).'vendor/'.$filename );
-        if ($vf) return $vf;
+
+        $vf = self::locate( DirectoryHelper::slashDirname($ln_dir).'vendor/'.$filename );
+        if ($vf) {
+            return $vf;
+        }
+
+        $mask = CarteBlanche::getConfig('i18n.language_strings_db_filename_mask');
+        if ($mask) {
+            $argument   = str_replace('%s', '', $mask);
+            if (!substr_count($filename, $argument)) {
+                $tmp_vf     = sprintf($mask, $filename);
+                if ($tmp_vf!=$filename) {
+                    return self::locateLanguage($tmp_vf, $fallback);
+                }
+            }
+        }
+
         return null;
     }
     
