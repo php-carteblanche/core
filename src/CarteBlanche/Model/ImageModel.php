@@ -93,9 +93,10 @@ class ImageModel
      */
     public function isImage( $exif=null )
     {
-        $_ext = empty($exif) ? self::$img_extensions : self::$exif_extensions;
-        return $this->pathExists() && $this->exists() &&
-            in_array(strtolower(end(explode('.', $this->filename))), $_ext);
+        $_ext   = empty($exif) ? self::$img_extensions : self::$exif_extensions;
+        $tbl    = explode('.', $this->filename);
+        $last   = end($tbl);
+        return (bool) ($this->pathExists() && $this->exists() && in_array(strtolower($last), $_ext));
     }
 
 // ------------------------------------------
