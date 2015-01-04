@@ -20,6 +20,8 @@ use \CarteBlanche\Library\StorageEngine\DatabaseDriver\DatabaseDriverInterface;
  *
  * SQLite DataBase driver
  *
+ * @TODO    rewrite the whole class with SQLite3
+ *
  * @author  Piero Wbmstr <me@e-piwi.fr>
  */
 class SqliteDriver
@@ -69,6 +71,7 @@ class SqliteDriver
      */
     public function connect()
     {
+/*
         $this->db = new \SQLiteDatabase(
             $this->db_name,
             isset($this->db_options['chmod']) ? $this->db_options['chmod'] : 0644,
@@ -77,6 +80,13 @@ class SqliteDriver
         if ($err) throw new ErrorException(
             sprintf('Can not connect or create SQLite database "%s" [%s]!', $this->db_name, $err)
         );
+*/
+        try {
+            $this->db = new \SQLite3($this->db_name);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
         $this->db_name = str_replace(array(
             CarteBlanche::getPath('root_path'),
             CarteBlanche::getPath('db_dir')
