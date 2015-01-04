@@ -86,6 +86,11 @@ final class Kernel
     const CARTE_BLANCHE_CONFIG_FILE = 'carteblanche.ini';
 
     /**
+     * The default internal language file
+     */
+    const CARTE_BLANCHE_I18N_FILE = 'carteblanche-i18n.csv';
+
+    /**
      * The mask for server settings specific to CarteBlanche
      */
     const CARTE_BLANCHE_SERVER_SETTING_PREFIX = 'CARTE_BLANCHE__';
@@ -442,6 +447,15 @@ final class Kernel
                 throw new ErrorException("Bootstrap file can't be found!");
             }
         }
+
+        // load internal language strings
+        $i18nfile = Locator::locateLanguage(self::CARTE_BLANCHE_I18N_FILE);
+        if (!file_exists($i18nfile)) {
+            throw new ErrorException(
+                sprintf('Global language file not found [%s]!', self::CARTE_BLANCHE_I18N_FILE)
+            );
+        }
+        self::getContainer()->get('i18n')->loadFile($i18nfile);
 
         $this->is_booted=true;
         return $this;
