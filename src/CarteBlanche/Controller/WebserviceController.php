@@ -152,7 +152,7 @@ class WebserviceController
             foreach ($tables as $table) {
                 $err = $SQLITE->add_table( $table['table'], $table['structure'] );
                 if (!$err) {
-                    trigger_error( "An error occured while creating table '{$table['table']}'!", E_USER_ERROR);
+                    trigger_error( "An error occurred while creating table '{$table['table']}'!", E_USER_ERROR);
                 }
                 $installed[] = $table['table'];
             }

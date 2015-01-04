@@ -87,7 +87,7 @@ function test_ajax_file_error() {
 			document.getElementById('TextDiv').innerHTML = resp;
 		},
 		error: function(resp, e) {
-    			alert('An error occured : '+resp);
+    			alert('An error occurred : '+resp);
 		}
 	});
 }
@@ -100,7 +100,7 @@ function test_ajax_form() {
 			document.getElementById('TextDiv').innerHTML = resp;
 		},
 		error: function(resp, e) {
-    			alert('An error occured : '+resp);
+    			alert('An error occurred : '+resp);
 		}
 	});
 }
@@ -130,7 +130,7 @@ function test_ajax_form_get() {
 			document.getElementById('TextDiv').innerHTML = resp;
 		},
 		error: function(resp, e) {
-    			alert('An error occured : '+resp);
+    			alert('An error occurred : '+resp);
 		}
 	});
 }
@@ -145,7 +145,7 @@ function test_ajax_form_post() {
 			document.getElementById('TextDiv').innerHTML = resp;
 		},
 		error: function(resp, e) {
-    			alert('An error occured : '+resp);
+    			alert('An error occurred : '+resp);
 		}
 	});
 }
@@ -157,7 +157,7 @@ function test_ajax_args_error() {
 			document.getElementById('TextDiv').innerHTML = resp;
 		},
 		error: function(resp, e) {
-    			alert('An error occured : '+resp);
+    			alert('An error occurred : '+resp);
 		}
 	});
 }

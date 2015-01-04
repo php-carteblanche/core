@@ -72,7 +72,7 @@ class Manifest extends SplFileInfo
                 case JSON_ERROR_NONE:break;
             }
             throw new Exception(
-                sprintf('An error occured while parsing a JSON content: "%s"', $error_str)
+                sprintf('An error occurred while parsing a JSON content: "%s"', $error_str)
             );
         }
     }
@@ -82,7 +82,7 @@ class Manifest extends SplFileInfo
         $this->entries = eval( str_replace(array('<?php', '?>'), '', $content) );
         if (is_null($this->entries) || !is_array($this->entries)) {
             throw new Exception(
-                'An error occured while parsing a PHP content: "PHP manifest must return an array"'
+                'An error occurred while parsing a PHP content: "PHP manifest must return an array"'
             );
         }
     }
@@ -92,7 +92,7 @@ class Manifest extends SplFileInfo
         $this->entries = parse_ini_string($content, true);
         if (is_null($this->entries) || !is_array($this->entries)) {
             throw new Exception(
-                'An error occured while parsing an INI content: "INI manifest must return an array"'
+                'An error occurred while parsing an INI content: "INI manifest must return an array"'
             );
         }
     }

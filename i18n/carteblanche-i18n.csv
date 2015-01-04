@@ -94,7 +94,7 @@ html_test;"Un test avec des <b>tags</b> <abbr title=""Hyper Text Markup Language
 ;Transmettre un email à l'administrateur du site avec des informations sur l'erreur et l'environnement courant.;Transmit an email to the website administrators with your error informations and environement
 ;Transmettre un rapport;Transmit a report
 ;OK – Un rapport a été envoyé concernant votre erreur. Merci.;OK - A report has been sent concerning your error. Thank you.
-;ERREUR – Une erreur est survenue en tentant d'envoyer un email …;ERROR - An error occured while trying to send email ...
+;ERREUR – Une erreur est survenue en tentant d'envoyer un email …;ERROR - An error occurred while trying to send email ...
 ;Traduire;Translate
 ;Traduire l'application;Translate the application
 ;Langue sélectionnée;Selected language

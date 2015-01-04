@@ -157,7 +157,7 @@ class Database
                 );
             } catch ( \Exception $e ) {
                 throw new \RuntimeException(
-                    sprintf('An error occured while trying to load Database Adapter "%s"!', $_adapter_class)
+                    sprintf('An error occurred while trying to load Database Adapter "%s"!', $_adapter_class)
                 );
             }
             if (!($this->__adapter instanceof \Lib\DatabaseAdapter\AbstractDatabaseAdapter)) {
@@ -352,7 +352,7 @@ class Database
      *
      * @param string $tablename The new table name
      * @param array $table_structure An array of the table fields
-     * @return bool TRUE if the table had been created, FALSE if an error occured
+     * @return bool TRUE if the table had been created, FALSE if an error occurred
      */
     public function add_table($tablename = null, $table_structure = null)
     {
@@ -379,7 +379,7 @@ class Database
      *
      * @param string $tablename The new table name
      * @param array $table_structure An array of the table fields
-     * @return bool TRUE if the field had been added, FALSE if an error occured
+     * @return bool TRUE if the field had been added, FALSE if an error occurred
      */
     public function add_fields($tablename = null, $table_structure = null)
     {

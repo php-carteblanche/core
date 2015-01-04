@@ -79,7 +79,7 @@ class ErrorController
                 ->setFlash("info:".$this->trans('OK - A report has been sent concerning your error. Thank you.'));
         } else {
             $this->getContainer()->get('session')
-                ->setFlash("error:".$this->trans('ERROR - An error occured while trying to send email ...'));
+                ->setFlash("error:".$this->trans('ERROR - An error occurred while trying to send email ...'));
         }
         $this->getContainer()->get('router')->redirect($_SERVER['HTTP_REFERER']);
     }

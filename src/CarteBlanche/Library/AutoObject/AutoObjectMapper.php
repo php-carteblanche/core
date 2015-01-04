@@ -207,7 +207,7 @@ class AutoObjectMapper extends AbstractSingleton
                 $em = new $em_class( $em_cfg['options'] );
             } catch ( \Exception $e ) {
                 throw new \RuntimeException(
-                    sprintf('An error occured while trying to load entity manager "%s"!', $em_class)
+                    sprintf('An error occurred while trying to load entity manager "%s"!', $em_class)
                 );
             }
             if (!($em instanceof \CarteBlanche\Interfaces\EntityManagerInterface)) {

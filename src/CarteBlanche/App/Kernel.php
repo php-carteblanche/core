@@ -353,11 +353,11 @@ final class Kernel
                 $this->addPath($name, $this->getPath($name), true);
             } catch (ErrorException $e) {
                 $this->addBootError(
-                    sprintf('An error occured while booting: "%s" [03]', $e->getMessage())
+                    sprintf('An error occurred while booting: "%s" [03]', $e->getMessage())
                 );
             } catch (Exception $e) {
                 $this->addBootError(
-                    sprintf('An error occured while booting: "%s" [04]', $e->getMessage())
+                    sprintf('An error occurred while booting: "%s" [04]', $e->getMessage())
                 );
             }
         }
@@ -369,11 +369,11 @@ final class Kernel
                 $this->addPath($name, $this->getPath($name), true, true);
             } catch (ErrorException $e) {
                 $this->addBootError(
-                    sprintf('An error occured while booting: "%s" [05]', $e->getMessage())
+                    sprintf('An error occurred while booting: "%s" [05]', $e->getMessage())
                 );
             } catch (Exception $e) {
                 $this->addBootError(
-                    sprintf('An error occured while booting: "%s" [06]', $e->getMessage())
+                    sprintf('An error occurred while booting: "%s" [06]', $e->getMessage())
                 );
             }
         }
@@ -426,7 +426,7 @@ final class Kernel
                 );
             } catch (Exception $e) {
                 $this->addBootError(
-                    sprintf('An error occured while loading a dependency: "%s"', $e->getMessage())
+                    sprintf('An error occurred while loading a dependency: "%s"', $e->getMessage())
                 );
             }
         }

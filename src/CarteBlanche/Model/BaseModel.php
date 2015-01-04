@@ -676,7 +676,7 @@ class BaseModel
      * @param   string  $relation   The relation name to fetch
      * @param   bool    $full       Get the full related object (default is TRUE)
      * @param   string  $fields     The string used to get the related fields
-     * @return  bool    TRUE if the related object(s) had been fetched, FALSE if an error occured
+     * @return  bool    TRUE if the related object(s) had been fetched, FALSE if an error occurred
      */
     public function fetchRelated($relation = null, $full = true, $fields = null)
     {
