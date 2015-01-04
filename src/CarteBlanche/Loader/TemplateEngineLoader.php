@@ -31,10 +31,10 @@ class TemplateEngineLoader
      */
     public function load(array $config = null, \CarteBlanche\App\Container $container)
     {
-        $root_path = $container->get('kernel')->getPath('root_path');
-        $web_dir = $container->get('kernel')->getPath('web_dir');
-        $views_dir = $container->get('kernel')->getPath('views_dir');
-        $cbcore_dir = $container->get('kernel')->getPath('carte_blanche_core');
+        $root_path      = $container->get('kernel')->getPath('root_path');
+        $web_dir        = $container->get('kernel')->getPath('web_dir');
+        $views_dir      = $container->get('kernel')->getPath('views_dir');
+        $cbcore_dir     = $container->get('kernel')->getPath('carte_blanche_core');
         $base_cache_dir = $container->get('kernel')->getPath('web_tmp_dir');
         if (empty($base_cache_dir)) {
             $base_cache_dir = 'www'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR;
