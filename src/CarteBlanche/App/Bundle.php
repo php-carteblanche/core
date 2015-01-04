@@ -29,6 +29,8 @@ class Bundle
     protected $namespace;
     protected $directory;
     protected $instance;
+    protected $package_name;
+    protected $package_data;
 
     /**
      * Construction of a bundle
@@ -51,6 +53,14 @@ class Bundle
         }
         $this->namespace = $namespace;
         $this->shortname = substr($directory, 0, strpos($directory, '/'));
+        $this->package_name = 'carte-blanche/bundle-'.strtolower($namespace);
+        $assets = CarteBlanche::getContainer()->get('template_engine')
+            ->getAssetsLoader()
+            ->getAssets();
+        if (!empty($assets) && isset($assets[$this->package_name])) {
+            $this->package_data = $assets[$this->package_name];
+        }
+
         $this->init();
     }
 
@@ -72,6 +82,15 @@ class Bundle
             if (@file_exists($_bundle_f.'.php')) {
                 $cls_name = '\\'.$this->getNamespace().'\\'.$_bundle_fname;
                 $this->instance = new $cls_name;
+                if (method_exists($this->instance, 'setName')) {
+                    call_user_func(array($this->instance, 'setName'), $this->getNamespace());
+                }
+                if (method_exists($this->instance, 'setPackageName')) {
+                    call_user_func(array($this->instance, 'setPackageName'), $this->getPackageName());
+                }
+                if (method_exists($this->instance, 'init')) {
+                    call_user_func(array($this->instance, 'init'), $this->getPackageData());
+                }
             }
         }
     }
@@ -98,6 +117,22 @@ class Bundle
     public function getShortname()
     {
         return $this->shortname;
+    }
+
+    /**
+     * Get bundle's package name
+     */
+    public function getPackageName()
+    {
+        return $this->package_name;
+    }
+
+    /**
+     * Get bundle's package's JSON data
+     */
+    public function getPackageData()
+    {
+        return $this->package_data;
     }
 
     /**
