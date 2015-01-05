@@ -44,13 +44,13 @@ class NotFoundException
     /**
      * Render of a production error
      *
-     * @return void
+     * @return string
      */
     public function productionRendering()
     {
-        $args = array('message'=>$this->getAppMessage());
-        return CarteBlanche::getContainer()->get('front_controller')
-            ->renderProductionError($args, 404);
+        $args   = array('message'=>$this->getAppMessage());
+        $ft     = CarteBlanche::getContainer()->get('front_controller');
+        return ($ft ? $ft->renderProductionError($args, 404) : parent::__toString());
     }
 
     /**

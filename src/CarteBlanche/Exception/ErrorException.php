@@ -85,25 +85,25 @@ class ErrorException
     /**
      * Render of a production error
      *
-     * @return void
+     * @return string
      */
     public function productionRendering()
     {
-        $args = array('message'=>$this->getAppMessage());
-        return CarteBlanche::getContainer()->get('front_controller')
-            ->renderProductionError($args, 500);
+        $args   = array('message'=>$this->getAppMessage());
+        $ft     = CarteBlanche::getContainer()->get('front_controller');
+        return ($ft ? $ft->renderProductionError($args, 500) : parent::__toString());
     }
 
     /**
      * Render of a debug error
      *
-     * @return void
+     * @return string
      */
     public function debugRendering()
     {
-        $args = array('message'=>$this->getAppMessage());
-        return CarteBlanche::getContainer()->get('front_controller')
-            ->renderError($args, $this);
+        $args   = array('message'=>$this->getAppMessage());
+        $ft     = CarteBlanche::getContainer()->get('front_controller');
+        return ($ft ? $ft->renderError($args, $this) : parent::__toString());
     }
 
     /**
